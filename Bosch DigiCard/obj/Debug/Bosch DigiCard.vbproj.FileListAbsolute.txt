@@ -1,0 +1,12 @@
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.exe.config
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.exe
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.pdb
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.vbproj.AssemblyReference.cache
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch_DigiCard.Resources.resources
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.vbproj.GenerateResource.cache
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.vbproj.CoreCompileInputs.cache
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.exe
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.pdb
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch_DigiCard.Form1.resources
