@@ -10,3 +10,6 @@ D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.exe
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.xml
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.pdb
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch_DigiCard.Form1.resources
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Interop.ADODB.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Interop.ADOR.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.vbproj.ResolveComReference.cache
