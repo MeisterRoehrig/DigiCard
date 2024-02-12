@@ -13,7 +13,7 @@ Public Class Form1
             conn = New ADODB.Connection
             conn.Open("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\Database.accdb")
 
-            rs.Open("SELECT * FROM Card INNER JOIN Project ON Card.ProjectID=Project.ProjectID INNER JOIN Person ON Project.PersonID=Person.PersonID", conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockPessimistic)
+            rs.Open("SELECT CardNumber, ProjectName, CardType, ProjectAddressStreet, ProjectAddressNumber, ProjectAddressPLZ, ProjectAddressCity, CardCreated, CardLastModified FROM Card INNER JOIN Project ON Card.ProjectID=Project.ProjectID", conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockPessimistic)
             Debug.WriteLine("[DigiCard] Recordset entries found: " & rs.RecordCount)
 
             Dim data As Object = rs.GetRows() ' Retrieve data into a 2-dimensional array
@@ -48,4 +48,6 @@ Public Class Form1
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         Me.Close()
     End Sub
+
+
 End Class
