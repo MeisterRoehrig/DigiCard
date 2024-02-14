@@ -1,10 +1,11 @@
 ﻿Imports System.Text
 Imports System.Windows.Forms
+Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
 
 Public Class Form1
 
-    Dim conn As ADODB.Connection = Nothing
-    Dim rs As ADODB.Recordset = Nothing
+    Private conn As ADODB.Connection = Nothing
+    Private rs As ADODB.Recordset = Nothing
 
     Private Sub WipeDatabaseConnection()
         ' Close and clean up the connection
@@ -67,7 +68,14 @@ Public Class Form1
         Debug.WriteLine("[DigiCard] Form1 Loaded")
         WipeDatabaseConnection()
         ToolStripStatusLabel1.Text = "Ready"
+
+        ' Restore the checkbox states from saved settings
+        CheckBoxHideFire.Checked = My.Settings.HideFire
+        CheckBoxHidePolice.Checked = My.Settings.HidePolice
+        CheckBoxBroadSearch.Checked = My.Settings.BroadSearch
+
         UpdateDatabase()
+
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -86,19 +94,20 @@ Public Class Form1
 
     Private Function BuildSearchQuery() As String
         Dim whereClause As New System.Text.StringBuilder()
+        Dim filterClause As New System.Text.StringBuilder() ' Renamed from exclusionClause
 
-        ' Handle exclusions
+        ' Handle exclusions explicitly with filterClause
         If CheckBoxHideFire.Checked Then
-            AppendCondition(whereClause, "CardType <> 'Fire'")
+            AppendCondition(filterClause, "CardType <> 'Fire'", alwaysUseAnd:=True)
         End If
         If CheckBoxHidePolice.Checked Then
-            AppendCondition(whereClause, "CardType <> 'Police'")
+            AppendCondition(filterClause, "CardType <> 'Police'", alwaysUseAnd:=True)
         End If
 
         ' Handle search box input
         If Not String.IsNullOrWhiteSpace(TextBoxQuickSearch.Text) Then
             Dim searchTerms As String() = TextBoxQuickSearch.Text.Split(New Char() {" "c}, StringSplitOptions.RemoveEmptyEntries)
-            Dim searchColumns As String() = {"CardNumber", "SiteName", "CardPropertyDescription", "SiteAddressAddition", "SiteAddressNumber", "SiteAddressZIP", "SiteAddressCity", "CardType"}
+            Dim searchColumns As String() = {"CardNumber", "SiteName", "CardPropertyDescription", "SiteAddressStreet", "SiteAddressAddition", "SiteAddressNumber", "SiteAddressZIP", "SiteAddressCity", "SiteAddressCountry", "CardType"}
 
             For Each term As String In searchTerms
                 Dim termCondition As New System.Text.StringBuilder()
@@ -106,12 +115,22 @@ Public Class Form1
                     If termCondition.Length > 0 Then termCondition.Append(" OR ")
                     termCondition.AppendFormat("{0} LIKE '%{1}%'", column, term)
                 Next
-                AppendCondition(whereClause, $"({termCondition})", useOr:=CheckBoxBroadSearch.Checked)
+                AppendCondition(whereClause, $"({termCondition})", CheckBoxBroadSearch.Checked)
             Next
         End If
 
+        ' Combine filterClause and whereClause
+        If filterClause.Length > 0 Then
+            If whereClause.Length > 0 Then
+                whereClause.Insert(0, filterClause.ToString() & " AND (") ' Prepend filterClause and open parenthesis for remaining conditions
+                whereClause.Append(")") ' Close parenthesis for remaining conditions
+            Else
+                whereClause.Append(filterClause.ToString()) ' Just use filterClause if no other conditions
+            End If
+        End If
+
         ' Construct the final search query
-        Dim searchQuery As String = "SELECT CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet,SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity,SiteAddressCountry, CardType, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
+        Dim searchQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet,SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity,SiteAddressCountry, CardType, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
         If whereClause.Length > 0 Then
             searchQuery &= " WHERE " & whereClause.ToString()
         End If
@@ -119,17 +138,18 @@ Public Class Form1
         Return searchQuery
     End Function
 
-    Private Sub AppendCondition(ByRef whereClause As StringBuilder, condition As String, Optional useOr As Boolean = False)
-        If whereClause.Length > 0 Then whereClause.Append(If(useOr, " OR ", " AND "))
-        whereClause.Append(condition)
+    Private Sub AppendCondition(ByRef clause As StringBuilder, condition As String, Optional useOr As Boolean = False, Optional alwaysUseAnd As Boolean = False)
+        If clause.Length > 0 Then clause.Append(If(alwaysUseAnd, " AND ", If(useOr, " OR ", " AND ")))
+        clause.Append(condition)
     End Sub
+
 
     Private Sub PopulateDataGridView(searchQuery As String)
         Try
             If rs Is Nothing Then
                 rs = New ADODB.Recordset
             End If
-            rs.Open(searchQuery, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockPessimistic)
+            rs.Open(searchQuery, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockReadOnly)
 
             Dim dt As New DataTable
             If Not rs.EOF Then
@@ -149,7 +169,14 @@ Public Class Form1
                     dt.Rows.Add(row)
                 Next
 
+                'Hide CardID Column
                 DataGridViewCardsForm1.DataSource = dt
+
+                With DataGridViewCardsForm1
+                    If .Columns("CardID") IsNot Nothing Then
+                        .Columns("CardID").Visible = False
+                    End If
+                End With
             Else
                 TextBoxQuickSearch.BackColor = Color.LightCoral
                 ToolStripStatusLabel1.Text = "Search results: No entries were found."
@@ -159,7 +186,7 @@ Public Class Form1
 
             rs.Close()
         Catch ex As Exception
-            Debug.WriteLine("[DigiCard] ADODB.Connection error: " + ex.Message)
+            Debug.WriteLine("[DigiCard] Error populating DataGridView: " + ex.Message)
             ToolStripStatusLabel1.Text = "Error: " + ex.Message
         End Try
     End Sub
@@ -170,6 +197,8 @@ Public Class Form1
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        My.Settings.BroadSearch = CheckBoxBroadSearch.Checked
+        My.Settings.Save()
         Me.Close()
     End Sub
 
@@ -178,25 +207,48 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxHideFire_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxHideFire.CheckedChanged
+        My.Settings.HideFire = CheckBoxHideFire.Checked
+        My.Settings.Save()
         PerformSearch()
     End Sub
 
     Private Sub CheckBoxHidePolice_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxHidePolice.CheckedChanged
+        My.Settings.HidePolice = CheckBoxHidePolice.Checked
+        My.Settings.Save()
         PerformSearch()
     End Sub
 
     Private Sub DataGridViewCardsForm1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCardsForm1.CellDoubleClick
         ' Make sure the click is not on the header
         If e.RowIndex >= 0 Then
-            Dim cardView As New CardView()
-
-            ' Assuming your DataGridView is bound to a DataTable or similar
-            ' Retrieve the DataRow bound to the clicked row
-            Dim row As DataRow = DirectCast(DataGridViewCardsForm1.Rows(e.RowIndex).DataBoundItem, DataRowView).Row
-            cardView.SetData(row)
-            cardView.ShowDialog() ' Use ShowDialog for modal, Show for non-modal
+            Dim cardID As Integer = Convert.ToInt32(DataGridViewCardsForm1.Rows(e.RowIndex).Cells("CardID").Value)
+            Dim cardView As New CardView(cardID, conn)
+            If cardView.ShowDialog() = DialogResult.OK Then
+                ' Refresh DataGridView here
+                PerformSearch()
+                SelectRowByCardID(cardID)
+            End If
         End If
     End Sub
 
+    Private Sub SelectRowByCardID(cardID As Integer)
+        ' Ensure the DataGridView has been populated and has rows
+        If DataGridViewCardsForm1.Rows.Count > 0 Then
+            Dim rowIndex As Integer = -1
+            ' Search for the row index with the matching CardID
+            For Each row As DataGridViewRow In DataGridViewCardsForm1.Rows
+                If row.Cells("CardID").Value IsNot Nothing AndAlso row.Cells("CardID").Value.ToString() = cardID.ToString() Then
+                    rowIndex = row.Index
+                    Exit For
+                End If
+            Next
 
+            ' If a matching row is found, select it
+            If rowIndex <> -1 Then
+                DataGridViewCardsForm1.ClearSelection()
+                DataGridViewCardsForm1.Rows(rowIndex).Selected = True
+                DataGridViewCardsForm1.CurrentCell = DataGridViewCardsForm1.Rows(rowIndex).Cells(1) ' Or another cell index if preferred
+            End If
+        End If
+    End Sub
 End Class

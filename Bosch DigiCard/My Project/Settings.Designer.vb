@@ -65,6 +65,42 @@ Namespace My
                 Me("DatabasePath") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property HideFire() As Boolean
+            Get
+                Return CType(Me("HideFire"),Boolean)
+            End Get
+            Set
+                Me("HideFire") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property HidePolice() As Boolean
+            Get
+                Return CType(Me("HidePolice"),Boolean)
+            End Get
+            Set
+                Me("HidePolice") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property BroadSearch() As Boolean
+            Get
+                Return CType(Me("BroadSearch"),Boolean)
+            End Get
+            Set
+                Me("BroadSearch") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

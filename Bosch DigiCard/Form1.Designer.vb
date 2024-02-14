@@ -25,7 +25,6 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim DataGridViewCellStyle1 As System.Windows.Forms.DataGridViewCellStyle = New System.Windows.Forms.DataGridViewCellStyle()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.ButtonSearch = New System.Windows.Forms.Button()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,6 +45,7 @@ Partial Class Form1
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStripForm1.SuspendLayout()
         CType(Me.DataGridViewCardsForm1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -54,15 +54,6 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'ButtonSearch
-        '
-        Me.ButtonSearch.Location = New System.Drawing.Point(909, 38)
-        Me.ButtonSearch.Name = "ButtonSearch"
-        Me.ButtonSearch.Size = New System.Drawing.Size(75, 23)
-        Me.ButtonSearch.TabIndex = 0
-        Me.ButtonSearch.Text = "Search"
-        Me.ButtonSearch.UseVisualStyleBackColor = True
         '
         'FileToolStripMenuItem
         '
@@ -167,7 +158,6 @@ Partial Class Form1
         Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxBroadSearch)
         Me.SplitContainer1.Panel1.Controls.Add(Me.LabelQuickSearch)
         Me.SplitContainer1.Panel1.Controls.Add(Me.TextBoxQuickSearch)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ButtonSearch)
         '
         'SplitContainer1.Panel2
         '
@@ -179,27 +169,29 @@ Partial Class Form1
         'CheckBoxHidePolice
         '
         Me.CheckBoxHidePolice.AutoSize = True
-        Me.CheckBoxHidePolice.Location = New System.Drawing.Point(713, 82)
+        Me.CheckBoxHidePolice.Location = New System.Drawing.Point(22, 72)
         Me.CheckBoxHidePolice.Name = "CheckBoxHidePolice"
         Me.CheckBoxHidePolice.Size = New System.Drawing.Size(80, 17)
         Me.CheckBoxHidePolice.TabIndex = 4
         Me.CheckBoxHidePolice.Text = "Hide Police"
+        Me.ToolTip.SetToolTip(Me.CheckBoxHidePolice, "Check this box to exclude all police-related cards from your search results.")
         Me.CheckBoxHidePolice.UseVisualStyleBackColor = True
         '
         'CheckBoxHideFire
         '
         Me.CheckBoxHideFire.AutoSize = True
-        Me.CheckBoxHideFire.Location = New System.Drawing.Point(713, 44)
+        Me.CheckBoxHideFire.Location = New System.Drawing.Point(118, 72)
         Me.CheckBoxHideFire.Name = "CheckBoxHideFire"
         Me.CheckBoxHideFire.Size = New System.Drawing.Size(68, 17)
         Me.CheckBoxHideFire.TabIndex = 4
         Me.CheckBoxHideFire.Text = "Hide Fire"
+        Me.ToolTip.SetToolTip(Me.CheckBoxHideFire, "Check this box to exclude all fire-related cards from your search results.")
         Me.CheckBoxHideFire.UseVisualStyleBackColor = True
         '
         'CheckBoxBroadSearch
         '
         Me.CheckBoxBroadSearch.AutoSize = True
-        Me.CheckBoxBroadSearch.Location = New System.Drawing.Point(812, 42)
+        Me.CheckBoxBroadSearch.Location = New System.Drawing.Point(203, 72)
         Me.CheckBoxBroadSearch.Name = "CheckBoxBroadSearch"
         Me.CheckBoxBroadSearch.Size = New System.Drawing.Size(91, 17)
         Me.CheckBoxBroadSearch.TabIndex = 3
@@ -223,6 +215,8 @@ Partial Class Form1
         Me.TextBoxQuickSearch.Name = "TextBoxQuickSearch"
         Me.TextBoxQuickSearch.Size = New System.Drawing.Size(256, 20)
         Me.TextBoxQuickSearch.TabIndex = 1
+        Me.ToolTip.SetToolTip(Me.TextBoxQuickSearch, "Enter keywords to search for specific cards. Use space to separate multiple terms" &
+        ".")
         '
         'TimerQuickSearch
         '
@@ -237,6 +231,11 @@ Partial Class Form1
         'OpenFileDialog1
         '
         Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
+        'NotifyIcon1
+        '
+        Me.NotifyIcon1.Text = "NotifyIcon1"
+        Me.NotifyIcon1.Visible = True
         '
         'Form1
         '
@@ -264,8 +263,6 @@ Partial Class Form1
         Me.PerformLayout()
 
     End Sub
-
-    Friend WithEvents ButtonSearch As Button
     Friend WithEvents FileToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents NewEntryToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As ToolStripMenuItem
@@ -286,4 +283,5 @@ Partial Class Form1
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
     Friend WithEvents CheckBoxHidePolice As CheckBox
     Friend WithEvents CheckBoxHideFire As CheckBox
+    Friend WithEvents NotifyIcon1 As NotifyIcon
 End Class

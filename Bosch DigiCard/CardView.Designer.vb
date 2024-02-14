@@ -273,11 +273,6 @@ Partial Class CardView
     Friend WithEvents TextBoxCardNumber As TextBox
     Friend WithEvents LabelCardType As Label
     Friend WithEvents ComboBoxCardTyp As ComboBox
-
-    Private Sub CardView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
-    End Sub
-
     Friend WithEvents ButtonCardViewCancel As Button
     Friend WithEvents GroupBoxObject As GroupBox
     Friend WithEvents LabelSiteName As Label
