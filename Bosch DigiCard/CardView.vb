@@ -2,16 +2,16 @@
 
 Public Class CardView
     Public Sub SetData(ByVal row As DataRow)
-        Me.Text = SafeGetString(row.Item("CardNumber")) + " - " + SafeGetString(row.Item("ProjectName"))
+        Me.Text = SafeGetString(row.Item("CardNumber")) + " - " + SafeGetString(row.Item("SiteName"))
         TextBoxCardNumber.Text = SafeGetString(row.Item("CardNumber"))
         ComboBoxCardTyp.SelectedItem = SafeGetString(row.Item("CardType"))
-        TextBoxProjectName.Text = SafeGetString(row.Item("ProjectName"))
-        TextBoxProjectAddressStreet.Text = SafeGetString(row.Item("ProjectAddressStreet"))
-        TextBoxProjectAddressSupplement.Text = SafeGetString(row.Item("ProjectAddressSupplement"))
-        TextBoxProjectAddressNumber.Text = SafeGetString(row.Item("ProjectAddressNumber"))
-        TextBoxProjectAddressPLZ.Text = SafeGetString(row.Item("ProjectAddressPLZ"))
-        TextBoxProjectAddressCity.Text = SafeGetString(row.Item("ProjectAddressCity"))
-        TextBoxProjectAddressCountry.Text = SafeGetString(row.Item("ProjectAddressCountry"))
+        TextBoxSiteName.Text = SafeGetString(row.Item("SiteName"))
+        TextBoxSiteAddressStreet.Text = SafeGetString(row.Item("SiteAddressStreet"))
+        TextBoxSiteAddressAddition.Text = SafeGetString(row.Item("SiteAddressAddition"))
+        TextBoxSiteAddressNumber.Text = SafeGetString(row.Item("SiteAddressNumber"))
+        TextBoxSiteAddressPLZ.Text = SafeGetString(row.Item("SiteAddressZIP"))
+        TextBoxSiteAddressCity.Text = SafeGetString(row.Item("SiteAddressCity"))
+        TextBoxSiteAddressCountry.Text = SafeGetString(row.Item("SiteAddressCountry"))
     End Sub
 
     Public Function SafeGetString(ByVal obj As Object) As String

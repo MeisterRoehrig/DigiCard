@@ -29,23 +29,23 @@ Partial Class CardView
         Me.LabelCardType = New System.Windows.Forms.Label()
         Me.TextBoxCardNumber = New System.Windows.Forms.TextBox()
         Me.ButtonCardViewCancel = New System.Windows.Forms.Button()
-        Me.GroupBoxProject = New System.Windows.Forms.GroupBox()
-        Me.TextBoxProjectAddressCountry = New System.Windows.Forms.TextBox()
-        Me.TextBoxProjectAddressCity = New System.Windows.Forms.TextBox()
-        Me.TextBoxProjectAddressPLZ = New System.Windows.Forms.TextBox()
-        Me.TextBoxProjectAddressNumber = New System.Windows.Forms.TextBox()
-        Me.LabelProjectAddressCountry = New System.Windows.Forms.Label()
-        Me.TextBoxProjectAddressStreet = New System.Windows.Forms.TextBox()
-        Me.LabelProjectAddressCity = New System.Windows.Forms.Label()
-        Me.TextBoxProjectAddressSupplement = New System.Windows.Forms.TextBox()
-        Me.LabelProjectAddressPLZ = New System.Windows.Forms.Label()
-        Me.LabelProjectAddressNumber = New System.Windows.Forms.Label()
-        Me.LabelProjectAddressStreet = New System.Windows.Forms.Label()
-        Me.LabelProjectAddressSupplement = New System.Windows.Forms.Label()
-        Me.LabelProjectName = New System.Windows.Forms.Label()
-        Me.TextBoxProjectName = New System.Windows.Forms.TextBox()
+        Me.GroupBoxObject = New System.Windows.Forms.GroupBox()
+        Me.TextBoxSiteAddressCountry = New System.Windows.Forms.TextBox()
+        Me.TextBoxSiteAddressCity = New System.Windows.Forms.TextBox()
+        Me.TextBoxSiteAddressPLZ = New System.Windows.Forms.TextBox()
+        Me.TextBoxSiteAddressNumber = New System.Windows.Forms.TextBox()
+        Me.LabelSiteAddressCountry = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressStreet = New System.Windows.Forms.TextBox()
+        Me.LabelSiteAddressCity = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressAddition = New System.Windows.Forms.TextBox()
+        Me.LabelSiteAddressZIP = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressNumber = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressStreet = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressAddition = New System.Windows.Forms.Label()
+        Me.LabelSiteName = New System.Windows.Forms.Label()
+        Me.TextBoxSiteName = New System.Windows.Forms.TextBox()
         Me.GroupBoxCard.SuspendLayout()
-        Me.GroupBoxProject.SuspendLayout()
+        Me.GroupBoxObject.SuspendLayout()
         Me.SuspendLayout()
         '
         'ButtonCardViewApply
@@ -113,147 +113,147 @@ Partial Class CardView
         Me.ButtonCardViewCancel.Text = "Cancel"
         Me.ButtonCardViewCancel.UseVisualStyleBackColor = True
         '
-        'GroupBoxProject
+        'GroupBoxObject
         '
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressCountry)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressCity)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressPLZ)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressNumber)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressCountry)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressStreet)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressCity)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectAddressSupplement)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressPLZ)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressNumber)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressStreet)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectAddressSupplement)
-        Me.GroupBoxProject.Controls.Add(Me.LabelProjectName)
-        Me.GroupBoxProject.Controls.Add(Me.TextBoxProjectName)
-        Me.GroupBoxProject.Location = New System.Drawing.Point(32, 196)
-        Me.GroupBoxProject.Name = "GroupBoxProject"
-        Me.GroupBoxProject.Size = New System.Drawing.Size(556, 185)
-        Me.GroupBoxProject.TabIndex = 3
-        Me.GroupBoxProject.TabStop = False
-        Me.GroupBoxProject.Text = "Project"
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressCountry)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressCity)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressPLZ)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressNumber)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressCountry)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressStreet)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressCity)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteAddressAddition)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressZIP)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressNumber)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressStreet)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteAddressAddition)
+        Me.GroupBoxObject.Controls.Add(Me.LabelSiteName)
+        Me.GroupBoxObject.Controls.Add(Me.TextBoxSiteName)
+        Me.GroupBoxObject.Location = New System.Drawing.Point(32, 196)
+        Me.GroupBoxObject.Name = "GroupBoxObject"
+        Me.GroupBoxObject.Size = New System.Drawing.Size(556, 185)
+        Me.GroupBoxObject.TabIndex = 3
+        Me.GroupBoxObject.TabStop = False
+        Me.GroupBoxObject.Text = "Object"
         '
-        'TextBoxProjectAddressCountry
+        'TextBoxSiteAddressCountry
         '
-        Me.TextBoxProjectAddressCountry.Location = New System.Drawing.Point(338, 140)
-        Me.TextBoxProjectAddressCountry.Name = "TextBoxProjectAddressCountry"
-        Me.TextBoxProjectAddressCountry.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressCountry.TabIndex = 2
+        Me.TextBoxSiteAddressCountry.Location = New System.Drawing.Point(338, 140)
+        Me.TextBoxSiteAddressCountry.Name = "TextBoxSiteAddressCountry"
+        Me.TextBoxSiteAddressCountry.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressCountry.TabIndex = 2
         '
-        'TextBoxProjectAddressCity
+        'TextBoxSiteAddressCity
         '
-        Me.TextBoxProjectAddressCity.Location = New System.Drawing.Point(338, 103)
-        Me.TextBoxProjectAddressCity.Name = "TextBoxProjectAddressCity"
-        Me.TextBoxProjectAddressCity.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressCity.TabIndex = 2
+        Me.TextBoxSiteAddressCity.Location = New System.Drawing.Point(338, 103)
+        Me.TextBoxSiteAddressCity.Name = "TextBoxSiteAddressCity"
+        Me.TextBoxSiteAddressCity.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressCity.TabIndex = 2
         '
-        'TextBoxProjectAddressPLZ
+        'TextBoxSiteAddressPLZ
         '
-        Me.TextBoxProjectAddressPLZ.Location = New System.Drawing.Point(93, 140)
-        Me.TextBoxProjectAddressPLZ.Name = "TextBoxProjectAddressPLZ"
-        Me.TextBoxProjectAddressPLZ.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressPLZ.TabIndex = 2
+        Me.TextBoxSiteAddressPLZ.Location = New System.Drawing.Point(93, 140)
+        Me.TextBoxSiteAddressPLZ.Name = "TextBoxSiteAddressPLZ"
+        Me.TextBoxSiteAddressPLZ.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressPLZ.TabIndex = 2
         '
-        'TextBoxProjectAddressNumber
+        'TextBoxSiteAddressNumber
         '
-        Me.TextBoxProjectAddressNumber.Location = New System.Drawing.Point(338, 68)
-        Me.TextBoxProjectAddressNumber.Name = "TextBoxProjectAddressNumber"
-        Me.TextBoxProjectAddressNumber.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressNumber.TabIndex = 2
+        Me.TextBoxSiteAddressNumber.Location = New System.Drawing.Point(338, 68)
+        Me.TextBoxSiteAddressNumber.Name = "TextBoxSiteAddressNumber"
+        Me.TextBoxSiteAddressNumber.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressNumber.TabIndex = 2
         '
-        'LabelProjectAddressCountry
+        'LabelSiteAddressCountry
         '
-        Me.LabelProjectAddressCountry.AutoSize = True
-        Me.LabelProjectAddressCountry.Location = New System.Drawing.Point(279, 143)
-        Me.LabelProjectAddressCountry.Name = "LabelProjectAddressCountry"
-        Me.LabelProjectAddressCountry.Size = New System.Drawing.Size(43, 13)
-        Me.LabelProjectAddressCountry.TabIndex = 1
-        Me.LabelProjectAddressCountry.Text = "Country"
+        Me.LabelSiteAddressCountry.AutoSize = True
+        Me.LabelSiteAddressCountry.Location = New System.Drawing.Point(279, 143)
+        Me.LabelSiteAddressCountry.Name = "LabelSiteAddressCountry"
+        Me.LabelSiteAddressCountry.Size = New System.Drawing.Size(43, 13)
+        Me.LabelSiteAddressCountry.TabIndex = 1
+        Me.LabelSiteAddressCountry.Text = "Country"
         '
-        'TextBoxProjectAddressStreet
+        'TextBoxSiteAddressStreet
         '
-        Me.TextBoxProjectAddressStreet.Location = New System.Drawing.Point(93, 68)
-        Me.TextBoxProjectAddressStreet.Name = "TextBoxProjectAddressStreet"
-        Me.TextBoxProjectAddressStreet.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressStreet.TabIndex = 2
+        Me.TextBoxSiteAddressStreet.Location = New System.Drawing.Point(93, 68)
+        Me.TextBoxSiteAddressStreet.Name = "TextBoxSiteAddressStreet"
+        Me.TextBoxSiteAddressStreet.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressStreet.TabIndex = 2
         '
-        'LabelProjectAddressCity
+        'LabelSiteAddressCity
         '
-        Me.LabelProjectAddressCity.AutoSize = True
-        Me.LabelProjectAddressCity.Location = New System.Drawing.Point(279, 106)
-        Me.LabelProjectAddressCity.Name = "LabelProjectAddressCity"
-        Me.LabelProjectAddressCity.Size = New System.Drawing.Size(24, 13)
-        Me.LabelProjectAddressCity.TabIndex = 1
-        Me.LabelProjectAddressCity.Text = "City"
+        Me.LabelSiteAddressCity.AutoSize = True
+        Me.LabelSiteAddressCity.Location = New System.Drawing.Point(279, 106)
+        Me.LabelSiteAddressCity.Name = "LabelSiteAddressCity"
+        Me.LabelSiteAddressCity.Size = New System.Drawing.Size(24, 13)
+        Me.LabelSiteAddressCity.TabIndex = 1
+        Me.LabelSiteAddressCity.Text = "City"
         '
-        'TextBoxProjectAddressSupplement
+        'TextBoxSiteAddressAddition
         '
-        Me.TextBoxProjectAddressSupplement.Location = New System.Drawing.Point(93, 103)
-        Me.TextBoxProjectAddressSupplement.Name = "TextBoxProjectAddressSupplement"
-        Me.TextBoxProjectAddressSupplement.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectAddressSupplement.TabIndex = 2
+        Me.TextBoxSiteAddressAddition.Location = New System.Drawing.Point(93, 103)
+        Me.TextBoxSiteAddressAddition.Name = "TextBoxSiteAddressAddition"
+        Me.TextBoxSiteAddressAddition.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressAddition.TabIndex = 2
         '
-        'LabelProjectAddressPLZ
+        'LabelSiteAddressZIP
         '
-        Me.LabelProjectAddressPLZ.AutoSize = True
-        Me.LabelProjectAddressPLZ.Location = New System.Drawing.Point(18, 143)
-        Me.LabelProjectAddressPLZ.Name = "LabelProjectAddressPLZ"
-        Me.LabelProjectAddressPLZ.Size = New System.Drawing.Size(27, 13)
-        Me.LabelProjectAddressPLZ.TabIndex = 1
-        Me.LabelProjectAddressPLZ.Text = "PLZ"
+        Me.LabelSiteAddressZIP.AutoSize = True
+        Me.LabelSiteAddressZIP.Location = New System.Drawing.Point(18, 143)
+        Me.LabelSiteAddressZIP.Name = "LabelSiteAddressZIP"
+        Me.LabelSiteAddressZIP.Size = New System.Drawing.Size(24, 13)
+        Me.LabelSiteAddressZIP.TabIndex = 1
+        Me.LabelSiteAddressZIP.Text = "ZIP"
         '
-        'LabelProjectAddressNumber
+        'LabelSiteAddressNumber
         '
-        Me.LabelProjectAddressNumber.AutoSize = True
-        Me.LabelProjectAddressNumber.Location = New System.Drawing.Point(279, 71)
-        Me.LabelProjectAddressNumber.Name = "LabelProjectAddressNumber"
-        Me.LabelProjectAddressNumber.Size = New System.Drawing.Size(44, 13)
-        Me.LabelProjectAddressNumber.TabIndex = 1
-        Me.LabelProjectAddressNumber.Text = "Number"
+        Me.LabelSiteAddressNumber.AutoSize = True
+        Me.LabelSiteAddressNumber.Location = New System.Drawing.Point(279, 71)
+        Me.LabelSiteAddressNumber.Name = "LabelSiteAddressNumber"
+        Me.LabelSiteAddressNumber.Size = New System.Drawing.Size(44, 13)
+        Me.LabelSiteAddressNumber.TabIndex = 1
+        Me.LabelSiteAddressNumber.Text = "Number"
         '
-        'LabelProjectAddressStreet
+        'LabelSiteAddressStreet
         '
-        Me.LabelProjectAddressStreet.AutoSize = True
-        Me.LabelProjectAddressStreet.Location = New System.Drawing.Point(18, 71)
-        Me.LabelProjectAddressStreet.Name = "LabelProjectAddressStreet"
-        Me.LabelProjectAddressStreet.Size = New System.Drawing.Size(35, 13)
-        Me.LabelProjectAddressStreet.TabIndex = 1
-        Me.LabelProjectAddressStreet.Text = "Street"
+        Me.LabelSiteAddressStreet.AutoSize = True
+        Me.LabelSiteAddressStreet.Location = New System.Drawing.Point(18, 71)
+        Me.LabelSiteAddressStreet.Name = "LabelSiteAddressStreet"
+        Me.LabelSiteAddressStreet.Size = New System.Drawing.Size(35, 13)
+        Me.LabelSiteAddressStreet.TabIndex = 1
+        Me.LabelSiteAddressStreet.Text = "Street"
         '
-        'LabelProjectAddressSupplement
+        'LabelSiteAddressAddition
         '
-        Me.LabelProjectAddressSupplement.AutoSize = True
-        Me.LabelProjectAddressSupplement.Location = New System.Drawing.Point(18, 106)
-        Me.LabelProjectAddressSupplement.Name = "LabelProjectAddressSupplement"
-        Me.LabelProjectAddressSupplement.Size = New System.Drawing.Size(45, 13)
-        Me.LabelProjectAddressSupplement.TabIndex = 1
-        Me.LabelProjectAddressSupplement.Text = "Addition"
+        Me.LabelSiteAddressAddition.AutoSize = True
+        Me.LabelSiteAddressAddition.Location = New System.Drawing.Point(18, 106)
+        Me.LabelSiteAddressAddition.Name = "LabelSiteAddressAddition"
+        Me.LabelSiteAddressAddition.Size = New System.Drawing.Size(45, 13)
+        Me.LabelSiteAddressAddition.TabIndex = 1
+        Me.LabelSiteAddressAddition.Text = "Addition"
         '
-        'LabelProjectName
+        'LabelSiteName
         '
-        Me.LabelProjectName.AutoSize = True
-        Me.LabelProjectName.Location = New System.Drawing.Point(18, 36)
-        Me.LabelProjectName.Name = "LabelProjectName"
-        Me.LabelProjectName.Size = New System.Drawing.Size(35, 13)
-        Me.LabelProjectName.TabIndex = 1
-        Me.LabelProjectName.Text = "Name"
+        Me.LabelSiteName.AutoSize = True
+        Me.LabelSiteName.Location = New System.Drawing.Point(18, 36)
+        Me.LabelSiteName.Name = "LabelSiteName"
+        Me.LabelSiteName.Size = New System.Drawing.Size(35, 13)
+        Me.LabelSiteName.TabIndex = 1
+        Me.LabelSiteName.Text = "Name"
         '
-        'TextBoxProjectName
+        'TextBoxSiteName
         '
-        Me.TextBoxProjectName.Location = New System.Drawing.Point(93, 33)
-        Me.TextBoxProjectName.Name = "TextBoxProjectName"
-        Me.TextBoxProjectName.Size = New System.Drawing.Size(163, 20)
-        Me.TextBoxProjectName.TabIndex = 2
+        Me.TextBoxSiteName.Location = New System.Drawing.Point(93, 33)
+        Me.TextBoxSiteName.Name = "TextBoxSiteName"
+        Me.TextBoxSiteName.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteName.TabIndex = 2
         '
         'CardView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(800, 455)
-        Me.Controls.Add(Me.GroupBoxProject)
+        Me.Controls.Add(Me.GroupBoxObject)
         Me.Controls.Add(Me.GroupBoxCard)
         Me.Controls.Add(Me.ButtonCardViewCancel)
         Me.Controls.Add(Me.ButtonCardViewApply)
@@ -261,8 +261,8 @@ Partial Class CardView
         Me.Text = "CardView"
         Me.GroupBoxCard.ResumeLayout(False)
         Me.GroupBoxCard.PerformLayout()
-        Me.GroupBoxProject.ResumeLayout(False)
-        Me.GroupBoxProject.PerformLayout()
+        Me.GroupBoxObject.ResumeLayout(False)
+        Me.GroupBoxObject.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -279,19 +279,19 @@ Partial Class CardView
     End Sub
 
     Friend WithEvents ButtonCardViewCancel As Button
-    Friend WithEvents GroupBoxProject As GroupBox
-    Friend WithEvents LabelProjectName As Label
-    Friend WithEvents TextBoxProjectName As TextBox
-    Friend WithEvents TextBoxProjectAddressSupplement As TextBox
-    Friend WithEvents LabelProjectAddressSupplement As Label
-    Friend WithEvents TextBoxProjectAddressCountry As TextBox
-    Friend WithEvents TextBoxProjectAddressCity As TextBox
-    Friend WithEvents TextBoxProjectAddressPLZ As TextBox
-    Friend WithEvents TextBoxProjectAddressNumber As TextBox
-    Friend WithEvents LabelProjectAddressCountry As Label
-    Friend WithEvents TextBoxProjectAddressStreet As TextBox
-    Friend WithEvents LabelProjectAddressCity As Label
-    Friend WithEvents LabelProjectAddressPLZ As Label
-    Friend WithEvents LabelProjectAddressNumber As Label
-    Friend WithEvents LabelProjectAddressStreet As Label
+    Friend WithEvents GroupBoxObject As GroupBox
+    Friend WithEvents LabelSiteName As Label
+    Friend WithEvents TextBoxSiteName As TextBox
+    Friend WithEvents TextBoxSiteAddressAddition As TextBox
+    Friend WithEvents LabelSiteAddressAddition As Label
+    Friend WithEvents TextBoxSiteAddressCountry As TextBox
+    Friend WithEvents TextBoxSiteAddressCity As TextBox
+    Friend WithEvents TextBoxSiteAddressPLZ As TextBox
+    Friend WithEvents TextBoxSiteAddressNumber As TextBox
+    Friend WithEvents LabelSiteAddressCountry As Label
+    Friend WithEvents TextBoxSiteAddressStreet As TextBox
+    Friend WithEvents LabelSiteAddressCity As Label
+    Friend WithEvents LabelSiteAddressZIP As Label
+    Friend WithEvents LabelSiteAddressNumber As Label
+    Friend WithEvents LabelSiteAddressStreet As Label
 End Class

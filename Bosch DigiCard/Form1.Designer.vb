@@ -27,17 +27,19 @@ Partial Class Form1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.ButtonSearch = New System.Windows.Forms.Button()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutBoschDigiCardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.StatusStripForm1 = New System.Windows.Forms.StatusStrip()
-        Me.ToolStripStatusLable1 = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DataGridViewCardsForm1 = New System.Windows.Forms.DataGridView()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.CheckBoxHidePolice = New System.Windows.Forms.CheckBox()
+        Me.CheckBoxHideFire = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBroadSearch = New System.Windows.Forms.CheckBox()
         Me.LabelQuickSearch = New System.Windows.Forms.Label()
         Me.TextBoxQuickSearch = New System.Windows.Forms.TextBox()
@@ -69,27 +71,27 @@ Partial Class Form1
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
-        'LocateDatabaseToolStripMenuItem
-        '
-        Me.LocateDatabaseToolStripMenuItem.Name = "LocateDatabaseToolStripMenuItem"
-        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.LocateDatabaseToolStripMenuItem.Text = "Locate Database"
-        '
         'NewEntryToolStripMenuItem
         '
         Me.NewEntryToolStripMenuItem.Name = "NewEntryToolStripMenuItem"
-        Me.NewEntryToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.NewEntryToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.NewEntryToolStripMenuItem.Text = "New Entry"
+        '
+        'LocateDatabaseToolStripMenuItem
+        '
+        Me.LocateDatabaseToolStripMenuItem.Name = "LocateDatabaseToolStripMenuItem"
+        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
+        Me.LocateDatabaseToolStripMenuItem.Text = "Locate Database"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(157, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(160, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'EditToolStripMenuItem
@@ -116,7 +118,7 @@ Partial Class Form1
         '
         'StatusStripForm1
         '
-        Me.StatusStripForm1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLable1})
+        Me.StatusStripForm1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripStatusLabel1})
         Me.StatusStripForm1.Location = New System.Drawing.Point(0, 600)
         Me.StatusStripForm1.Name = "StatusStripForm1"
         Me.StatusStripForm1.Size = New System.Drawing.Size(1013, 22)
@@ -124,25 +126,29 @@ Partial Class Form1
         Me.StatusStripForm1.TabIndex = 3
         Me.StatusStripForm1.Text = "StatusStrip1"
         '
-        'ToolStripStatusLable1
+        'ToolStripStatusLabel1
         '
-        Me.ToolStripStatusLable1.Name = "ToolStripStatusLable1"
-        Me.ToolStripStatusLable1.Size = New System.Drawing.Size(36, 17)
-        Me.ToolStripStatusLable1.Text = "None"
+        Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(36, 17)
+        Me.ToolStripStatusLabel1.Text = "None"
         '
         'DataGridViewCardsForm1
         '
         Me.DataGridViewCardsForm1.AllowUserToAddRows = False
         Me.DataGridViewCardsForm1.AllowUserToDeleteRows = False
         Me.DataGridViewCardsForm1.AllowUserToOrderColumns = True
+        Me.DataGridViewCardsForm1.AllowUserToResizeRows = False
         DataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlLight
         Me.DataGridViewCardsForm1.AlternatingRowsDefaultCellStyle = DataGridViewCellStyle1
         Me.DataGridViewCardsForm1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewCardsForm1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewCardsForm1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.DataGridViewCardsForm1.Location = New System.Drawing.Point(0, 0)
+        Me.DataGridViewCardsForm1.MultiSelect = False
         Me.DataGridViewCardsForm1.Name = "DataGridViewCardsForm1"
         Me.DataGridViewCardsForm1.ReadOnly = True
+        Me.DataGridViewCardsForm1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.DataGridViewCardsForm1.RowHeadersVisible = False
         Me.DataGridViewCardsForm1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.DataGridViewCardsForm1.Size = New System.Drawing.Size(1013, 449)
         Me.DataGridViewCardsForm1.TabIndex = 4
@@ -156,6 +162,8 @@ Partial Class Form1
         '
         'SplitContainer1.Panel1
         '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxHidePolice)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxHideFire)
         Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxBroadSearch)
         Me.SplitContainer1.Panel1.Controls.Add(Me.LabelQuickSearch)
         Me.SplitContainer1.Panel1.Controls.Add(Me.TextBoxQuickSearch)
@@ -167,6 +175,26 @@ Partial Class Form1
         Me.SplitContainer1.Size = New System.Drawing.Size(1013, 576)
         Me.SplitContainer1.SplitterDistance = 123
         Me.SplitContainer1.TabIndex = 5
+        '
+        'CheckBoxHidePolice
+        '
+        Me.CheckBoxHidePolice.AutoSize = True
+        Me.CheckBoxHidePolice.Location = New System.Drawing.Point(713, 82)
+        Me.CheckBoxHidePolice.Name = "CheckBoxHidePolice"
+        Me.CheckBoxHidePolice.Size = New System.Drawing.Size(80, 17)
+        Me.CheckBoxHidePolice.TabIndex = 4
+        Me.CheckBoxHidePolice.Text = "Hide Police"
+        Me.CheckBoxHidePolice.UseVisualStyleBackColor = True
+        '
+        'CheckBoxHideFire
+        '
+        Me.CheckBoxHideFire.AutoSize = True
+        Me.CheckBoxHideFire.Location = New System.Drawing.Point(713, 44)
+        Me.CheckBoxHideFire.Name = "CheckBoxHideFire"
+        Me.CheckBoxHideFire.Size = New System.Drawing.Size(68, 17)
+        Me.CheckBoxHideFire.TabIndex = 4
+        Me.CheckBoxHideFire.Text = "Hide Fire"
+        Me.CheckBoxHideFire.UseVisualStyleBackColor = True
         '
         'CheckBoxBroadSearch
         '
@@ -250,10 +278,12 @@ Partial Class Form1
     Friend WithEvents SplitContainer1 As SplitContainer
     Friend WithEvents TextBoxQuickSearch As TextBox
     Friend WithEvents TimerQuickSearch As Timer
-    Friend WithEvents ToolStripStatusLable1 As ToolStripStatusLabel
+    Friend WithEvents ToolStripStatusLabel1 As ToolStripStatusLabel
     Friend WithEvents LabelQuickSearch As Label
     Friend WithEvents CheckBoxBroadSearch As CheckBox
     Friend WithEvents ToolTip As ToolTip
     Friend WithEvents LocateDatabaseToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
+    Friend WithEvents CheckBoxHidePolice As CheckBox
+    Friend WithEvents CheckBoxHideFire As CheckBox
 End Class
