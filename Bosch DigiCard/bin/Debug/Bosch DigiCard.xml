@@ -22,5 +22,20 @@ Bosch DigiCard
   resource lookups using this strongly typed resource class.
 </summary>
 </member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.BoschDigiCard">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.IconFire">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.IconPolice">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
 </members>
 </doc>

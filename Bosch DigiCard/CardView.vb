@@ -1,4 +1,6 @@
-﻿Imports System.Windows.Forms
+﻿Imports System.Text.RegularExpressions
+Imports System.Windows.Forms
+Imports System.Drawing
 
 Public Class CardView
     Private cardID As Integer
@@ -27,17 +29,44 @@ Public Class CardView
     End Sub
 
     Private CardContactsWindowOpenState As New List(Of Integer)
+    Private ClientID As Integer
 
+    Private Sub SetFormIconBasedOnCardType(cardType As String)
+        Select Case cardType
+            Case "Police"
+                Me.Icon = My.Resources.IconPolice
+            Case "Fire"
+                Me.Icon = My.Resources.IconFire
+                ' Add more cases as needed for different card types
+            Case Else
+                Me.Icon = My.Resources.BoschDigiCard ' A default icon if card type doesn't match
+        End Select
+    End Sub
 
     Private Sub LoadCardData(cardID As Integer)
         ' Assuming you have a method to get a database connection
-        Dim query As String = $"SELECT * FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID WHERE CardID = {cardID}"
+        Dim queryBackup As String = $"SELECT * " &
+                      $"FROM ((Card " &
+                      $"INNER JOIN Site ON Card.SiteID = Site.SiteID) " &
+                      $"INNER JOIN Client ON Site.ClientID = Client.ClientID) " &
+                      $"WHERE CardID = {cardID}"
+
+        Dim query As String = $"SELECT Card.*, Site.*, Client.ClientID, Client.ClientName, Client.ClientAddressStreet, Client.ClientAddressSupplement, Client.ClientAddressNumber, Client.ClientAddressZIP, Client.ClientAddressCity, Client.ClientAddressCountry " &
+                      $"FROM ((Card " &
+                      $"INNER JOIN Site ON Card.SiteID = Site.SiteID) " &
+                      $"INNER JOIN Client ON Site.ClientID = Client.ClientID) " &
+                      $"WHERE Card.CardID = {cardID}"
 
         Try
             If rs Is Nothing Then
                 rs = New ADODB.Recordset
             End If
             rs.Open(query, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockOptimistic)
+            'Write all elements of the recorset to the debug console
+            For Each field As ADODB.Field In rs.Fields
+                Debug.WriteLine($"{field.Name} = {field.Value}")
+            Next
+
 
             If Not rs.EOF Then
                 ' Populate your form controls here based on the recordset's fields
@@ -45,6 +74,7 @@ Public Class CardView
                 RichTextBoxCardComment.Text = SafeGetString(rs.Fields("CardComment"))
                 TextBoxCardNumber.Text = SafeGetString(rs.Fields("CardNumber"))
                 ComboBoxCardTyp.SelectedItem = SafeGetString(rs.Fields("CardType"))
+                SetFormIconBasedOnCardType(SafeGetString(rs.Fields("CardType")))
                 TextBoxSiteName.Text = SafeGetString(rs.Fields("SiteName"))
                 TextBoxSiteAddressStreet.Text = SafeGetString(rs.Fields("SiteAddressStreet"))
                 TextBoxSiteAddressAddition.Text = SafeGetString(rs.Fields("SiteAddressAddition"))
@@ -57,13 +87,22 @@ Public Class CardView
                 CheckBoxCardBurglary.CheckState = If(SafeGetString(rs.Fields("CardBurglary")) = "True", CheckState.Checked, CheckState.Unchecked)
                 CheckBoxCardTSN.CheckState = If(SafeGetString(rs.Fields("CardTSN")) = "True", CheckState.Checked, CheckState.Unchecked)
                 CheckBoxCardBoSiNet.CheckState = If(SafeGetString(rs.Fields("CardBoSiNet")) = "True", CheckState.Checked, CheckState.Unchecked)
-
+                ToolStripStatusLabelCardCreated.Text = "Created: " + SafeGetString(rs.Fields("CardCreated"))
+                ToolStripStatusLabelCardLastModified.Text = "Last Modified: " + SafeGetString(rs.Fields("CardLastModified"))
+                TextBoxClientName.Text = SafeGetString(rs.Fields("ClientName"))
+                TextBoxClientAddressStreet.Text = SafeGetString(rs.Fields("ClientAddressStreet"))
+                TextBoxClientAddressSupplement.Text = SafeGetString(rs.Fields("ClientAddressSupplement"))
+                TextBoxClientAddressNumber.Text = SafeGetString(rs.Fields("ClientAddressNumber"))
+                TextBoxClientAddressZIP.Text = SafeGetString(rs.Fields("ClientAddressZIP"))
+                TextBoxClientAddressCity.Text = SafeGetString(rs.Fields("ClientAddressCity"))
+                TextBoxClientAddressCountry.Text = SafeGetString(rs.Fields("ClientAddressCountry"))
+                ClientID = SafeGetInt(rs.Fields("Site.ClientID"))
             Else
                 Debug.WriteLine("No data found for the specified card.")
             End If
         Catch ex As Exception
             Debug.WriteLine($"An error occurred while fetching card data: {ex.Message}")
-            MessageBox.Show($"An error occurred while fetching card data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                MessageBox.Show($"An error occurred while fetching card data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
         ' New code to load contacts:
@@ -177,7 +216,8 @@ Public Class CardView
             conn.Execute(deleteMappingQuery)
         Next
 
-        ' Construct the UPDATE SQL statement
+
+
         Dim updateQuery As String = $"UPDATE Card INNER JOIN Site ON Card.SiteID = Site.SiteID SET " &
                                 $"CardNumber = '{SafeSQL(TextBoxCardNumber.Text)}', " &
                                 $"CardComment = '{SafeSQL(RichTextBoxCardComment.Text)}', " &
@@ -196,16 +236,35 @@ Public Class CardView
                                 $"CardTSN = '{SafeSQL(If(CheckBoxCardTSN.Checked, 1, 0))}', " &
                                 $"CardBoSiNet = '{SafeSQL(If(CheckBoxCardBoSiNet.Checked, 1, 0))}' " &
                                 $"WHERE CardID = {Me.cardID}"
+
+        Debug.WriteLine(updateQuery)
+        Dim clientUpdateQuery As String = $"UPDATE Client SET " &
+                              $"ClientName = '{SafeSQL(TextBoxClientName.Text)}', " &
+                              $"ClientAddressStreet = '{SafeSQL(TextBoxClientAddressStreet.Text)}', " &
+                              $"ClientAddressSupplement = '{SafeSQL(TextBoxClientAddressSupplement.Text)}', " &
+                              $"ClientAddressNumber = '{SafeSQL(TextBoxClientAddressNumber.Text)}', " &
+                              $"ClientAddressZIP = '{SafeSQL(TextBoxClientAddressZIP.Text)}', " &
+                              $"ClientAddressCity = '{SafeSQL(TextBoxClientAddressCity.Text)}', " &
+                              $"ClientAddressCountry = '{SafeSQL(TextBoxClientAddressCountry.Text)}', " &
+                              $"ClientLastModified = '{GlobalUtilities.GetFormattedCurrentTime()}' " &
+                              $"WHERE ClientID = {ClientID}"
+        Debug.WriteLine(clientUpdateQuery)
+
         Try
             ' Execute the update query
             conn.Execute(updateQuery)
+            conn.Execute(clientUpdateQuery)
             Debug.WriteLine($"Changes to {cardID} saved successfully")
             Me.DialogResult = DialogResult.OK
             Me.Close()
         Catch ex As Exception
             MessageBox.Show($"Failed to save changes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            Debug.WriteLine($"Failed to save changes: {ex.Message}")
         End Try
     End Sub
+
+
+
 
     Private Function SafeSQL(ByVal value As String) As String
         If value Is Nothing Then
@@ -227,9 +286,6 @@ Public Class CardView
             Return 0
         End If
     End Function
-
-
-
 
 
     Private CardContacts As New List(Of Contact)
@@ -292,24 +348,49 @@ Public Class CardView
             ("Phone 2", contact.PersonPhone2),
             ("Email", contact.PersonMail)
         }
+            ' Assuming contact is the current item in your larger For Each contact In CardContacts loop
 
-            Dim column As Integer = 2 ' Starting column for the first label-textbox pair
-            For Each item In labelsAndControls
-                Dim label As New Label With {.Text = $"{item.Item1}:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-                Dim textBox As New TextBox With {.Text = item.Item2, .Dock = DockStyle.Fill}
-                ' Determine which row based on the type of data
-                Dim row As Integer = If(item.Item1 = "Gender" OrElse item.Item1.StartsWith("First") OrElse item.Item1.StartsWith("Surname"), 0, 1)
+            ' Gender Label and TextBox
+            Dim genderLabel As New Label With {.Text = "Gender:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim genderTextBox As New TextBox With {.Text = contact.PersonGender, .Dock = DockStyle.Fill}
+            contactTable.Controls.Add(genderLabel, 2, 0)
+            contactTable.Controls.Add(genderTextBox, 3, 0)
 
-                ' Add label and textbox to the table
-                contactTable.Controls.Add(label, column, row)
-                contactTable.Controls.Add(textBox, column + 1, row)
-                column += 2 ' Increment column for the next label-textbox pair, skipping one for the textbox
+            ' First Name Label and TextBox
+            Dim firstNameLabel As New Label With {.Text = "First Name:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim firstNameTextBox As New TextBox With {.Text = contact.PersonFirstname, .Dock = DockStyle.Fill}
+            contactTable.Controls.Add(firstNameLabel, 4, 0) ' Adjust column index as needed
+            contactTable.Controls.Add(firstNameTextBox, 5, 0) ' Adjust column index as needed
 
-                ' Reset column index after surname for the first line
-                If item.Item1.StartsWith("Surname") Then column = 2
-            Next
+            ' Surname Label and TextBox
+            Dim surnameLabel As New Label With {.Text = "Surname:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim surnameTextBox As New TextBox With {.Text = contact.PersonSurname, .Dock = DockStyle.Fill}
+            contactTable.Controls.Add(surnameLabel, 6, 0) ' Adjust column index as needed
+            contactTable.Controls.Add(surnameTextBox, 7, 0) ' Adjust column index as needed
 
-            ' Delete button spanning two rows
+            ' Phone 1 Label and TextBox
+            Dim phone1Label As New Label With {.Text = "Phone 1:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim phone1TextBox As New TextBox With {.Text = contact.PersonPhone, .Dock = DockStyle.Fill}
+            AddHandler phone1TextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidatePhoneNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+            contactTable.Controls.Add(phone1Label, 2, 1) ' Adjust column index as needed
+            contactTable.Controls.Add(phone1TextBox, 3, 1) ' Adjust column index as needed
+
+            ' Phone 2 Label and TextBox
+            Dim phone2Label As New Label With {.Text = "Phone 2:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim phone2TextBox As New TextBox With {.Text = contact.PersonPhone2, .Dock = DockStyle.Fill}
+            AddHandler phone2TextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidatePhoneNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+            contactTable.Controls.Add(phone2Label, 4, 1) ' Adjust column index and row index as needed
+            contactTable.Controls.Add(phone2TextBox, 5, 1) ' Adjust column index and row index as needed
+
+            ' Email Label and TextBox
+            Dim emailLabel As New Label With {.Text = "Email:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
+            Dim emailTextBox As New TextBox With {.Text = contact.PersonMail, .Dock = DockStyle.Fill}
+            AddHandler emailTextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidateEmail(DirectCast(sender, TextBox), ButtonCardViewApply)
+            contactTable.Controls.Add(emailLabel, 6, 1) ' Adjust column index and row index as needed
+            contactTable.Controls.Add(emailTextBox, 7, 1) ' Adjust column index and row index as needed
+
+
+            ' Delete button
             Dim deleteButton As New Button With {.Text = "Delete", .AutoSize = True}
             AddHandler deleteButton.Click, Sub(sender, e) DeleteContact(contact)
             contactTable.Controls.Add(deleteButton, 8, 0)
@@ -322,95 +403,6 @@ Public Class CardView
     End Sub
 
 
-    'Private Sub ContactLayoutUpdate()
-    '    FlowLayoutContact.SuspendLayout() ' Suspend layout logic
-    '    FlowLayoutContact.Controls.Clear() ' Clear existing controls
-
-    '    Dim contactIndex As Integer = 1 ' Initialize contact index for displaying position
-    '    For Each contact In CardContacts
-    '        Dim contactTable As New BorderedTableLayoutPanel With {
-    '        .ColumnCount = 7, ' Adjusted for position label and move buttons
-    '        .RowCount = 2,
-    '        .AutoSize = True,
-    '        .AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink,
-    '        .Padding = New Padding(5),
-    '        .Dock = DockStyle.Top,
-    '        .Anchor = AnchorStyles.Left Or AnchorStyles.Right,
-    '        .Margin = New Padding(5)
-    '        }
-
-    '        ' Configure columns: new for label and buttons, existing adjusted
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' New: Position label
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' New: Move buttons
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 10.0F)) ' Existing: Label
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 40.0F)) ' Existing: TextBox
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 10.0F)) ' Existing: Label
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 40.0F)) ' Existing: TextBox
-    '        contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' Existing: Delete Button
-
-    '        ' Position label
-    '        Dim positionLabel As New Label With {
-    '        .Text = contactIndex.ToString(),
-    '        .AutoSize = True,
-    '        .Anchor = AnchorStyles.Left
-    '    }
-    '        contactTable.Controls.Add(positionLabel, 0, 0)
-    '        contactTable.SetRowSpan(positionLabel, 2) ' Span two rows
-
-    '        ' Move up and down buttons
-    '        Dim moveUpButton As New Button With {.Text = "↑", .AutoSize = True}
-    '        Dim moveDownButton As New Button With {.Text = "↓", .AutoSize = True}
-    '        AddHandler moveUpButton.Click, Sub(sender, e) MoveContactUp(contact)
-    '        AddHandler moveDownButton.Click, Sub(sender, e) MoveContactDown(contact)
-    '        contactTable.Controls.Add(moveUpButton, 1, 0)
-    '        contactTable.Controls.Add(moveDownButton, 1, 1)
-    '        moveUpButton.Width = contactTable.GetColumnWidths(1) ' Assuming column 1 is for buttons
-    '        moveDownButton.Width = moveUpButton.Width
-
-    '        ' Add labels and textboxes for contact details, adjusting column indices
-    '        Dim labels As String() = {"First Name", "Surname", "Phone", "Email"}
-    '        Dim values As String() = {contact.PersonFirstname, contact.PersonSurname, contact.PersonPhone, contact.PersonMail}
-    '        For i As Integer = 0 To labels.Length - 1
-    '            Dim label As New Label With {.Text = labels(i), .Anchor = AnchorStyles.Right, .AutoSize = True}
-    '            Dim textBox As New TextBox With {.Text = values(i), .Anchor = AnchorStyles.Left Or AnchorStyles.Right, .AutoSize = True}
-    '            textBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = i}
-    '            AddHandler textBox.TextChanged, AddressOf UpdateContact
-    '            Dim row As Integer = i \ 2 ' Determine row based on index
-    '            Dim col As Integer = (i Mod 2) * 2 + 2 ' Adjust column index to account for new columns
-    '            contactTable.Controls.Add(label, col, row)
-    '            contactTable.Controls.Add(textBox, col + 1, row)
-    '        Next
-
-    '        ' Delete button, adjusting column index
-    '        Dim deleteButton As New Button With {.Text = "Delete", .AutoSize = True}
-    '        AddHandler deleteButton.Click, Sub(sender, e) DeleteContact(contact)
-    '        contactTable.Controls.Add(deleteButton, 6, 0)
-    '        contactTable.SetRowSpan(deleteButton, 2) ' Span two rows
-
-    '        FlowLayoutContact.Controls.Add(contactTable)
-    '        contactIndex += 1 ' Increment for the next contact's position label
-    '    Next
-
-    '    FlowLayoutContact.ResumeLayout(True) ' Resume layout logic and optionally perform layout
-    'End Sub
-
-    'Private Sub UpdateContact(sender As Object, e As EventArgs)
-    '    Dim textBox As TextBox = CType(sender, TextBox)
-    '    Dim contactInfo = CType(textBox.Tag, Object) ' Assuming you used an anonymous type; adjust if using a Tuple or custom class
-    '    Dim contact As Contact = contactInfo.Contact
-    '    Dim propertyIndex As Integer = contactInfo.PropertyIndex
-
-    '    Select Case propertyIndex
-    '        Case 0
-    '            contact.PersonFirstname = textBox.Text
-    '        Case 1
-    '            contact.PersonSurname = textBox.Text
-    '        Case 2
-    '            contact.PersonPhone = textBox.Text
-    '        Case 3
-    '            contact.PersonMail = textBox.Text
-    '    End Select
-    'End Sub
 
     Private Sub UpdateContact(sender As Object, e As EventArgs)
         Dim textBox As TextBox = CType(sender, TextBox)
@@ -514,6 +506,39 @@ Public Class BorderedTableLayoutPanel
 End Class
 
 Module GlobalUtilities
+
+    Public Sub ValidatePhoneNumber(textBox As TextBox, applyButton As Button)
+        ' Regular expression for validating a phone number
+        Dim pattern As String = "^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$"
+
+        ' Check if the phone number is valid or the textbox is empty
+        Dim isValidPhoneNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern)
+
+        If isValidPhoneNumber Then
+            ' Phone number is valid or empty
+            textBox.BackColor = Color.White
+            applyButton.Enabled = True ' Enable the Apply button
+        Else
+            ' Phone number is not valid
+            textBox.BackColor = Color.LightCoral
+            applyButton.Enabled = False ' Disable the Apply button
+        End If
+    End Sub
+
+    Public Sub ValidateEmail(textBox As TextBox, applyButton As Button)
+        ' Regular expression for validating an email address
+        Dim pattern As String = "^\S+@\S+\.\S+$"
+
+        If String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern) Then
+            ' Email is valid (including being empty or whitespace)
+            textBox.BackColor = Color.White
+            applyButton.Enabled = True ' Enable the Apply button
+        Else
+            ' Email is not valid
+            textBox.BackColor = Color.LightCoral
+            applyButton.Enabled = False ' Disable the Apply button
+        End If
+    End Sub
 
     ' Retrieves a DateTime object from a database field, safely handling DBNull values.
     ' Returns a default value if the date is not initialized or is DBNull.

@@ -207,6 +207,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BoschDigiCard.ico" />
+    <Content Include="IconFire.ico" />
+    <Content Include="IconPolice.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
