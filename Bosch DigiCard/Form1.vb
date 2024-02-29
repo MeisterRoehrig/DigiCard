@@ -251,4 +251,35 @@ Public Class Form1
             End If
         End If
     End Sub
+
+    Private Sub SetDonwloadPathToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetDonwloadPathToolStripMenuItem.Click
+        Using folderBrowser As New FolderBrowserDialog()
+            folderBrowser.Description = "Select a folder to save downloaded PDFs"
+            ' Set the initial directory to the current download path if one exists
+            If Not String.IsNullOrEmpty(My.Settings.DownloadPath) Then
+                folderBrowser.SelectedPath = My.Settings.DownloadPath
+            End If
+
+            ' Show the dialog and check if the user clicked OK
+            If folderBrowser.ShowDialog() = DialogResult.OK Then
+                ' Update the download path in the settings
+                My.Settings.DownloadPath = folderBrowser.SelectedPath
+                My.Settings.Save() ' Save the settings
+
+                Debug.WriteLine($"Download path set to: {My.Settings.DownloadPath}", "Download Path Updated", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Else
+                ' Optionally handle the case where the user cancels the dialog
+                MessageBox.Show("Download path update cancelled.", "Update Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+        End Using
+    End Sub
+
+    Private Sub NewEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewEntryToolStripMenuItem.Click
+        Dim cardView As New CardView(0, conn)
+        If cardView.ShowDialog() = DialogResult.OK Then
+            ' Refresh DataGridView here
+            PerformSearch()
+            'SelectRowByCardID(cardID)
+        End If
+    End Sub
 End Class

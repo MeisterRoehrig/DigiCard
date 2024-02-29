@@ -160,6 +160,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="App.config" />
+    <None Include="testpdf.pdf" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ADODB">

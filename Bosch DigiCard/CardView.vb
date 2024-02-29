@@ -1,6 +1,9 @@
 ﻿Imports System.Text.RegularExpressions
 Imports System.Windows.Forms
 Imports System.Drawing
+Imports System.IO
+Imports System.Diagnostics
+
 
 Public Class CardView
     Private cardID As Integer
@@ -43,7 +46,27 @@ Public Class CardView
         End Select
     End Sub
 
+
+    Private Sub InitializeFormForNewCard()
+        Me.Text = "New Card"
+        Me.Icon = My.Resources.BoschDigiCard
+        RichTextBoxCardComment.Text = String.Empty
+        TextBoxCardNumber.Text = String.Empty
+        ComboBoxCardTyp.SelectedIndex = -1 ' Or set to a default type
+        ' Repeat for other controls...
+
+        ToolStripStatusLabelCardCreated.Text = "Created: Not yet created"
+        ToolStripStatusLabelCardLastModified.Text = "Last Modified: Not yet modified"
+        ' Initialize other parts of the UI as needed for a new card
+    End Sub
+
     Private Sub LoadCardData(cardID As Integer)
+        If cardID <= 0 Then
+            ' Initialize form for a new card
+            InitializeFormForNewCard()
+            Return
+        End If
+
         ' Assuming you have a method to get a database connection
         Dim queryBackup As String = $"SELECT * " &
                       $"FROM ((Card " &
@@ -102,7 +125,7 @@ Public Class CardView
             End If
         Catch ex As Exception
             Debug.WriteLine($"An error occurred while fetching card data: {ex.Message}")
-                MessageBox.Show($"An error occurred while fetching card data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show($"An error occurred while fetching card data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
         ' New code to load contacts:
@@ -467,6 +490,137 @@ Public Class CardView
         Me.DialogResult = DialogResult.Cancel
         Me.Close()
     End Sub
+
+    Private Sub TextBoxCardNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCardNumber.TextChanged
+        GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+
+    Private Sub TextBoxSiteAddressPLZ_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSiteAddressPLZ.TextChanged
+        GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+
+    Private Sub TextBoxClientAddressZIP_TextChanged(sender As Object, e As EventArgs) Handles TextBoxClientAddressZIP.TextChanged
+        GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+
+    Private Sub TextBoxSiteAddressNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSiteAddressNumber.TextChanged
+        GlobalUtilities.ValidateAddressNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+
+    Private Sub TextBoxClientAddressNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxClientAddressNumber.TextChanged
+        GlobalUtilities.ValidateAddressNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+
+
+    Private Function EnsureDownloadPath() As String
+        If String.IsNullOrEmpty(My.Settings.DownloadPath) OrElse Not Directory.Exists(My.Settings.DownloadPath) Then
+            Using folderBrowser As New FolderBrowserDialog()
+                folderBrowser.Description = "Select a folder to save downloaded files"
+                If folderBrowser.ShowDialog() = DialogResult.OK Then
+                    My.Settings.DownloadPath = folderBrowser.SelectedPath
+                    My.Settings.Save() ' Save the updated path
+                    Return My.Settings.DownloadPath
+                Else
+                    MessageBox.Show("Download path not selected. Operation cancelled.", "Operation Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                    Return Nothing
+                End If
+            End Using
+        Else
+            Return My.Settings.DownloadPath
+        End If
+    End Function
+
+    Private Function FileToByteArray(filePath As String) As Byte()
+        Return IO.File.ReadAllBytes(filePath)
+    End Function
+
+    Private Sub UploadFile(columnName As String, fileTypeFilter As String)
+        Using openFileDialog As New OpenFileDialog()
+            openFileDialog.Filter = fileTypeFilter
+            If openFileDialog.ShowDialog() = DialogResult.OK Then
+                Dim filePath As String = openFileDialog.FileName
+                Dim fileBytes As Byte() = FileToByteArray(filePath)
+                Dim currentTime As String = GlobalUtilities.GetFormattedCurrentTime()
+
+                Dim rs As New ADODB.Recordset
+                Try
+                    rs.Open($"SELECT {columnName}, DataCreated, DataLastModified FROM Data WHERE CardID = {Me.cardID}", conn, ADODB.CursorTypeEnum.adOpenKeyset, ADODB.LockTypeEnum.adLockOptimistic)
+
+                    If Not rs.EOF Then
+                        rs.Fields(columnName).Value = fileBytes
+                        rs.Fields("DataLastModified").Value = currentTime
+                    Else
+                        rs.AddNew()
+                        rs.Fields("CardID").Value = Me.cardID
+                        rs.Fields(columnName).Value = fileBytes
+                        rs.Fields("DataCreated").Value = currentTime
+                        rs.Fields("DataLastModified").Value = currentTime
+                    End If
+                    rs.Update()
+                Catch ex As Exception
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Finally
+                    rs.Close()
+                End Try
+            End If
+        End Using
+    End Sub
+
+    Private Sub DownloadFile(columnName As String, fileExtension As String, fileName As String)
+        Dim downloadPath As String = EnsureDownloadPath()
+        If String.IsNullOrEmpty(downloadPath) Then Return
+
+        Dim rs As New ADODB.Recordset
+        Try
+            rs.Open($"SELECT {columnName} FROM Data WHERE CardID = {Me.cardID}", conn, ADODB.CursorTypeEnum.adOpenKeyset, ADODB.LockTypeEnum.adLockOptimistic)
+
+            If Not rs.EOF AndAlso Not IsDBNull(rs.Fields(columnName).Value) Then
+                Dim fileBytes As Byte() = CType(rs.Fields(columnName).Value, Byte())
+                ' Generate a unique filename if the specified one already exists
+                Dim tempFilePath As String = Path.Combine(downloadPath, $"{fileName}{fileExtension}")
+                Dim counter As Integer = 1
+                While File.Exists(tempFilePath)
+                    tempFilePath = Path.Combine(downloadPath, $"{fileName} ({counter}){fileExtension}")
+                    counter += 1
+                End While
+                File.WriteAllBytes(tempFilePath, fileBytes)
+
+                MessageBox.Show($"File downloaded successfully to {tempFilePath}", "Download Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                ' Optionally, open the folder containing the downloaded file
+                Process.Start("explorer.exe", $"/select,""{tempFilePath}""")
+            Else
+                MessageBox.Show("No file available for the current CardID.", "Download Failed", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            End If
+        Catch ex As Exception
+            MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            rs.Close()
+        End Try
+    End Sub
+
+    Private Sub ButtonUploadCardPDF_Click(sender As Object, e As EventArgs) Handles ButtonUploadCardPDF.Click
+        UploadFile("DataCardPdf", "PDF Files|*.pdf")
+    End Sub
+
+    Private Sub ButtonDownloadCard_Click(sender As Object, e As EventArgs) Handles ButtonDownloadCard.Click
+        DownloadFile("DataCardPdf", ".pdf", "DataCard_" + TextBoxCardNumber.Text)
+    End Sub
+
+    Private Sub ButtonUploadMapPDF_Click(sender As Object, e As EventArgs) Handles ButtonUploadMapPDF.Click
+        UploadFile("DataMapPdf", "PDF Files|*.pdf")
+    End Sub
+
+    Private Sub ButtonDownloadMapPDF_Click(sender As Object, e As EventArgs) Handles ButtonDownloadMapPDF.Click
+        DownloadFile("DataMapPdf", ".pdf", "DataMap_" + TextBoxCardNumber.Text)
+    End Sub
+
+    Private Sub ButtonUploadMapDWG_Click(sender As Object, e As EventArgs) Handles ButtonUploadMapDWG.Click
+        UploadFile("DataMapDwg", "DWG Files|*.dwg")
+    End Sub
+
+    Private Sub ButtonDownloadMapDWG_Click(sender As Object, e As EventArgs) Handles ButtonDownloadMapDWG.Click
+        DownloadFile("DataMapDwg", ".dwg", "DataMap_" + TextBoxCardNumber.Text)
+    End Sub
 End Class
 
 Public Class Contact
@@ -506,6 +660,38 @@ Public Class BorderedTableLayoutPanel
 End Class
 
 Module GlobalUtilities
+
+    Public Sub ValidateAddressNumber(textBox As TextBox, applyButton As Button)
+        ' Regular expression to check for alphanumeric characters (letters, numbers), 
+        ' potentially including spaces and hyphens
+        Dim pattern As String = "^[a-zA-Z0-9\s\-]*$"
+
+        Dim isValidAddressNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern)
+
+        If isValidAddressNumber Then
+            ' The input is a valid alphanumeric address number or empty
+            textBox.BackColor = Color.White
+            applyButton.Enabled = True ' Enable the Apply button
+        Else
+            ' The input is not a valid alphanumeric address number
+            textBox.BackColor = Color.LightCoral
+            applyButton.Enabled = False ' Disable the Apply button
+        End If
+    End Sub
+
+    Public Sub ValidateNumber(textBox As TextBox, applyButton As Button)
+        Dim isValidNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse IsNumeric(textBox.Text)
+
+        If isValidNumber Then
+            ' The input is a valid number or empty
+            textBox.BackColor = Color.White
+            applyButton.Enabled = True ' Enable the Apply button
+        Else
+            ' The input is not a valid number
+            textBox.BackColor = Color.LightCoral
+            applyButton.Enabled = False ' Disable the Apply button
+        End If
+    End Sub
 
     Public Sub ValidatePhoneNumber(textBox As TextBox, applyButton As Button)
         ' Regular expression for validating a phone number

@@ -101,6 +101,18 @@ Namespace My
                 Me("BroadSearch") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property DownloadPath() As String
+            Get
+                Return CType(Me("DownloadPath"),String)
+            End Get
+            Set
+                Me("DownloadPath") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
