@@ -70,7 +70,7 @@ Partial Class CardView
         Me.LabelSiteAddressAddition = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.FlowLayoutPanelLetLong = New System.Windows.Forms.FlowLayoutPanel()
-        Me.TextBoxLet = New System.Windows.Forms.TextBox()
+        Me.TextBoxLat = New System.Windows.Forms.TextBox()
         Me.TextBoxLong = New System.Windows.Forms.TextBox()
         Me.ButtonRequestLatLong = New System.Windows.Forms.Button()
         Me.ButtonCardViewCancel = New System.Windows.Forms.Button()
@@ -645,7 +645,7 @@ Partial Class CardView
         Me.FlowLayoutPanelLetLong.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.FlowLayoutPanelLetLong.AutoSize = True
         Me.TableLayoutPanelObject.SetColumnSpan(Me.FlowLayoutPanelLetLong, 2)
-        Me.FlowLayoutPanelLetLong.Controls.Add(Me.TextBoxLet)
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.TextBoxLat)
         Me.FlowLayoutPanelLetLong.Controls.Add(Me.TextBoxLong)
         Me.FlowLayoutPanelLetLong.Location = New System.Drawing.Point(57, 145)
         Me.FlowLayoutPanelLetLong.Margin = New System.Windows.Forms.Padding(0)
@@ -653,12 +653,12 @@ Partial Class CardView
         Me.FlowLayoutPanelLetLong.Size = New System.Drawing.Size(212, 26)
         Me.FlowLayoutPanelLetLong.TabIndex = 3
         '
-        'TextBoxLet
+        'TextBoxLat
         '
-        Me.TextBoxLet.Location = New System.Drawing.Point(3, 3)
-        Me.TextBoxLet.Name = "TextBoxLet"
-        Me.TextBoxLet.Size = New System.Drawing.Size(100, 20)
-        Me.TextBoxLet.TabIndex = 0
+        Me.TextBoxLat.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxLat.Name = "TextBoxLat"
+        Me.TextBoxLat.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxLat.TabIndex = 0
         '
         'TextBoxLong
         '
@@ -1202,7 +1202,7 @@ Partial Class CardView
     Friend WithEvents ButtonCardDelete As Button
     Friend WithEvents Label1 As Label
     Friend WithEvents FlowLayoutPanelLetLong As FlowLayoutPanel
-    Friend WithEvents TextBoxLet As TextBox
+    Friend WithEvents TextBoxLat As TextBox
     Friend WithEvents TextBoxLong As TextBox
     Friend WithEvents ButtonRequestLatLong As Button
 End Class

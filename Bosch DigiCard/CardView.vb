@@ -71,11 +71,6 @@ Public Class CardView
                 rs = New ADODB.Recordset
             End If
             rs.Open(query, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockOptimistic)
-            'Write all elements of the recorset to the debug console
-            For Each field As ADODB.Field In rs.Fields
-                Debug.WriteLine($"{field.Name} = {field.Value}")
-            Next
-
 
             If Not rs.EOF Then
                 ' Populate your form controls here based on the recordset's fields
@@ -91,6 +86,8 @@ Public Class CardView
                 TextBoxSiteAddressPLZ.Text = SafeGetString(rs.Fields("SiteAddressZIP"))
                 TextBoxSiteAddressCity.Text = SafeGetString(rs.Fields("SiteAddressCity"))
                 TextBoxSiteAddressCountry.Text = SafeGetString(rs.Fields("SiteAddressCountry"))
+                TextBoxLat.Text = SafeGetString(rs.Fields("SiteAddressLat"))
+                TextBoxLong.Text = SafeGetString(rs.Fields("SiteAddressLong"))
                 CheckBoxCardCDM.CheckState = If(SafeGetString(rs.Fields("CardPanic")) = "True", CheckState.Checked, CheckState.Unchecked)
                 CheckBoxCardPanic.CheckState = If(SafeGetString(rs.Fields("CardPanic")) = "True", CheckState.Checked, CheckState.Unchecked)
                 CheckBoxCardBurglary.CheckState = If(SafeGetString(rs.Fields("CardBurglary")) = "True", CheckState.Checked, CheckState.Unchecked)
@@ -301,6 +298,8 @@ Public Class CardView
                                 $"SiteAddressZIP = '{SafeSQL(TextBoxSiteAddressPLZ.Text)}', " &
                                 $"SiteAddressCity = '{SafeSQL(TextBoxSiteAddressCity.Text)}', " &
                                 $"SiteAddressCountry = '{SafeSQL(TextBoxSiteAddressCountry.Text)}', " &
+                                $"SiteAddressLat = '{SafeSQL(TextBoxLat.Text)}', " &
+                                $"SiteAddressLong = '{SafeSQL(TextBoxLong.Text)}', " &
                                 $"CardType = '{SafeSQL(ComboBoxCardTyp.SelectedItem)}', " &
                                 $"CardCDM = '{SafeSQL(CheckBoxCardCDM.CheckState)}', " &
                                 $"CardPanic = '{SafeSQL(If(CheckBoxCardPanic.Checked, 1, 0))}', " &
@@ -538,8 +537,6 @@ Public Class CardView
     End Sub
 
     Private Sub CardView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Dim config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal)
-        MessageBox.Show(config.FilePath)
         LoadCardData(cardID)
         ContactLayoutUpdate()
     End Sub
@@ -714,16 +711,19 @@ Public Class CardView
     Private Sub ButtonRequestLatLong_Click(sender As Object, e As EventArgs) Handles ButtonRequestLatLong.Click
         Dim address As String = $"{TextBoxSiteAddressStreet.Text} {TextBoxSiteAddressNumber.Text} {TextBoxSiteAddressAddition.Text}, {TextBoxSiteAddressCity.Text}, {TextBoxSiteAddressPLZ.Text}, {TextBoxSiteAddressCountry.Text}"
         Dim apiKey As String = GetGoogleMapsAPIKey()
-        Dim requestUrl As String = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}"
+        Dim requestUrl As String = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}&language=de&region=de"
 
         Using webClient As New WebClient()
             Try
+                Debug.WriteLine($"Requesting geocoding data from: {requestUrl}")
+                Debug.WriteLine($"API Key: {apiKey}")
+                Debug.WriteLine($"Address: {address}")
                 Dim response As String = webClient.DownloadString(requestUrl)
                 Dim geoData = JsonConvert.DeserializeObject(Of GeocodeResponse)(response)
 
                 If geoData.status = "OK" AndAlso geoData.results.Count > 0 Then
                     Dim location = geoData.results(0).geometry.location
-                    TextBoxLet.Text = location.lat.ToString()
+                    TextBoxLat.Text = location.lat.ToString()
                     TextBoxLong.Text = location.lng.ToString()
                 Else
                     MessageBox.Show("Geocoding failed. Please check the address and try again. Make sure that you have a valid Google Geocoding Api key.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -890,27 +890,34 @@ Module GlobalUtilities
         ' Utilizes FormatDateForSql to ensure consistent formatting.
         Return FormatDateForSql(DateTime.UtcNow)
     End Function
-
     Public Function GetGoogleMapsAPIKey() As String
-        ' Attempt to retrieve the API key from application settings
-        Dim apiKey As String = My.Settings.GoogleMapsAPIKey
-
-        If String.IsNullOrEmpty(apiKey) Then
-            ' Prompt the user to input the API Key
-            Dim prompt As String = "Please enter your Google Geocoding API Key:"
-            apiKey = InputBox(prompt, "API Key Required")
-
-            If Not String.IsNullOrWhiteSpace(apiKey) Then
-                ' Save the provided API key for future use
-                My.Settings.GoogleMapsAPIKey = apiKey
-                My.Settings.Save() ' Make sure to save the settings
-            Else
-                Debug.WriteLine("Google Geocoding API Key is required.")
-                Return String.Empty
-            End If
+        ' Check if the API Key is already set
+        If String.IsNullOrEmpty(My.Settings.GoogleMapsAPIKey) Then
+            ' If not set, prompt the user to update the API Key
+            UpdateGoogleMapsAPIKey(forcePrompt:=True)
         End If
 
-        Return apiKey
+        ' Return the API Key after ensuring it has been set
+        Return My.Settings.GoogleMapsAPIKey
     End Function
+
+    Public Sub UpdateGoogleMapsAPIKey(Optional forcePrompt As Boolean = False)
+        Dim currentApiKey As String = My.Settings.GoogleMapsAPIKey
+        Dim prompt As String = "Please enter the new Google Maps API Key:"
+        Dim title As String = "Update API Key"
+
+        ' Only show the current key in the prompt if not forcing the user to re-enter the key
+        Dim defaultValue As String = If(forcePrompt, String.Empty, currentApiKey)
+        Dim newApiKey As String = InputBox(prompt, title, defaultValue)
+
+        ' Check if the user entered a value or pressed OK with the default value
+        If Not String.IsNullOrWhiteSpace(newApiKey) Then
+            ' Save the new API key for future use in application settings
+            My.Settings.GoogleMapsAPIKey = newApiKey
+            My.Settings.Save() ' Save the settings to make the change persistent
+        ElseIf forcePrompt AndAlso String.IsNullOrWhiteSpace(currentApiKey) Then
+            Debug.WriteLine("API Key is required to use Google Maps features.")
+        End If
+    End Sub
 
 End Module

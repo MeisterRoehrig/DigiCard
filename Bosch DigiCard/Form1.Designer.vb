@@ -29,6 +29,7 @@ Partial Class Form1
         Me.NewEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.SetDonwloadPathToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutBoschDigiCardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -46,7 +47,7 @@ Partial Class Form1
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.SetDonwloadPathToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SetGeocodingAPIKeyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStripForm1.SuspendLayout()
         CType(Me.DataGridViewCardsForm1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -58,7 +59,7 @@ Partial Class Form1
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.LocateDatabaseToolStripMenuItem, Me.ToolStripSeparator1, Me.SetDonwloadPathToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.LocateDatabaseToolStripMenuItem, Me.ToolStripSeparator1, Me.SetDonwloadPathToolStripMenuItem, Me.SetGeocodingAPIKeyToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -66,24 +67,30 @@ Partial Class Form1
         'NewEntryToolStripMenuItem
         '
         Me.NewEntryToolStripMenuItem.Name = "NewEntryToolStripMenuItem"
-        Me.NewEntryToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.NewEntryToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.NewEntryToolStripMenuItem.Text = "New Entry"
         '
         'LocateDatabaseToolStripMenuItem
         '
         Me.LocateDatabaseToolStripMenuItem.Name = "LocateDatabaseToolStripMenuItem"
-        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.LocateDatabaseToolStripMenuItem.Text = "Locate Database"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(177, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(191, 6)
+        '
+        'SetDonwloadPathToolStripMenuItem
+        '
+        Me.SetDonwloadPathToolStripMenuItem.Name = "SetDonwloadPathToolStripMenuItem"
+        Me.SetDonwloadPathToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.SetDonwloadPathToolStripMenuItem.Text = "Set Donwload Path"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'EditToolStripMenuItem
@@ -238,11 +245,11 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'SetDonwloadPathToolStripMenuItem
+        'SetGeocodingAPIKeyToolStripMenuItem
         '
-        Me.SetDonwloadPathToolStripMenuItem.Name = "SetDonwloadPathToolStripMenuItem"
-        Me.SetDonwloadPathToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
-        Me.SetDonwloadPathToolStripMenuItem.Text = "Set Donwload Path"
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Name = "SetGeocodingAPIKeyToolStripMenuItem"
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Text = "Set Geocoding API Key"
         '
         'Form1
         '
@@ -293,4 +300,5 @@ Partial Class Form1
     Friend WithEvents CheckBoxHideFire As CheckBox
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents SetDonwloadPathToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents SetGeocodingAPIKeyToolStripMenuItem As ToolStripMenuItem
 End Class

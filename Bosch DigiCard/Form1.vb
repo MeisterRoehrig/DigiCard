@@ -282,4 +282,8 @@ Public Class Form1
             'SelectRowByCardID(cardID)
         End If
     End Sub
+
+    Private Sub SetGeocodingAPIKeyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetGeocodingAPIKeyToolStripMenuItem.Click
+        GlobalUtilities.UpdateGoogleMapsAPIKey(True)
+    End Sub
 End Class
