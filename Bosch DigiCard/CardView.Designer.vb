@@ -68,6 +68,11 @@ Partial Class CardView
         Me.TextBoxSiteAddressAddition = New System.Windows.Forms.TextBox()
         Me.LabelSiteAddressStreet = New System.Windows.Forms.Label()
         Me.LabelSiteAddressAddition = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.FlowLayoutPanelLetLong = New System.Windows.Forms.FlowLayoutPanel()
+        Me.TextBoxLet = New System.Windows.Forms.TextBox()
+        Me.TextBoxLong = New System.Windows.Forms.TextBox()
+        Me.ButtonRequestLatLong = New System.Windows.Forms.Button()
         Me.ButtonCardViewCancel = New System.Windows.Forms.Button()
         Me.ButtonCardViewApply = New System.Windows.Forms.Button()
         Me.FlowLayoutPanel3 = New System.Windows.Forms.FlowLayoutPanel()
@@ -110,6 +115,7 @@ Partial Class CardView
         Me.TableLayoutPanel2.SuspendLayout()
         Me.GroupBoxObject.SuspendLayout()
         Me.TableLayoutPanelObject.SuspendLayout()
+        Me.FlowLayoutPanelLetLong.SuspendLayout()
         Me.FlowLayoutPanel3.SuspendLayout()
         Me.GroupBoxClient.SuspendLayout()
         Me.TableLayoutPanel1.SuspendLayout()
@@ -453,10 +459,10 @@ Partial Class CardView
         Me.GroupBoxObject.Dock = System.Windows.Forms.DockStyle.Top
         Me.GroupBoxObject.Location = New System.Drawing.Point(8, 340)
         Me.GroupBoxObject.Margin = New System.Windows.Forms.Padding(5)
-        Me.GroupBoxObject.MinimumSize = New System.Drawing.Size(0, 164)
+        Me.GroupBoxObject.MinimumSize = New System.Drawing.Size(0, 200)
         Me.GroupBoxObject.Name = "GroupBoxObject"
         Me.GroupBoxObject.Padding = New System.Windows.Forms.Padding(5)
-        Me.GroupBoxObject.Size = New System.Drawing.Size(930, 164)
+        Me.GroupBoxObject.Size = New System.Drawing.Size(930, 200)
         Me.GroupBoxObject.TabIndex = 3
         Me.GroupBoxObject.TabStop = False
         Me.GroupBoxObject.Text = "Object"
@@ -483,15 +489,19 @@ Partial Class CardView
         Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressAddition, 1, 2)
         Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressStreet, 0, 1)
         Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressAddition, 0, 2)
+        Me.TableLayoutPanelObject.Controls.Add(Me.Label1, 0, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.FlowLayoutPanelLetLong, 1, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.ButtonRequestLatLong, 3, 4)
         Me.TableLayoutPanelObject.Dock = System.Windows.Forms.DockStyle.Fill
         Me.TableLayoutPanelObject.Location = New System.Drawing.Point(5, 18)
         Me.TableLayoutPanelObject.Name = "TableLayoutPanelObject"
-        Me.TableLayoutPanelObject.RowCount = 4
-        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25.0!))
-        Me.TableLayoutPanelObject.Size = New System.Drawing.Size(920, 141)
+        Me.TableLayoutPanelObject.RowCount = 5
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.Size = New System.Drawing.Size(920, 177)
         Me.TableLayoutPanelObject.TabIndex = 3
         '
         'LabelSiteAddressZIP
@@ -507,7 +517,7 @@ Partial Class CardView
         'TextBoxSiteAddressPLZ
         '
         Me.TextBoxSiteAddressPLZ.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressPLZ.Location = New System.Drawing.Point(54, 113)
+        Me.TextBoxSiteAddressPLZ.Location = New System.Drawing.Point(60, 112)
         Me.TextBoxSiteAddressPLZ.Name = "TextBoxSiteAddressPLZ"
         Me.TextBoxSiteAddressPLZ.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressPLZ.TabIndex = 2
@@ -515,7 +525,7 @@ Partial Class CardView
         'TextBoxSiteAddressCountry
         '
         Me.TextBoxSiteAddressCountry.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressCountry.Location = New System.Drawing.Point(273, 113)
+        Me.TextBoxSiteAddressCountry.Location = New System.Drawing.Point(279, 112)
         Me.TextBoxSiteAddressCountry.Name = "TextBoxSiteAddressCountry"
         Me.TextBoxSiteAddressCountry.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressCountry.TabIndex = 2
@@ -523,7 +533,7 @@ Partial Class CardView
         'TextBoxSiteName
         '
         Me.TextBoxSiteName.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteName.Location = New System.Drawing.Point(54, 7)
+        Me.TextBoxSiteName.Location = New System.Drawing.Point(60, 7)
         Me.TextBoxSiteName.Name = "TextBoxSiteName"
         Me.TextBoxSiteName.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteName.TabIndex = 2
@@ -531,7 +541,7 @@ Partial Class CardView
         'TextBoxSiteAddressCity
         '
         Me.TextBoxSiteAddressCity.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressCity.Location = New System.Drawing.Point(273, 77)
+        Me.TextBoxSiteAddressCity.Location = New System.Drawing.Point(279, 77)
         Me.TextBoxSiteAddressCity.Name = "TextBoxSiteAddressCity"
         Me.TextBoxSiteAddressCity.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressCity.TabIndex = 2
@@ -540,7 +550,7 @@ Partial Class CardView
         '
         Me.LabelSiteAddressCountry.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelSiteAddressCountry.AutoSize = True
-        Me.LabelSiteAddressCountry.Location = New System.Drawing.Point(223, 116)
+        Me.LabelSiteAddressCountry.Location = New System.Drawing.Point(229, 116)
         Me.LabelSiteAddressCountry.Name = "LabelSiteAddressCountry"
         Me.LabelSiteAddressCountry.Size = New System.Drawing.Size(43, 13)
         Me.LabelSiteAddressCountry.TabIndex = 1
@@ -560,7 +570,7 @@ Partial Class CardView
         '
         Me.LabelSiteAddressCity.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelSiteAddressCity.AutoSize = True
-        Me.LabelSiteAddressCity.Location = New System.Drawing.Point(223, 81)
+        Me.LabelSiteAddressCity.Location = New System.Drawing.Point(229, 81)
         Me.LabelSiteAddressCity.Name = "LabelSiteAddressCity"
         Me.LabelSiteAddressCity.Size = New System.Drawing.Size(24, 13)
         Me.LabelSiteAddressCity.TabIndex = 1
@@ -570,7 +580,7 @@ Partial Class CardView
         '
         Me.LabelSiteAddressNumber.Anchor = System.Windows.Forms.AnchorStyles.Left
         Me.LabelSiteAddressNumber.AutoSize = True
-        Me.LabelSiteAddressNumber.Location = New System.Drawing.Point(223, 46)
+        Me.LabelSiteAddressNumber.Location = New System.Drawing.Point(229, 46)
         Me.LabelSiteAddressNumber.Name = "LabelSiteAddressNumber"
         Me.LabelSiteAddressNumber.Size = New System.Drawing.Size(44, 13)
         Me.LabelSiteAddressNumber.TabIndex = 1
@@ -579,7 +589,7 @@ Partial Class CardView
         'TextBoxSiteAddressNumber
         '
         Me.TextBoxSiteAddressNumber.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressNumber.Location = New System.Drawing.Point(273, 42)
+        Me.TextBoxSiteAddressNumber.Location = New System.Drawing.Point(279, 42)
         Me.TextBoxSiteAddressNumber.Name = "TextBoxSiteAddressNumber"
         Me.TextBoxSiteAddressNumber.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressNumber.TabIndex = 2
@@ -587,7 +597,7 @@ Partial Class CardView
         'TextBoxSiteAddressStreet
         '
         Me.TextBoxSiteAddressStreet.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressStreet.Location = New System.Drawing.Point(54, 42)
+        Me.TextBoxSiteAddressStreet.Location = New System.Drawing.Point(60, 42)
         Me.TextBoxSiteAddressStreet.Name = "TextBoxSiteAddressStreet"
         Me.TextBoxSiteAddressStreet.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressStreet.TabIndex = 2
@@ -595,7 +605,7 @@ Partial Class CardView
         'TextBoxSiteAddressAddition
         '
         Me.TextBoxSiteAddressAddition.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.TextBoxSiteAddressAddition.Location = New System.Drawing.Point(54, 77)
+        Me.TextBoxSiteAddressAddition.Location = New System.Drawing.Point(60, 77)
         Me.TextBoxSiteAddressAddition.Name = "TextBoxSiteAddressAddition"
         Me.TextBoxSiteAddressAddition.Size = New System.Drawing.Size(163, 20)
         Me.TextBoxSiteAddressAddition.TabIndex = 2
@@ -619,6 +629,53 @@ Partial Class CardView
         Me.LabelSiteAddressAddition.Size = New System.Drawing.Size(45, 13)
         Me.LabelSiteAddressAddition.TabIndex = 1
         Me.LabelSiteAddressAddition.Text = "Addition"
+        '
+        'Label1
+        '
+        Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 152)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(51, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Lat/Long"
+        '
+        'FlowLayoutPanelLetLong
+        '
+        Me.FlowLayoutPanelLetLong.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.FlowLayoutPanelLetLong.AutoSize = True
+        Me.TableLayoutPanelObject.SetColumnSpan(Me.FlowLayoutPanelLetLong, 2)
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.TextBoxLet)
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.TextBoxLong)
+        Me.FlowLayoutPanelLetLong.Location = New System.Drawing.Point(57, 145)
+        Me.FlowLayoutPanelLetLong.Margin = New System.Windows.Forms.Padding(0)
+        Me.FlowLayoutPanelLetLong.Name = "FlowLayoutPanelLetLong"
+        Me.FlowLayoutPanelLetLong.Size = New System.Drawing.Size(212, 26)
+        Me.FlowLayoutPanelLetLong.TabIndex = 3
+        '
+        'TextBoxLet
+        '
+        Me.TextBoxLet.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxLet.Name = "TextBoxLet"
+        Me.TextBoxLet.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxLet.TabIndex = 0
+        '
+        'TextBoxLong
+        '
+        Me.TextBoxLong.Location = New System.Drawing.Point(109, 3)
+        Me.TextBoxLong.Name = "TextBoxLong"
+        Me.TextBoxLong.Size = New System.Drawing.Size(100, 20)
+        Me.TextBoxLong.TabIndex = 1
+        '
+        'ButtonRequestLatLong
+        '
+        Me.ButtonRequestLatLong.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonRequestLatLong.Location = New System.Drawing.Point(279, 147)
+        Me.ButtonRequestLatLong.Name = "ButtonRequestLatLong"
+        Me.ButtonRequestLatLong.Size = New System.Drawing.Size(75, 23)
+        Me.ButtonRequestLatLong.TabIndex = 4
+        Me.ButtonRequestLatLong.Text = "Request"
+        Me.ButtonRequestLatLong.UseVisualStyleBackColor = True
         '
         'ButtonCardViewCancel
         '
@@ -658,7 +715,7 @@ Partial Class CardView
         Me.GroupBoxClient.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBoxClient.Controls.Add(Me.TableLayoutPanel1)
         Me.GroupBoxClient.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBoxClient.Location = New System.Drawing.Point(8, 512)
+        Me.GroupBoxClient.Location = New System.Drawing.Point(8, 548)
         Me.GroupBoxClient.Margin = New System.Windows.Forms.Padding(5)
         Me.GroupBoxClient.MinimumSize = New System.Drawing.Size(0, 164)
         Me.GroupBoxClient.Name = "GroupBoxClient"
@@ -897,7 +954,7 @@ Partial Class CardView
         Me.GroupBoxDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.GroupBoxDelete.Controls.Add(Me.TableLayoutPanelDelete)
         Me.GroupBoxDelete.Dock = System.Windows.Forms.DockStyle.Top
-        Me.GroupBoxDelete.Location = New System.Drawing.Point(8, 684)
+        Me.GroupBoxDelete.Location = New System.Drawing.Point(8, 720)
         Me.GroupBoxDelete.Margin = New System.Windows.Forms.Padding(5)
         Me.GroupBoxDelete.Name = "GroupBoxDelete"
         Me.GroupBoxDelete.Padding = New System.Windows.Forms.Padding(5)
@@ -972,7 +1029,7 @@ Partial Class CardView
         'Panel2
         '
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel2.Location = New System.Drawing.Point(8, 676)
+        Me.Panel2.Location = New System.Drawing.Point(8, 712)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(930, 8)
         Me.Panel2.TabIndex = 11
@@ -980,7 +1037,7 @@ Partial Class CardView
         'PanelSpacer3
         '
         Me.PanelSpacer3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.PanelSpacer3.Location = New System.Drawing.Point(8, 504)
+        Me.PanelSpacer3.Location = New System.Drawing.Point(8, 540)
         Me.PanelSpacer3.Name = "PanelSpacer3"
         Me.PanelSpacer3.Size = New System.Drawing.Size(930, 8)
         Me.PanelSpacer3.TabIndex = 7
@@ -1043,6 +1100,8 @@ Partial Class CardView
         Me.GroupBoxObject.ResumeLayout(False)
         Me.TableLayoutPanelObject.ResumeLayout(False)
         Me.TableLayoutPanelObject.PerformLayout()
+        Me.FlowLayoutPanelLetLong.ResumeLayout(False)
+        Me.FlowLayoutPanelLetLong.PerformLayout()
         Me.FlowLayoutPanel3.ResumeLayout(False)
         Me.GroupBoxClient.ResumeLayout(False)
         Me.TableLayoutPanel1.ResumeLayout(False)
@@ -1141,4 +1200,9 @@ Partial Class CardView
     Friend WithEvents FlowLayoutPanelDelete As FlowLayoutPanel
     Friend WithEvents LabelDeleteCard As Label
     Friend WithEvents ButtonCardDelete As Button
+    Friend WithEvents Label1 As Label
+    Friend WithEvents FlowLayoutPanelLetLong As FlowLayoutPanel
+    Friend WithEvents TextBoxLet As TextBox
+    Friend WithEvents TextBoxLong As TextBox
+    Friend WithEvents ButtonRequestLatLong As Button
 End Class

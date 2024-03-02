@@ -4,6 +4,9 @@ Imports System.Drawing
 Imports System.IO
 Imports System.Diagnostics
 Imports System.Data.SqlClient
+Imports System.Net
+Imports Newtonsoft.Json
+Imports System.Configuration
 
 
 Public Class CardView
@@ -535,6 +538,8 @@ Public Class CardView
     End Sub
 
     Private Sub CardView_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Dim config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal)
+        MessageBox.Show(config.FilePath)
         LoadCardData(cardID)
         ContactLayoutUpdate()
     End Sub
@@ -706,6 +711,48 @@ Public Class CardView
         DownloadFile("DataMapDwg", ".dwg", "DataMap_" + TextBoxCardNumber.Text)
     End Sub
 
+    Private Sub ButtonRequestLatLong_Click(sender As Object, e As EventArgs) Handles ButtonRequestLatLong.Click
+        Dim address As String = $"{TextBoxSiteAddressStreet.Text} {TextBoxSiteAddressNumber.Text} {TextBoxSiteAddressAddition.Text}, {TextBoxSiteAddressCity.Text}, {TextBoxSiteAddressPLZ.Text}, {TextBoxSiteAddressCountry.Text}"
+        Dim apiKey As String = GetGoogleMapsAPIKey()
+        Dim requestUrl As String = $"https://maps.googleapis.com/maps/api/geocode/json?address={Uri.EscapeDataString(address)}&key={apiKey}"
+
+        Using webClient As New WebClient()
+            Try
+                Dim response As String = webClient.DownloadString(requestUrl)
+                Dim geoData = JsonConvert.DeserializeObject(Of GeocodeResponse)(response)
+
+                If geoData.status = "OK" AndAlso geoData.results.Count > 0 Then
+                    Dim location = geoData.results(0).geometry.location
+                    TextBoxLet.Text = location.lat.ToString()
+                    TextBoxLong.Text = location.lng.ToString()
+                Else
+                    MessageBox.Show("Geocoding failed. Please check the address and try again. Make sure that you have a valid Google Geocoding Api key.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                End If
+            Catch ex As Exception
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End Using
+    End Sub
+
+    ' Define classes to parse the JSON response
+    Public Class GeocodeResponse
+        Public Property status As String
+        Public Property results As List(Of GeocodeResult)
+    End Class
+
+    Public Class GeocodeResult
+        Public Property geometry As GeocodeGeometry
+    End Class
+
+    Public Class GeocodeGeometry
+        Public Property location As GeocodeLocation
+    End Class
+
+    Public Class GeocodeLocation
+        Public Property lat As Double
+        Public Property lng As Double
+    End Class
+
 End Class
 
 Public Class Contact
@@ -842,6 +889,28 @@ Module GlobalUtilities
     Public Function GetFormattedCurrentTime() As String
         ' Utilizes FormatDateForSql to ensure consistent formatting.
         Return FormatDateForSql(DateTime.UtcNow)
+    End Function
+
+    Public Function GetGoogleMapsAPIKey() As String
+        ' Attempt to retrieve the API key from application settings
+        Dim apiKey As String = My.Settings.GoogleMapsAPIKey
+
+        If String.IsNullOrEmpty(apiKey) Then
+            ' Prompt the user to input the API Key
+            Dim prompt As String = "Please enter your Google Geocoding API Key:"
+            apiKey = InputBox(prompt, "API Key Required")
+
+            If Not String.IsNullOrWhiteSpace(apiKey) Then
+                ' Save the provided API key for future use
+                My.Settings.GoogleMapsAPIKey = apiKey
+                My.Settings.Save() ' Make sure to save the settings
+            Else
+                Debug.WriteLine("Google Geocoding API Key is required.")
+                Return String.Empty
+            End If
+        End If
+
+        Return apiKey
     End Function
 
 End Module
