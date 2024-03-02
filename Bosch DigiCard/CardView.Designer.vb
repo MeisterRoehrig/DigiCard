@@ -22,6 +22,7 @@ Partial Class CardView
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CardView))
         Me.StatusStrip1 = New System.Windows.Forms.StatusStrip()
         Me.ToolStripStatusLabelCardCreated = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabelCardLastModified = New System.Windows.Forms.ToolStripStatusLabel()
@@ -122,14 +123,14 @@ Partial Class CardView
         'ToolStripStatusLabelCardCreated
         '
         Me.ToolStripStatusLabelCardCreated.Name = "ToolStripStatusLabelCardCreated"
-        Me.ToolStripStatusLabelCardCreated.Size = New System.Drawing.Size(119, 17)
-        Me.ToolStripStatusLabelCardCreated.Text = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabelCardCreated.Size = New System.Drawing.Size(135, 17)
+        Me.ToolStripStatusLabelCardCreated.Text = "Created: Not yet created"
         '
         'ToolStripStatusLabelCardLastModified
         '
         Me.ToolStripStatusLabelCardLastModified.Name = "ToolStripStatusLabelCardLastModified"
-        Me.ToolStripStatusLabelCardLastModified.Size = New System.Drawing.Size(119, 17)
-        Me.ToolStripStatusLabelCardLastModified.Text = "ToolStripStatusLabel1"
+        Me.ToolStripStatusLabelCardLastModified.Size = New System.Drawing.Size(175, 17)
+        Me.ToolStripStatusLabelCardLastModified.Text = "Last Modified: Not yet modified"
         '
         'GroupBoxSystemsType
         '
@@ -929,8 +930,9 @@ Partial Class CardView
         Me.Controls.Add(Me.FlowLayoutPanel3)
         Me.Controls.Add(Me.StatusStrip1)
         Me.DoubleBuffered = True
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.Name = "CardView"
-        Me.Text = "va"
+        Me.Text = "New Card"
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
         Me.GroupBoxSystemsType.ResumeLayout(False)

@@ -3,6 +3,7 @@ Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.IO
 Imports System.Diagnostics
+Imports System.Data.SqlClient
 
 
 Public Class CardView
@@ -47,32 +48,14 @@ Public Class CardView
     End Sub
 
 
-    Private Sub InitializeFormForNewCard()
-        Me.Text = "New Card"
-        Me.Icon = My.Resources.BoschDigiCard
-        RichTextBoxCardComment.Text = String.Empty
-        TextBoxCardNumber.Text = String.Empty
-        ComboBoxCardTyp.SelectedIndex = -1 ' Or set to a default type
-        ' Repeat for other controls...
 
-        ToolStripStatusLabelCardCreated.Text = "Created: Not yet created"
-        ToolStripStatusLabelCardLastModified.Text = "Last Modified: Not yet modified"
-        ' Initialize other parts of the UI as needed for a new card
-    End Sub
+
 
     Private Sub LoadCardData(cardID As Integer)
         If cardID <= 0 Then
-            ' Initialize form for a new card
-            InitializeFormForNewCard()
+            Debug.WriteLine("New card being created. No data to load.")
             Return
         End If
-
-        ' Assuming you have a method to get a database connection
-        Dim queryBackup As String = $"SELECT * " &
-                      $"FROM ((Card " &
-                      $"INNER JOIN Site ON Card.SiteID = Site.SiteID) " &
-                      $"INNER JOIN Client ON Site.ClientID = Client.ClientID) " &
-                      $"WHERE CardID = {cardID}"
 
         Dim query As String = $"SELECT Card.*, Site.*, Client.ClientID, Client.ClientName, Client.ClientAddressStreet, Client.ClientAddressSupplement, Client.ClientAddressNumber, Client.ClientAddressZIP, Client.ClientAddressCity, Client.ClientAddressCountry " &
                       $"FROM ((Card " &
@@ -167,9 +150,70 @@ Public Class CardView
 
     End Sub
 
+    Public Function InitializeCard() As Tuple(Of Integer, Integer)
+        Dim rsNewCard As New ADODB.Recordset
+        Dim cardID As Integer = 0
+        Dim clientID As Integer = 0
+        Dim currentTime As String = GlobalUtilities.GetFormattedCurrentTime()
 
+        ' Begin transaction
+        conn.BeginTrans()
+
+        Try
+            ' 1. Insert new Client and retrieve ClientID
+            Dim insertClientSql As String = $"INSERT INTO Client (ClientCreated, ClientLastModified) VALUES ('{currentTime}', '{currentTime}')"
+            conn.Execute(insertClientSql)
+
+            Dim getClientIDSql As String = "SELECT @@IDENTITY AS NewID"
+            rsNewCard.Open(getClientIDSql, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockOptimistic)
+            clientID = CInt(rsNewCard.Fields("NewID").Value)
+            rsNewCard.Close()
+
+            ' 2. Insert new Site using the new ClientID and retrieve SiteID
+            Dim insertSiteSql As String = $"INSERT INTO Site (ClientID, SiteCreated, SiteLastModified) VALUES ({clientID}, '{currentTime}', '{currentTime}')"
+            conn.Execute(insertSiteSql)
+
+            rsNewCard.Open(getClientIDSql, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockOptimistic)
+            Dim siteID As Integer = CInt(rsNewCard.Fields("NewID").Value)
+            rsNewCard.Close()
+
+            ' 3. Insert new Card with the new SiteID and retrieve CardID
+            Dim insertCardSql As String = $"INSERT INTO Card (SiteID, CardCreated, CardLastModified) VALUES ({siteID}, '{currentTime}', '{currentTime}')"
+            conn.Execute(insertCardSql)
+
+            rsNewCard.Open(getClientIDSql, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockOptimistic)
+            cardID = CInt(rsNewCard.Fields("NewID").Value)
+            rsNewCard.Close()
+
+            ' Commit transaction
+            conn.CommitTrans()
+
+        Catch ex As Exception
+            ' Rollback transaction on error
+            Debug.WriteLine($"An error occurred while creating a new card: {ex.Message}")
+            conn.RollbackTrans()
+            ' Log or handle the exception as needed
+            Throw
+        Finally
+            ' Ensure the rsNewCard is closed and cleaned up
+            If rsNewCard.State = ADODB.ObjectStateEnum.adStateOpen Then rsNewCard.Close()
+            rsNewCard = Nothing
+        End Try
+
+        ToolStripStatusLabelCardCreated.Text = "Created: " + currentTime.ToString()
+        ToolStripStatusLabelCardLastModified.Text = "Last Modified: " + currentTime.ToString()
+        Debug.WriteLine($"New card created with CardID {cardID} and ClientID {clientID}")
+        Return New Tuple(Of Integer, Integer)(clientID, cardID)
+    End Function
 
     Private Sub ButtonCardViewApply_Click(sender As Object, e As EventArgs) Handles ButtonCardViewApply.Click
+        If cardID <= 0 Then
+            ' Initialize form for a new card
+            Dim result As Tuple(Of Integer, Integer) = InitializeCard()
+            ClientID = result.Item1
+            cardID = result.Item2
+        End If
+
         ' Iterate over each contact in CardContacts
         For Each contact In CardContacts
             If contact.PersonID > 0 Then
@@ -178,9 +222,11 @@ Public Class CardView
                 Debug.WriteLine($"Updating contact {GlobalUtilities.GetFormattedCurrentTime()}")
                 Dim updatePersonQuery As String = $"UPDATE Person SET " &
                                           $"PersonLastModified = '{GlobalUtilities.GetFormattedCurrentTime()}', " &
+                                          $"PersonGender = '{SafeSQL(contact.PersonGender)}', " &
                                           $"PersonFirstname = '{SafeSQL(contact.PersonFirstname)}', " &
                                           $"PersonSurname = '{SafeSQL(contact.PersonSurname)}', " &
                                           $"PersonPhone = '{SafeSQL(contact.PersonPhone)}', " &
+                                          $"PersonPhone2 = '{SafeSQL(contact.PersonPhone2)}', " &
                                           $"PersonMail = '{SafeSQL(contact.PersonMail)}' " &
                                           $"WHERE PersonID = {contact.PersonID}"
                 conn.Execute(updatePersonQuery)
@@ -287,8 +333,6 @@ Public Class CardView
     End Sub
 
 
-
-
     Private Function SafeSQL(ByVal value As String) As String
         If value Is Nothing Then
             Return ""
@@ -376,39 +420,48 @@ Public Class CardView
             ' Gender Label and TextBox
             Dim genderLabel As New Label With {.Text = "Gender:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim genderTextBox As New TextBox With {.Text = contact.PersonGender, .Dock = DockStyle.Fill}
+            genderTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 0}
+            AddHandler genderTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(genderLabel, 2, 0)
             contactTable.Controls.Add(genderTextBox, 3, 0)
 
             ' First Name Label and TextBox
             Dim firstNameLabel As New Label With {.Text = "First Name:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim firstNameTextBox As New TextBox With {.Text = contact.PersonFirstname, .Dock = DockStyle.Fill}
+            firstNameTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 1}
+            AddHandler firstNameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(firstNameLabel, 4, 0) ' Adjust column index as needed
             contactTable.Controls.Add(firstNameTextBox, 5, 0) ' Adjust column index as needed
 
             ' Surname Label and TextBox
             Dim surnameLabel As New Label With {.Text = "Surname:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim surnameTextBox As New TextBox With {.Text = contact.PersonSurname, .Dock = DockStyle.Fill}
+            surnameTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 2}
+            AddHandler surnameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(surnameLabel, 6, 0) ' Adjust column index as needed
             contactTable.Controls.Add(surnameTextBox, 7, 0) ' Adjust column index as needed
 
             ' Phone 1 Label and TextBox
             Dim phone1Label As New Label With {.Text = "Phone 1:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim phone1TextBox As New TextBox With {.Text = contact.PersonPhone, .Dock = DockStyle.Fill}
-            AddHandler phone1TextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidatePhoneNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+            phone1TextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 3}
+            AddHandler phone1TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone1Label, 2, 1) ' Adjust column index as needed
             contactTable.Controls.Add(phone1TextBox, 3, 1) ' Adjust column index as needed
 
             ' Phone 2 Label and TextBox
             Dim phone2Label As New Label With {.Text = "Phone 2:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim phone2TextBox As New TextBox With {.Text = contact.PersonPhone2, .Dock = DockStyle.Fill}
-            AddHandler phone2TextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidatePhoneNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
+            phone2TextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 4}
+            AddHandler phone2TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone2Label, 4, 1) ' Adjust column index and row index as needed
             contactTable.Controls.Add(phone2TextBox, 5, 1) ' Adjust column index and row index as needed
 
             ' Email Label and TextBox
             Dim emailLabel As New Label With {.Text = "Email:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim emailTextBox As New TextBox With {.Text = contact.PersonMail, .Dock = DockStyle.Fill}
-            AddHandler emailTextBox.TextChanged, Sub(sender, e) GlobalUtilities.ValidateEmail(DirectCast(sender, TextBox), ButtonCardViewApply)
+            emailTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 5}
+            AddHandler emailTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(emailLabel, 6, 1) ' Adjust column index and row index as needed
             contactTable.Controls.Add(emailTextBox, 7, 1) ' Adjust column index and row index as needed
 
@@ -426,14 +479,11 @@ Public Class CardView
     End Sub
 
 
-
     Private Sub UpdateContact(sender As Object, e As EventArgs)
         Dim textBox As TextBox = CType(sender, TextBox)
-        Dim contactInfo = CType(textBox.Tag, Object) ' Adjusted for direct use of the anonymous type
-        Dim contact As Contact = contactInfo.Contact
-        Dim propertyIndex As Integer = contactInfo.PropertyIndex
+        Dim contact As Contact = CType(textBox.Tag, Object).Contact
+        Dim propertyIndex As Integer = CType(textBox.Tag, Object).PropertyIndex
 
-        ' Updated to match the new properties in the labels array
         Select Case propertyIndex
             Case 0
                 contact.PersonGender = textBox.Text
@@ -442,11 +492,17 @@ Public Class CardView
             Case 2
                 contact.PersonSurname = textBox.Text
             Case 3
-                contact.PersonPhone = textBox.Text
+                If GlobalUtilities.ValidatePhoneNumber(textBox, ButtonCardViewApply) Then
+                    contact.PersonPhone = textBox.Text
+                End If
             Case 4
-                contact.PersonPhone2 = textBox.Text
+                If GlobalUtilities.ValidatePhoneNumber(textBox, ButtonCardViewApply) Then
+                    contact.PersonPhone2 = textBox.Text
+                End If
             Case 5
-                contact.PersonMail = textBox.Text
+                If GlobalUtilities.ValidateEmail(textBox, ButtonCardViewApply) Then
+                    contact.PersonMail = textBox.Text
+                End If
         End Select
     End Sub
 
@@ -534,7 +590,15 @@ Public Class CardView
         Return IO.File.ReadAllBytes(filePath)
     End Function
 
+
     Private Sub UploadFile(columnName As String, fileTypeFilter As String)
+        If cardID <= 0 Then
+            ' Initialize form for a new card
+            Dim result As Tuple(Of Integer, Integer) = InitializeCard()
+            ClientID = result.Item1
+            cardID = result.Item2
+        End If
+
         Using openFileDialog As New OpenFileDialog()
             openFileDialog.Filter = fileTypeFilter
             If openFileDialog.ShowDialog() = DialogResult.OK Then
@@ -542,26 +606,31 @@ Public Class CardView
                 Dim fileBytes As Byte() = FileToByteArray(filePath)
                 Dim currentTime As String = GlobalUtilities.GetFormattedCurrentTime()
 
-                Dim rs As New ADODB.Recordset
-                Try
-                    rs.Open($"SELECT {columnName}, DataCreated, DataLastModified FROM Data WHERE CardID = {Me.cardID}", conn, ADODB.CursorTypeEnum.adOpenKeyset, ADODB.LockTypeEnum.adLockOptimistic)
+                ' Attempt to find an existing record for the given CardID
+                Dim rsUploadFile As New ADODB.Recordset
+                rsUploadFile.CursorType = ADODB.CursorTypeEnum.adOpenDynamic
+                rsUploadFile.LockType = ADODB.LockTypeEnum.adLockOptimistic
+                rsUploadFile.Open($"SELECT * FROM Data WHERE CardID = {Me.cardID}", conn, , , ADODB.CommandTypeEnum.adCmdText)
 
-                    If Not rs.EOF Then
-                        rs.Fields(columnName).Value = fileBytes
-                        rs.Fields("DataLastModified").Value = currentTime
-                    Else
-                        rs.AddNew()
-                        rs.Fields("CardID").Value = Me.cardID
-                        rs.Fields(columnName).Value = fileBytes
-                        rs.Fields("DataCreated").Value = currentTime
-                        rs.Fields("DataLastModified").Value = currentTime
-                    End If
-                    rs.Update()
-                Catch ex As Exception
-                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                Finally
-                    rs.Close()
-                End Try
+                If rsUploadFile.EOF Then
+                    ' No existing record, so add a new one
+                    rsUploadFile.AddNew()
+                    rsUploadFile.Fields("CardID").Value = Me.cardID
+                    rsUploadFile.Fields("DataCreated").Value = currentTime
+                End If
+
+                ' Update the specific OLE Object field and modification date
+                rsUploadFile.Fields(columnName).Value = fileBytes
+                rsUploadFile.Fields("DataLastModified").Value = currentTime
+                rsUploadFile.Update()
+
+                ' Clean up
+                If Not rsUploadFile Is Nothing Then
+                    If rsUploadFile.State = ADODB.ObjectStateEnum.adStateOpen Then rsUploadFile.Close()
+                End If
+                rsUploadFile = Nothing
+
+                MessageBox.Show("File uploaded successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
     End Sub
@@ -661,70 +730,58 @@ End Class
 
 Module GlobalUtilities
 
-    Public Sub ValidateAddressNumber(textBox As TextBox, applyButton As Button)
-        ' Regular expression to check for alphanumeric characters (letters, numbers), 
-        ' potentially including spaces and hyphens
+    Public Function ValidateAddressNumber(textBox As TextBox, applyButton As Button) As Boolean
         Dim pattern As String = "^[a-zA-Z0-9\s\-]*$"
-
         Dim isValidAddressNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern)
 
         If isValidAddressNumber Then
-            ' The input is a valid alphanumeric address number or empty
             textBox.BackColor = Color.White
-            applyButton.Enabled = True ' Enable the Apply button
-        Else
-            ' The input is not a valid alphanumeric address number
-            textBox.BackColor = Color.LightCoral
-            applyButton.Enabled = False ' Disable the Apply button
+            applyButton.Enabled = True
+            Return True
         End If
-    End Sub
+        textBox.BackColor = Color.LightCoral
+        applyButton.Enabled = False
+        Return False
+    End Function
 
-    Public Sub ValidateNumber(textBox As TextBox, applyButton As Button)
+    Public Function ValidateNumber(textBox As TextBox, applyButton As Button)
         Dim isValidNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse IsNumeric(textBox.Text)
 
         If isValidNumber Then
-            ' The input is a valid number or empty
             textBox.BackColor = Color.White
-            applyButton.Enabled = True ' Enable the Apply button
-        Else
-            ' The input is not a valid number
-            textBox.BackColor = Color.LightCoral
-            applyButton.Enabled = False ' Disable the Apply button
+            applyButton.Enabled = True
+            Return True
         End If
-    End Sub
+        textBox.BackColor = Color.LightCoral
+        applyButton.Enabled = False
+        Return False
+    End Function
 
-    Public Sub ValidatePhoneNumber(textBox As TextBox, applyButton As Button)
-        ' Regular expression for validating a phone number
+    Public Function ValidatePhoneNumber(textBox As TextBox, applyButton As Button)
         Dim pattern As String = "^\+?(\d[\d-. ]+)?(\([\d-. ]+\))?[\d-. ]+\d$"
-
-        ' Check if the phone number is valid or the textbox is empty
         Dim isValidPhoneNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern)
 
         If isValidPhoneNumber Then
-            ' Phone number is valid or empty
             textBox.BackColor = Color.White
-            applyButton.Enabled = True ' Enable the Apply button
-        Else
-            ' Phone number is not valid
-            textBox.BackColor = Color.LightCoral
-            applyButton.Enabled = False ' Disable the Apply button
+            applyButton.Enabled = True
+            Return True
         End If
-    End Sub
+        textBox.BackColor = Color.LightCoral
+        applyButton.Enabled = False
+        Return False
+    End Function
 
-    Public Sub ValidateEmail(textBox As TextBox, applyButton As Button)
-        ' Regular expression for validating an email address
+    Public Function ValidateEmail(textBox As TextBox, applyButton As Button)
         Dim pattern As String = "^\S+@\S+\.\S+$"
-
         If String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern) Then
-            ' Email is valid (including being empty or whitespace)
             textBox.BackColor = Color.White
-            applyButton.Enabled = True ' Enable the Apply button
-        Else
-            ' Email is not valid
-            textBox.BackColor = Color.LightCoral
-            applyButton.Enabled = False ' Disable the Apply button
+            applyButton.Enabled = True
+            Return True
         End If
-    End Sub
+        textBox.BackColor = Color.LightCoral
+        applyButton.Enabled = False
+        Return False
+    End Function
 
     ' Retrieves a DateTime object from a database field, safely handling DBNull values.
     ' Returns a default value if the date is not initialized or is DBNull.
