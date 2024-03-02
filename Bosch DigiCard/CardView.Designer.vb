@@ -91,6 +91,13 @@ Partial Class CardView
         Me.FlowLayoutContact = New System.Windows.Forms.FlowLayoutPanel()
         Me.ButtonContactAdd = New System.Windows.Forms.Button()
         Me.PanelMain = New System.Windows.Forms.Panel()
+        Me.GroupBoxDelete = New System.Windows.Forms.GroupBox()
+        Me.TableLayoutPanelDelete = New System.Windows.Forms.TableLayoutPanel()
+        Me.FlowLayoutPanelDelete = New System.Windows.Forms.FlowLayoutPanel()
+        Me.LabelDeleteCard = New System.Windows.Forms.Label()
+        Me.LabelDeleteCardDes = New System.Windows.Forms.Label()
+        Me.ButtonCardDelete = New System.Windows.Forms.Button()
+        Me.Panel2 = New System.Windows.Forms.Panel()
         Me.PanelSpacer3 = New System.Windows.Forms.Panel()
         Me.PanelSpacer2 = New System.Windows.Forms.Panel()
         Me.PanelSpacer1 = New System.Windows.Forms.Panel()
@@ -108,6 +115,9 @@ Partial Class CardView
         Me.TableLayoutPanel1.SuspendLayout()
         Me.GroupBoxContactList.SuspendLayout()
         Me.PanelMain.SuspendLayout()
+        Me.GroupBoxDelete.SuspendLayout()
+        Me.TableLayoutPanelDelete.SuspendLayout()
+        Me.FlowLayoutPanelDelete.SuspendLayout()
         Me.SuspendLayout()
         '
         'StatusStrip1
@@ -863,6 +873,8 @@ Partial Class CardView
         Me.PanelMain.AutoScroll = True
         Me.PanelMain.AutoSize = True
         Me.PanelMain.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.PanelMain.Controls.Add(Me.GroupBoxDelete)
+        Me.PanelMain.Controls.Add(Me.Panel2)
         Me.PanelMain.Controls.Add(Me.GroupBoxClient)
         Me.PanelMain.Controls.Add(Me.PanelSpacer3)
         Me.PanelMain.Controls.Add(Me.GroupBoxObject)
@@ -878,6 +890,92 @@ Partial Class CardView
         Me.PanelMain.Padding = New System.Windows.Forms.Padding(8)
         Me.PanelMain.Size = New System.Drawing.Size(963, 555)
         Me.PanelMain.TabIndex = 6
+        '
+        'GroupBoxDelete
+        '
+        Me.GroupBoxDelete.AutoSize = True
+        Me.GroupBoxDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.GroupBoxDelete.Controls.Add(Me.TableLayoutPanelDelete)
+        Me.GroupBoxDelete.Dock = System.Windows.Forms.DockStyle.Top
+        Me.GroupBoxDelete.Location = New System.Drawing.Point(8, 684)
+        Me.GroupBoxDelete.Margin = New System.Windows.Forms.Padding(5)
+        Me.GroupBoxDelete.Name = "GroupBoxDelete"
+        Me.GroupBoxDelete.Padding = New System.Windows.Forms.Padding(5)
+        Me.GroupBoxDelete.Size = New System.Drawing.Size(930, 55)
+        Me.GroupBoxDelete.TabIndex = 12
+        Me.GroupBoxDelete.TabStop = False
+        Me.GroupBoxDelete.Text = "Delete"
+        '
+        'TableLayoutPanelDelete
+        '
+        Me.TableLayoutPanelDelete.AutoSize = True
+        Me.TableLayoutPanelDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TableLayoutPanelDelete.ColumnCount = 4
+        Me.TableLayoutPanelDelete.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelDelete.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelDelete.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelDelete.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelDelete.Controls.Add(Me.FlowLayoutPanelDelete, 0, 0)
+        Me.TableLayoutPanelDelete.Controls.Add(Me.ButtonCardDelete, 3, 0)
+        Me.TableLayoutPanelDelete.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanelDelete.Location = New System.Drawing.Point(5, 18)
+        Me.TableLayoutPanelDelete.Name = "TableLayoutPanelDelete"
+        Me.TableLayoutPanelDelete.RowCount = 1
+        Me.TableLayoutPanelDelete.RowStyles.Add(New System.Windows.Forms.RowStyle())
+        Me.TableLayoutPanelDelete.Size = New System.Drawing.Size(920, 32)
+        Me.TableLayoutPanelDelete.TabIndex = 3
+        '
+        'FlowLayoutPanelDelete
+        '
+        Me.FlowLayoutPanelDelete.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.FlowLayoutPanelDelete.AutoSize = True
+        Me.FlowLayoutPanelDelete.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.FlowLayoutPanelDelete.Controls.Add(Me.LabelDeleteCard)
+        Me.FlowLayoutPanelDelete.Controls.Add(Me.LabelDeleteCardDes)
+        Me.FlowLayoutPanelDelete.FlowDirection = System.Windows.Forms.FlowDirection.TopDown
+        Me.FlowLayoutPanelDelete.Location = New System.Drawing.Point(3, 3)
+        Me.FlowLayoutPanelDelete.Name = "FlowLayoutPanelDelete"
+        Me.FlowLayoutPanelDelete.Size = New System.Drawing.Size(329, 26)
+        Me.FlowLayoutPanelDelete.TabIndex = 4
+        '
+        'LabelDeleteCard
+        '
+        Me.LabelDeleteCard.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelDeleteCard.AutoSize = True
+        Me.LabelDeleteCard.Location = New System.Drawing.Point(3, 0)
+        Me.LabelDeleteCard.Name = "LabelDeleteCard"
+        Me.LabelDeleteCard.Size = New System.Drawing.Size(81, 13)
+        Me.LabelDeleteCard.TabIndex = 2
+        Me.LabelDeleteCard.Text = "Delete this card"
+        '
+        'LabelDeleteCardDes
+        '
+        Me.LabelDeleteCardDes.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelDeleteCardDes.AutoSize = True
+        Me.LabelDeleteCardDes.Location = New System.Drawing.Point(3, 13)
+        Me.LabelDeleteCardDes.Name = "LabelDeleteCardDes"
+        Me.LabelDeleteCardDes.Size = New System.Drawing.Size(323, 13)
+        Me.LabelDeleteCardDes.TabIndex = 1
+        Me.LabelDeleteCardDes.Text = "Once you delete a card, there is no going back. Please be certain. "
+        '
+        'ButtonCardDelete
+        '
+        Me.ButtonCardDelete.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonCardDelete.ForeColor = System.Drawing.Color.Firebrick
+        Me.ButtonCardDelete.Location = New System.Drawing.Point(338, 4)
+        Me.ButtonCardDelete.Name = "ButtonCardDelete"
+        Me.ButtonCardDelete.Size = New System.Drawing.Size(90, 23)
+        Me.ButtonCardDelete.TabIndex = 3
+        Me.ButtonCardDelete.Text = "Delete this Card"
+        Me.ButtonCardDelete.UseVisualStyleBackColor = True
+        '
+        'Panel2
+        '
+        Me.Panel2.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel2.Location = New System.Drawing.Point(8, 676)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(930, 8)
+        Me.Panel2.TabIndex = 11
         '
         'PanelSpacer3
         '
@@ -953,6 +1051,12 @@ Partial Class CardView
         Me.GroupBoxContactList.PerformLayout()
         Me.PanelMain.ResumeLayout(False)
         Me.PanelMain.PerformLayout()
+        Me.GroupBoxDelete.ResumeLayout(False)
+        Me.GroupBoxDelete.PerformLayout()
+        Me.TableLayoutPanelDelete.ResumeLayout(False)
+        Me.TableLayoutPanelDelete.PerformLayout()
+        Me.FlowLayoutPanelDelete.ResumeLayout(False)
+        Me.FlowLayoutPanelDelete.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1030,4 +1134,11 @@ Partial Class CardView
     Friend WithEvents PanelSpacer1 As Panel
     Friend WithEvents PanelSpacer0 As Panel
     Friend WithEvents Panel1 As Panel
+    Friend WithEvents GroupBoxDelete As GroupBox
+    Friend WithEvents TableLayoutPanelDelete As TableLayoutPanel
+    Friend WithEvents LabelDeleteCardDes As Label
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents FlowLayoutPanelDelete As FlowLayoutPanel
+    Friend WithEvents LabelDeleteCard As Label
+    Friend WithEvents ButtonCardDelete As Button
 End Class

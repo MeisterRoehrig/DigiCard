@@ -233,8 +233,8 @@ Public Class CardView
             Else
                 ' This is a new contact, insert them into the Person table
                 Debug.WriteLine($"Adding new contact {contact.PersonID}")
-                Dim insertPersonQuery As String = $"INSERT INTO Person (PersonCreated, PersonLastModified, PersonFirstname, PersonSurname, PersonPhone, PersonMail) " &
-                                          $"VALUES ('{GlobalUtilities.GetFormattedCurrentTime()}', '{GlobalUtilities.GetFormattedCurrentTime()}', '{SafeSQL(contact.PersonFirstname)}', '{SafeSQL(contact.PersonSurname)}', '{SafeSQL(contact.PersonPhone)}', '{SafeSQL(contact.PersonMail)}');"
+                Dim insertPersonQuery As String = $"INSERT INTO Person (PersonCreated, PersonLastModified, PersonGender, PersonFirstname, PersonSurname, PersonPhone, PersonPhone2, PersonMail) " &
+                                          $"VALUES ('{GlobalUtilities.GetFormattedCurrentTime()}', '{GlobalUtilities.GetFormattedCurrentTime()}', '{SafeSQL(contact.PersonGender)}', '{SafeSQL(contact.PersonFirstname)}', '{SafeSQL(contact.PersonSurname)}', '{SafeSQL(contact.PersonPhone)}', '{SafeSQL(contact.PersonPhone2)}', '{SafeSQL(contact.PersonMail)}');"
                 conn.Execute(insertPersonQuery)
 
                 ' Retrieve the new PersonID using @@IDENTITY
@@ -547,6 +547,21 @@ Public Class CardView
         Me.Close()
     End Sub
 
+    Private Sub ButtonCardDelete_Click(sender As Object, e As EventArgs) Handles ButtonCardDelete.Click
+        If MessageBox.Show("Are you sure you want to delete this card?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) = DialogResult.Yes Then
+            Dim deleteQuery As String = $"DELETE FROM Card WHERE CardID = {cardID}"
+            Try
+                conn.Execute(deleteQuery)
+                Debug.WriteLine($"Card {cardID} deleted successfully")
+                Me.DialogResult = DialogResult.OK
+                Me.Close()
+            Catch ex As Exception
+                MessageBox.Show($"Failed to delete card: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                Debug.WriteLine($"Failed to delete card: {ex.Message}")
+            End Try
+        End If
+    End Sub
+
     Private Sub TextBoxCardNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCardNumber.TextChanged
         GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
     End Sub
@@ -690,6 +705,7 @@ Public Class CardView
     Private Sub ButtonDownloadMapDWG_Click(sender As Object, e As EventArgs) Handles ButtonDownloadMapDWG.Click
         DownloadFile("DataMapDwg", ".dwg", "DataMap_" + TextBoxCardNumber.Text)
     End Sub
+
 End Class
 
 Public Class Contact
