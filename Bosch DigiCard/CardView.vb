@@ -7,6 +7,7 @@ Imports System.Data.SqlClient
 Imports System.Net
 Imports Newtonsoft.Json
 Imports System.Configuration
+Imports System.Globalization
 
 
 Public Class CardView
@@ -421,48 +422,60 @@ Public Class CardView
 
             ' Gender Label and TextBox
             Dim genderLabel As New Label With {.Text = "Gender:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim genderTextBox As New TextBox With {.Text = contact.PersonGender, .Dock = DockStyle.Fill}
-            genderTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 0}
+            Dim genderTextBox As New TextBox With {
+                .Text = contact.PersonGender, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 0}
+            }
             AddHandler genderTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(genderLabel, 2, 0)
             contactTable.Controls.Add(genderTextBox, 3, 0)
 
             ' First Name Label and TextBox
             Dim firstNameLabel As New Label With {.Text = "First Name:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim firstNameTextBox As New TextBox With {.Text = contact.PersonFirstname, .Dock = DockStyle.Fill}
-            firstNameTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 1}
+            Dim firstNameTextBox As New TextBox With {
+                .Text = contact.PersonFirstname, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 1}
+            }
             AddHandler firstNameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(firstNameLabel, 4, 0) ' Adjust column index as needed
             contactTable.Controls.Add(firstNameTextBox, 5, 0) ' Adjust column index as needed
 
             ' Surname Label and TextBox
             Dim surnameLabel As New Label With {.Text = "Surname:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim surnameTextBox As New TextBox With {.Text = contact.PersonSurname, .Dock = DockStyle.Fill}
-            surnameTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 2}
+            Dim surnameTextBox As New TextBox With {
+                .Text = contact.PersonSurname, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 2}
+            }
             AddHandler surnameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(surnameLabel, 6, 0) ' Adjust column index as needed
             contactTable.Controls.Add(surnameTextBox, 7, 0) ' Adjust column index as needed
 
             ' Phone 1 Label and TextBox
             Dim phone1Label As New Label With {.Text = "Phone 1:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim phone1TextBox As New TextBox With {.Text = contact.PersonPhone, .Dock = DockStyle.Fill}
-            phone1TextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 3}
+            Dim phone1TextBox As New TextBox With {
+                .Text = contact.PersonPhone, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 3}
+            }
             AddHandler phone1TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone1Label, 2, 1) ' Adjust column index as needed
             contactTable.Controls.Add(phone1TextBox, 3, 1) ' Adjust column index as needed
 
             ' Phone 2 Label and TextBox
             Dim phone2Label As New Label With {.Text = "Phone 2:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim phone2TextBox As New TextBox With {.Text = contact.PersonPhone2, .Dock = DockStyle.Fill}
-            phone2TextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 4}
+            Dim phone2TextBox As New TextBox With {
+                .Text = contact.PersonPhone2, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 4}
+            }
             AddHandler phone2TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone2Label, 4, 1) ' Adjust column index and row index as needed
             contactTable.Controls.Add(phone2TextBox, 5, 1) ' Adjust column index and row index as needed
 
             ' Email Label and TextBox
             Dim emailLabel As New Label With {.Text = "Email:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
-            Dim emailTextBox As New TextBox With {.Text = contact.PersonMail, .Dock = DockStyle.Fill}
-            emailTextBox.Tag = New With {Key .Contact = contact, Key .PropertyIndex = 5}
+            Dim emailTextBox As New TextBox With {
+                .Text = contact.PersonMail, .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 5}
+            }
             AddHandler emailTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(emailLabel, 6, 1) ' Adjust column index and row index as needed
             contactTable.Controls.Add(emailTextBox, 7, 1) ' Adjust column index and row index as needed
@@ -723,8 +736,8 @@ Public Class CardView
 
                 If geoData.status = "OK" AndAlso geoData.results.Count > 0 Then
                     Dim location = geoData.results(0).geometry.location
-                    TextBoxLat.Text = location.lat.ToString()
-                    TextBoxLong.Text = location.lng.ToString()
+                    TextBoxLat.Text = location.lat.ToString(CultureInfo.InvariantCulture)
+                    TextBoxLong.Text = location.lng.ToString(CultureInfo.InvariantCulture)
                 Else
                     MessageBox.Show("Geocoding failed. Please check the address and try again. Make sure that you have a valid Google Geocoding Api key.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
                 End If
@@ -753,6 +766,12 @@ Public Class CardView
         Public Property lng As Double
     End Class
 
+    Private Sub TextBoxLat_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLat.TextChanged
+        GlobalUtilities.ValidateGeocode(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
+    Private Sub TextBoxLong_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLong.TextChanged
+        GlobalUtilities.ValidateGeocode(DirectCast(sender, TextBox), ButtonCardViewApply)
+    End Sub
 End Class
 
 Public Class Contact
@@ -805,6 +824,22 @@ Module GlobalUtilities
         textBox.BackColor = Color.LightCoral
         applyButton.Enabled = False
         Return False
+    End Function
+
+    Public Function ValidateGeocode(textBox As TextBox, applyButton As Button) As Boolean
+        ' Pattern for matching a geocode: optional minus, digits, optional dot and more digits
+        ' This pattern does not strictly validate the range of latitude (-90 to 90) and longitude (-180 to 180)
+        Dim pattern As String = "^-?\d+(\.\d+)?$"
+
+        If Not String.IsNullOrWhiteSpace(textBox.Text) AndAlso Regex.IsMatch(textBox.Text, pattern) Then
+            textBox.BackColor = Color.White
+            applyButton.Enabled = True
+            Return True
+        Else
+            textBox.BackColor = Color.LightCoral
+            applyButton.Enabled = False
+            Return False
+        End If
     End Function
 
     Public Function ValidateNumber(textBox As TextBox, applyButton As Button)

@@ -18,3 +18,19 @@ D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch_DigiCard.FormDa
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Newtonsoft.Json.dll
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Newtonsoft.Json.xml
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.vbproj.CopyComplete
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\EntityFramework.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\EntityFramework.SqlServer.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\GMap.NET.Core.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\GMap.NET.WindowsForms.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SqlClient.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SQLite.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SQLite.EF6.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SQLite.Linq.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Security.Principal.Windows.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\EntityFramework.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\EntityFramework.SqlServer.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SqlClient.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SQLite.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Security.Principal.Windows.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Microsoft.Maps.MapControl.WPF.dll
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Microsoft.Maps.MapControl.WPF.xml

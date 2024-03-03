@@ -30,6 +30,8 @@ Partial Class Form1
         Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.SetDonwloadPathToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.SetGeocodingAPIKeyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EditToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutBoschDigiCardToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -43,11 +45,14 @@ Partial Class Form1
         Me.CheckBoxBroadSearch = New System.Windows.Forms.CheckBox()
         Me.LabelQuickSearch = New System.Windows.Forms.Label()
         Me.TextBoxQuickSearch = New System.Windows.Forms.TextBox()
+        Me.TabControlCardTable = New System.Windows.Forms.TabControl()
+        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.GMapControl = New GMap.NET.WindowsForms.GMapControl()
+        Me.TableView = New System.Windows.Forms.TabPage()
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.SetGeocodingAPIKeyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MenuStrip1.SuspendLayout()
         Me.StatusStripForm1.SuspendLayout()
         CType(Me.DataGridViewCardsForm1, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -55,11 +60,14 @@ Partial Class Form1
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.TabControlCardTable.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
+        Me.TableView.SuspendLayout()
         Me.SuspendLayout()
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.LocateDatabaseToolStripMenuItem, Me.ToolStripSeparator1, Me.SetDonwloadPathToolStripMenuItem, Me.SetGeocodingAPIKeyToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.LocateDatabaseToolStripMenuItem, Me.ToolStripSeparator1, Me.SetDonwloadPathToolStripMenuItem, Me.SetGeocodingAPIKeyToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
@@ -86,6 +94,17 @@ Partial Class Form1
         Me.SetDonwloadPathToolStripMenuItem.Name = "SetDonwloadPathToolStripMenuItem"
         Me.SetDonwloadPathToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.SetDonwloadPathToolStripMenuItem.Text = "Set Donwload Path"
+        '
+        'SetGeocodingAPIKeyToolStripMenuItem
+        '
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Name = "SetGeocodingAPIKeyToolStripMenuItem"
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.SetGeocodingAPIKeyToolStripMenuItem.Text = "Set Geocoding API Key"
+        '
+        'ToolStripSeparator2
+        '
+        Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(191, 6)
         '
         'ExitToolStripMenuItem
         '
@@ -142,14 +161,14 @@ Partial Class Form1
         Me.DataGridViewCardsForm1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill
         Me.DataGridViewCardsForm1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
         Me.DataGridViewCardsForm1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.DataGridViewCardsForm1.Location = New System.Drawing.Point(0, 0)
+        Me.DataGridViewCardsForm1.Location = New System.Drawing.Point(3, 3)
         Me.DataGridViewCardsForm1.MultiSelect = False
         Me.DataGridViewCardsForm1.Name = "DataGridViewCardsForm1"
         Me.DataGridViewCardsForm1.ReadOnly = True
         Me.DataGridViewCardsForm1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.DataGridViewCardsForm1.RowHeadersVisible = False
         Me.DataGridViewCardsForm1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.DataGridViewCardsForm1.Size = New System.Drawing.Size(1013, 449)
+        Me.DataGridViewCardsForm1.Size = New System.Drawing.Size(999, 417)
         Me.DataGridViewCardsForm1.TabIndex = 4
         '
         'SplitContainer1
@@ -169,7 +188,7 @@ Partial Class Form1
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.DataGridViewCardsForm1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.TabControlCardTable)
         Me.SplitContainer1.Size = New System.Drawing.Size(1013, 576)
         Me.SplitContainer1.SplitterDistance = 123
         Me.SplitContainer1.TabIndex = 5
@@ -226,6 +245,66 @@ Partial Class Form1
         Me.ToolTip.SetToolTip(Me.TextBoxQuickSearch, "Enter keywords to search for specific cards. Use space to separate multiple terms" &
         ".")
         '
+        'TabControlCardTable
+        '
+        Me.TabControlCardTable.Controls.Add(Me.TableView)
+        Me.TabControlCardTable.Controls.Add(Me.TabPage2)
+        Me.TabControlCardTable.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControlCardTable.Location = New System.Drawing.Point(0, 0)
+        Me.TabControlCardTable.Name = "TabControlCardTable"
+        Me.TabControlCardTable.SelectedIndex = 0
+        Me.TabControlCardTable.Size = New System.Drawing.Size(1013, 449)
+        Me.TabControlCardTable.TabIndex = 5
+        '
+        'TabPage2
+        '
+        Me.TabPage2.Controls.Add(Me.GMapControl)
+        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage2.Name = "TabPage2"
+        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage2.Size = New System.Drawing.Size(1005, 423)
+        Me.TabPage2.TabIndex = 1
+        Me.TabPage2.Text = "Map View"
+        Me.TabPage2.UseVisualStyleBackColor = True
+        '
+        'GMapControl
+        '
+        Me.GMapControl.Bearing = 0!
+        Me.GMapControl.CanDragMap = True
+        Me.GMapControl.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.GMapControl.EmptyTileColor = System.Drawing.Color.Navy
+        Me.GMapControl.GrayScaleMode = False
+        Me.GMapControl.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow
+        Me.GMapControl.LevelsKeepInMemory = 5
+        Me.GMapControl.Location = New System.Drawing.Point(3, 3)
+        Me.GMapControl.MarkersEnabled = True
+        Me.GMapControl.MaxZoom = 2
+        Me.GMapControl.MinZoom = 2
+        Me.GMapControl.MouseWheelZoomEnabled = True
+        Me.GMapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionAndCenter
+        Me.GMapControl.Name = "GMapControl"
+        Me.GMapControl.NegativeMode = False
+        Me.GMapControl.PolygonsEnabled = True
+        Me.GMapControl.RetryLoadTile = 0
+        Me.GMapControl.RoutesEnabled = True
+        Me.GMapControl.ScaleMode = GMap.NET.WindowsForms.ScaleModes.[Integer]
+        Me.GMapControl.SelectedAreaFillColor = System.Drawing.Color.FromArgb(CType(CType(33, Byte), Integer), CType(CType(65, Byte), Integer), CType(CType(105, Byte), Integer), CType(CType(225, Byte), Integer))
+        Me.GMapControl.ShowTileGridLines = False
+        Me.GMapControl.Size = New System.Drawing.Size(999, 417)
+        Me.GMapControl.TabIndex = 0
+        Me.GMapControl.Zoom = 0R
+        '
+        'TableView
+        '
+        Me.TableView.Controls.Add(Me.DataGridViewCardsForm1)
+        Me.TableView.Location = New System.Drawing.Point(4, 22)
+        Me.TableView.Name = "TableView"
+        Me.TableView.Padding = New System.Windows.Forms.Padding(3)
+        Me.TableView.Size = New System.Drawing.Size(1005, 423)
+        Me.TableView.TabIndex = 0
+        Me.TableView.Text = "Table View"
+        Me.TableView.UseVisualStyleBackColor = True
+        '
         'TimerQuickSearch
         '
         '
@@ -244,12 +323,6 @@ Partial Class Form1
         '
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
-        '
-        'SetGeocodingAPIKeyToolStripMenuItem
-        '
-        Me.SetGeocodingAPIKeyToolStripMenuItem.Name = "SetGeocodingAPIKeyToolStripMenuItem"
-        Me.SetGeocodingAPIKeyToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.SetGeocodingAPIKeyToolStripMenuItem.Text = "Set Geocoding API Key"
         '
         'Form1
         '
@@ -274,6 +347,9 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.TabControlCardTable.ResumeLayout(False)
+        Me.TabPage2.ResumeLayout(False)
+        Me.TableView.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -301,4 +377,9 @@ Partial Class Form1
     Friend WithEvents NotifyIcon1 As NotifyIcon
     Friend WithEvents SetDonwloadPathToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents SetGeocodingAPIKeyToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents TabControlCardTable As TabControl
+    Friend WithEvents TableView As TabPage
+    Friend WithEvents TabPage2 As TabPage
+    Friend WithEvents GMapControl As GMap.NET.WindowsForms.GMapControl
+    Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
 End Class

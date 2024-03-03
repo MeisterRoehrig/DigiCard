@@ -1,6 +1,15 @@
-﻿Imports System.Text
+﻿Imports System.Runtime.Serialization
+Imports System.Text
+Imports System.Windows
 Imports System.Windows.Forms
 Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
+Imports GMap.NET
+Imports GMap.NET.WindowsForms
+Imports GMap.NET.WindowsForms.Markers
+Imports Microsoft.Maps
+Imports System
+Imports System.Drawing
+Imports System.Globalization
 
 Public Class Form1
 
@@ -130,7 +139,7 @@ Public Class Form1
         End If
 
         ' Construct the final search query
-        Dim searchQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet,SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity,SiteAddressCountry, CardType, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
+        Dim searchQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet,SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity,SiteAddressCountry, CardType, SiteAddressLat, SiteAddressLong, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
         If whereClause.Length > 0 Then
             searchQuery &= " WHERE " & whereClause.ToString()
         End If
@@ -183,17 +192,18 @@ Public Class Form1
                 DataGridViewCardsForm1.DataSource = Nothing
                 DataGridViewCardsForm1.DataSource = New DataTable() ' Clears the DataGridView
             End If
-
             rs.Close()
         Catch ex As Exception
             Debug.WriteLine("[DigiCard] Error populating DataGridView: " + ex.Message)
             ToolStripStatusLabel1.Text = "Error: " + ex.Message
         End Try
+
     End Sub
 
     Private Sub PerformSearch()
         Dim searchQuery As String = BuildSearchQuery()
         PopulateDataGridView(searchQuery)
+        DisplayMarkersFromDataGridView()
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -230,6 +240,7 @@ Public Class Form1
             End If
         End If
     End Sub
+
 
     Private Sub SelectRowByCardID(cardID As Integer)
         ' Ensure the DataGridView has been populated and has rows
@@ -286,4 +297,163 @@ Public Class Form1
     Private Sub SetGeocodingAPIKeyToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetGeocodingAPIKeyToolStripMenuItem.Click
         GlobalUtilities.UpdateGoogleMapsAPIKey(True)
     End Sub
+
+    Private Sub GMapControl_Load(sender As Object, e As EventArgs) Handles GMapControl.Load
+        ' Setting the map provider to OpenStreetMap
+        GMapControl.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance
+
+        ' Optional settings for the GMap control
+        GMapControl.Position = New GMap.NET.PointLatLng(52.520008, 13.404954) ' Example: Latitude and Longitude of Paris, France
+        GMapControl.MinZoom = 5
+        GMapControl.MaxZoom = 20
+        GMapControl.Zoom = 10
+        GMapControl.DragButton = MouseButtons.Left
+        GMapControl.ShowCenter = False
+        GMapControl.MouseWheelZoomType = GMap.NET.MouseWheelZoomType.MousePositionWithoutCenter
+        AddHandler GMapControl.OnMarkerClick, AddressOf MarkerClick
+    End Sub
+
+    ' Event handler for marker click
+    Private Sub MarkerClick(item As GMap.NET.WindowsForms.GMapMarker, e As MouseEventArgs)
+        Debug.WriteLine("Marker clicked: " & item.Position.ToString())
+        ' Check if the marker's Tag property contains a cardID
+        If item.Tag IsNot Nothing Then
+            Dim cardID As Integer = Convert.ToInt32(item.Tag)
+
+            ' Open CardView form with the cardID
+            Dim cardView As New CardView(cardID, conn) ' Assuming conn is the database connection
+            If cardView.ShowDialog() = DialogResult.OK Then
+                ' Optionally, refresh the data shown on the map or perform other actions
+            End If
+        End If
+    End Sub
+
+    Private Sub DisplayMarkersFromDataGridView()
+        ' Create or clear the overlay for markers
+        Dim markersOverlay As GMap.NET.WindowsForms.GMapOverlay
+        Dim overlayExists As Boolean = False
+
+        For Each overlay As GMap.NET.WindowsForms.GMapOverlay In GMapControl.Overlays
+            If overlay.Id = "markers" Then
+                markersOverlay = overlay
+                overlayExists = True
+                markersOverlay.Markers.Clear() ' Clear existing markers if overlay already exists
+                Exit For
+            End If
+        Next
+
+        If Not overlayExists Then
+            markersOverlay = New GMap.NET.WindowsForms.GMapOverlay("markers")
+            GMapControl.Overlays.Add(markersOverlay)
+            Debug.WriteLine("Overlay count: " & GMapControl.Overlays.Count)
+        End If
+
+        ' Iterate through the DataGridView rows
+        For Each row As DataGridViewRow In DataGridViewCardsForm1.Rows
+            If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells("SiteAddressLat").Value) AndAlso Not IsDBNull(row.Cells("SiteAddressLong").Value) Then
+                Dim lat As Double = 0
+                Dim lng As Double = 0
+                Dim latString As String = row.Cells("SiteAddressLat").Value.ToString()
+                Dim lngString As String = row.Cells("SiteAddressLong").Value.ToString()
+
+                ' Use Double.TryParse with CultureInfo.InvariantCulture
+                If Double.TryParse(latString, NumberStyles.Any, CultureInfo.InvariantCulture, lat) AndAlso Double.TryParse(lngString, NumberStyles.Any, CultureInfo.InvariantCulture, lng) Then
+                    ' Create a new marker with lat and lng
+                    Dim marker As GMarkerGoogleWithLabel
+                    If row.Cells("CardType").Value.ToString() = "Fire" Then
+                        marker = New GMarkerGoogleWithLabel(New GMap.NET.PointLatLng(lat, lng), GMap.NET.WindowsForms.Markers.GMarkerGoogleType.red_dot)
+                        marker.Tag = Convert.ToInt32(row.Cells("CardID").Value)
+                        marker.LabelColor = Color.IndianRed
+                    ElseIf row.Cells("CardType").Value.ToString() = "Police" Then
+                        marker = New GMarkerGoogleWithLabel(New GMap.NET.PointLatLng(lat, lng), GMap.NET.WindowsForms.Markers.GMarkerGoogleType.blue_dot)
+                        marker.Tag = Convert.ToInt32(row.Cells("CardID").Value)
+                        marker.LabelColor = Color.Blue
+                    Else
+                        marker = New GMarkerGoogleWithLabel(New GMap.NET.PointLatLng(lat, lng), GMap.NET.WindowsForms.Markers.GMarkerGoogleType.black_small)
+                        marker.Tag = Convert.ToInt32(row.Cells("CardID").Value)
+                        marker.LabelColor = Color.Black
+                    End If
+                    If Not IsDBNull(row.Cells("SiteName").Value) Then
+                        marker.LabelText = row.Cells("SiteName").Value.ToString()
+                    End If
+                    ' Add the marker to the overlay
+                    markersOverlay.Markers.Add(marker)
+                End If
+            End If
+        Next
+
+        ' Refresh the map to show the new markers
+        GMapControl.Refresh()
+    End Sub
+
+
+End Class
+
+
+Public Class GMarkerGoogleWithLabel
+    Inherits GMarkerGoogle
+
+    Public Property LabelText As String
+    Public Property LabelFont As Font = New Font("Arial", 8)
+
+    Private _labelBrush As Brush = New SolidBrush(Color.Black)
+    Public Property LabelBrush As Brush
+        Get
+            Return _labelBrush
+        End Get
+        Set(value As Brush)
+            _labelBrush = value
+        End Set
+    End Property
+
+    Private _labelColor As Color = Color.Black
+    Public Property LabelColor As Color
+        Get
+            Return _labelColor
+        End Get
+        Set(value As Color)
+            _labelColor = value
+            _labelBrush = New SolidBrush(value) ' Update the brush when the color is set
+        End Set
+    End Property
+
+    Public Property LabelOffset As Point = New Point(20, 20)
+
+    Public Sub New(p As PointLatLng, type As GMarkerGoogleType)
+        MyBase.New(p, type)
+    End Sub
+
+    Public Sub New(p As PointLatLng, bitmap As Bitmap)
+        MyBase.New(p, bitmap)
+    End Sub
+
+    Public Overrides Sub OnRender(g As Graphics)
+        MyBase.OnRender(g)
+
+        ' Ensure there is text to draw.
+        If Not String.IsNullOrWhiteSpace(LabelText) Then
+            ' Calculate the position for the label based on the marker's position and the offset.
+            Dim labelPosition As New PointF(LocalPosition.X + LabelOffset.X, LocalPosition.Y + LabelOffset.Y)
+
+            ' Create a white brush for the border
+            Dim borderBrush As Brush = New SolidBrush(Color.White)
+
+            ' Text border thickness
+            Dim borderThickness As Integer = 0.7 ' Adjust the thickness as needed
+
+            ' Draw the border by drawing the text in white slightly offset in all directions
+            For x As Integer = -borderThickness To borderThickness
+                For y As Integer = -borderThickness To borderThickness
+                    If x <> 0 OrElse y <> 0 Then ' Avoid redrawing the text at the central position
+                        g.DrawString(LabelText, LabelFont, borderBrush, New PointF(labelPosition.X + x, labelPosition.Y + y))
+                    End If
+                Next
+            Next
+
+            ' Draw the main text over the border
+            g.DrawString(LabelText, LabelFont, LabelBrush, labelPosition)
+        End If
+    End Sub
+
+
 End Class
