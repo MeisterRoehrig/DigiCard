@@ -306,6 +306,8 @@ Public Class Form1
 
     Private Sub GMapControl_Load(sender As Object, e As EventArgs) Handles GMapControl.Load
         ' Setting the map provider to OpenStreetMap
+        GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache
+        GMap.NET.MapProviders.OpenStreetMapProvider.UserAgent = "DigiCard GMap tool 1.0"
         GMapControl.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance
 
         ' Optional settings for the GMap control
