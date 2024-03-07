@@ -6,6 +6,7 @@ Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
 Imports GMap.NET
 Imports GMap.NET.WindowsForms
 Imports GMap.NET.WindowsForms.Markers
+Imports Microsoft.Maps
 Imports System
 Imports System.Drawing
 Imports System.Globalization

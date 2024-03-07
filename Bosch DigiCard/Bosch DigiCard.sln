@@ -7,8 +7,6 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Bosch DigiCard", "Bosch Dig
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{87F7FFEF-E48E-47B9-85E0-CECF0487FE53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenPDF", "..\GenPDF\GenPDF.csproj", "{B2C18D87-0C5D-4345-B1DD-DBF74BEB6E3C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,10 +17,6 @@ Global
 		{967957D5-8F1B-4291-A96D-22C2992E10DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{967957D5-8F1B-4291-A96D-22C2992E10DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{967957D5-8F1B-4291-A96D-22C2992E10DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B2C18D87-0C5D-4345-B1DD-DBF74BEB6E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B2C18D87-0C5D-4345-B1DD-DBF74BEB6E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B2C18D87-0C5D-4345-B1DD-DBF74BEB6E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B2C18D87-0C5D-4345-B1DD-DBF74BEB6E3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

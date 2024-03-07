@@ -3,13 +3,11 @@ Imports System.Windows.Forms
 Imports System.Drawing
 Imports System.IO
 Imports System.Diagnostics
-'Imports System.Data.SqlClient
+Imports System.Data.SqlClient
 Imports System.Net
 Imports Newtonsoft.Json
 Imports System.Configuration
 Imports System.Globalization
-Imports GenPDF
-
 
 
 Public Class CardView
@@ -774,14 +772,6 @@ Public Class CardView
     Private Sub TextBoxLong_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLong.TextChanged
         GlobalUtilities.ValidateGeocode(DirectCast(sender, TextBox), ButtonCardViewApply)
     End Sub
-
-    Private Sub ButtonGenerateCardPDF_Click(sender As Object, e As EventArgs) Handles ButtonGenerateCardPDF.Click
-        Dim downloadPath As String = EnsureDownloadPath()
-
-        PdfGenerator.GenerateSimpleReport("C:\path\to\your\output.pdf")
-    End Sub
-
-
 End Class
 
 Public Class Contact
