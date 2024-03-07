@@ -185,6 +185,12 @@ Public Class Form1
                     If .Columns("CardID") IsNot Nothing Then
                         .Columns("CardID").Visible = False
                     End If
+                    If .Columns("SiteAddressLat") IsNot Nothing Then
+                        .Columns("SiteAddressLat").Visible = False
+                    End If
+                    If .Columns("SiteAddressLong") IsNot Nothing Then
+                        .Columns("SiteAddressLong").Visible = False
+                    End If
                 End With
             Else
                 TextBoxQuickSearch.BackColor = Color.LightCoral
