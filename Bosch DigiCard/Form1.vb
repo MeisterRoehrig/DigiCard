@@ -271,7 +271,7 @@ Public Class Form1
 
     Private Sub SetDonwloadPathToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetDonwloadPathToolStripMenuItem.Click
         Using folderBrowser As New FolderBrowserDialog()
-            folderBrowser.Description = "Select a folder to save downloaded PDFs"
+            folderBrowser.Description = "Select a folder to save downloaded Files."
             ' Set the initial directory to the current download path if one exists
             If Not String.IsNullOrEmpty(My.Settings.DownloadPath) Then
                 folderBrowser.SelectedPath = My.Settings.DownloadPath
@@ -284,9 +284,6 @@ Public Class Form1
                 My.Settings.Save() ' Save the settings
 
                 Debug.WriteLine($"Download path set to: {My.Settings.DownloadPath}", "Download Path Updated", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Else
-                ' Optionally handle the case where the user cancels the dialog
-                MessageBox.Show("Download path update cancelled.", "Update Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
     End Sub
@@ -306,9 +303,9 @@ Public Class Form1
 
     Private Sub GMapControl_Load(sender As Object, e As EventArgs) Handles GMapControl.Load
         ' Setting the map provider to OpenStreetMap
-        GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerAndCache
-        GMap.NET.MapProviders.OpenStreetMapProvider.UserAgent = "DigiCard GMap tool 1.0"
-        GMapControl.MapProvider = GMap.NET.MapProviders.OpenStreetMapProvider.Instance
+        GMap.NET.MapProviders.GoogleMapProvider.UserAgent = "DigiCard"
+        GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly
+        GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance
 
         ' Optional settings for the GMap control
         GMapControl.Position = New GMap.NET.PointLatLng(52.520008, 13.404954) ' Example: Latitude and Longitude of Paris, France

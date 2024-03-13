@@ -27,8 +27,8 @@ Partial Class Form1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NewEntryToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
+        Me.LocateDatabaseToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetDonwloadPathToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.SetGeocodingAPIKeyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
@@ -46,9 +46,9 @@ Partial Class Form1
         Me.LabelQuickSearch = New System.Windows.Forms.Label()
         Me.TextBoxQuickSearch = New System.Windows.Forms.TextBox()
         Me.TabControlCardTable = New System.Windows.Forms.TabControl()
+        Me.TableView = New System.Windows.Forms.TabPage()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.GMapControl = New GMap.NET.WindowsForms.GMapControl()
-        Me.TableView = New System.Windows.Forms.TabPage()
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
         Me.ToolTip = New System.Windows.Forms.ToolTip(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
@@ -61,39 +61,42 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
         Me.TabControlCardTable.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
         Me.TableView.SuspendLayout()
+        Me.TabPage2.SuspendLayout()
         Me.SuspendLayout()
         '
         'FileToolStripMenuItem
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.LocateDatabaseToolStripMenuItem, Me.ToolStripSeparator1, Me.SetDonwloadPathToolStripMenuItem, Me.SetGeocodingAPIKeyToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.NewEntryToolStripMenuItem, Me.ToolStripSeparator1, Me.LocateDatabaseToolStripMenuItem, Me.SetDonwloadPathToolStripMenuItem, Me.SetGeocodingAPIKeyToolStripMenuItem, Me.ToolStripSeparator2, Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "File"
         '
         'NewEntryToolStripMenuItem
         '
+        Me.NewEntryToolStripMenuItem.Image = Global.Bosch_DigiCard.My.Resources.Resources.icons8_seite_einfügen_96
         Me.NewEntryToolStripMenuItem.Name = "NewEntryToolStripMenuItem"
         Me.NewEntryToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
         Me.NewEntryToolStripMenuItem.Text = "New Entry"
-        '
-        'LocateDatabaseToolStripMenuItem
-        '
-        Me.LocateDatabaseToolStripMenuItem.Name = "LocateDatabaseToolStripMenuItem"
-        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.LocateDatabaseToolStripMenuItem.Text = "Locate Database"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
         Me.ToolStripSeparator1.Size = New System.Drawing.Size(191, 6)
         '
+        'LocateDatabaseToolStripMenuItem
+        '
+        Me.LocateDatabaseToolStripMenuItem.Image = Global.Bosch_DigiCard.My.Resources.Resources.icons8_mappe_96
+        Me.LocateDatabaseToolStripMenuItem.Name = "LocateDatabaseToolStripMenuItem"
+        Me.LocateDatabaseToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
+        Me.LocateDatabaseToolStripMenuItem.Text = "Locate Database"
+        '
         'SetDonwloadPathToolStripMenuItem
         '
+        Me.SetDonwloadPathToolStripMenuItem.Image = Global.Bosch_DigiCard.My.Resources.Resources.icons8_updates_herunterladen_96
         Me.SetDonwloadPathToolStripMenuItem.Name = "SetDonwloadPathToolStripMenuItem"
         Me.SetDonwloadPathToolStripMenuItem.Size = New System.Drawing.Size(194, 22)
-        Me.SetDonwloadPathToolStripMenuItem.Text = "Set Donwload Path"
+        Me.SetDonwloadPathToolStripMenuItem.Text = "Set Download Path"
         '
         'SetGeocodingAPIKeyToolStripMenuItem
         '
@@ -256,6 +259,17 @@ Partial Class Form1
         Me.TabControlCardTable.Size = New System.Drawing.Size(1013, 449)
         Me.TabControlCardTable.TabIndex = 5
         '
+        'TableView
+        '
+        Me.TableView.Controls.Add(Me.DataGridViewCardsForm1)
+        Me.TableView.Location = New System.Drawing.Point(4, 22)
+        Me.TableView.Name = "TableView"
+        Me.TableView.Padding = New System.Windows.Forms.Padding(3)
+        Me.TableView.Size = New System.Drawing.Size(1005, 423)
+        Me.TableView.TabIndex = 0
+        Me.TableView.Text = "Table View"
+        Me.TableView.UseVisualStyleBackColor = True
+        '
         'TabPage2
         '
         Me.TabPage2.Controls.Add(Me.GMapControl)
@@ -294,17 +308,6 @@ Partial Class Form1
         Me.GMapControl.TabIndex = 0
         Me.GMapControl.Zoom = 0R
         '
-        'TableView
-        '
-        Me.TableView.Controls.Add(Me.DataGridViewCardsForm1)
-        Me.TableView.Location = New System.Drawing.Point(4, 22)
-        Me.TableView.Name = "TableView"
-        Me.TableView.Padding = New System.Windows.Forms.Padding(3)
-        Me.TableView.Size = New System.Drawing.Size(1005, 423)
-        Me.TableView.TabIndex = 0
-        Me.TableView.Text = "Table View"
-        Me.TableView.UseVisualStyleBackColor = True
-        '
         'TimerQuickSearch
         '
         '
@@ -336,6 +339,7 @@ Partial Class Form1
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "Form1"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "DigiCard"
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
@@ -348,8 +352,8 @@ Partial Class Form1
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TabControlCardTable.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
         Me.TableView.ResumeLayout(False)
+        Me.TabPage2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 

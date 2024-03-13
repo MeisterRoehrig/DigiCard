@@ -37,6 +37,21 @@ Bosch DigiCard
   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
 </summary>
 </member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_mappe_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_seite_einfügen_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_updates_herunterladen_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:Bosch_DigiCard.My.Resources.Resources.Marker">
 <summary>
   Looks up a localized resource of type System.Drawing.Bitmap.

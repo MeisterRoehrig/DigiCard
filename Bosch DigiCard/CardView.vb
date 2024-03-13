@@ -8,6 +8,8 @@ Imports System.Net
 Imports Newtonsoft.Json
 Imports System.Configuration
 Imports System.Globalization
+Imports System.Data.OleDb
+Imports ADODB
 
 
 Public Class CardView
@@ -577,9 +579,50 @@ Public Class CardView
         End If
     End Sub
 
+    Private Sub TimerSearch_Tick(sender As Object, e As EventArgs) Handles TimerQuickSearch.Tick
+        TimerQuickSearch.Stop() ' Stop the timer to prevent multiple executions
+        If TextBoxCardNumber.Text IsNot "" Then
+            LableCardNumberInfo.Text = CardsDuplicateCheck(TextBoxCardNumber.Text, ComboBoxCardTyp.SelectedItem)
+        Else
+            LableCardNumberInfo.Text = "⚠ Avoid cards without a number."
+        End If
+    End Sub
+
     Private Sub TextBoxCardNumber_TextChanged(sender As Object, e As EventArgs) Handles TextBoxCardNumber.TextChanged
+        TimerQuickSearch.Stop() ' Reset the timer every time the user types
+        TimerQuickSearch.Start() ' Restart the timer
         GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
     End Sub
+
+    Private Sub ComboBoxCardTyp_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxCardTyp.SelectedIndexChanged
+        TimerQuickSearch.Stop() ' Reset the timer every time the user types
+        TimerQuickSearch.Start() ' Restart the timer
+    End Sub
+
+
+    Public Function CardsDuplicateCheck(ByVal cardNumber As String, ByVal cardType As String) As String
+        Dim cmd As New ADODB.Command
+        cardID = If(cardID = Nothing, 0, cardID)
+        cardType = If(cardType = Nothing, "", cardType)
+        cardNumber = If(cardNumber = Nothing, "", cardNumber)
+
+        With cmd
+            .ActiveConnection = conn
+            .CommandText = "SELECT * FROM Card WHERE CardNumber = ? AND CardType = ? AND NOT CardID = ?"
+            .CommandType = CommandTypeEnum.adCmdText
+            .Parameters.Append(.CreateParameter("CardNumber", DataTypeEnum.adVarChar, ParameterDirectionEnum.adParamInput, 50, cardNumber))
+            .Parameters.Append(.CreateParameter("CardType", DataTypeEnum.adVarChar, ParameterDirectionEnum.adParamInput, 50, cardType))
+            .Parameters.Append(.CreateParameter("CardID", DataTypeEnum.adVarChar, ParameterDirectionEnum.adParamInput, 50, cardID))
+        End With
+
+        Dim rs As ADODB.Recordset = cmd.Execute()
+
+        If Not rs.EOF Then
+            Return $"⚠ Duplicate for {rs.Fields("CardNumber").Value.ToString()} & {rs.Fields("CardType").Value.ToString()} found."
+        End If
+        Return ""
+    End Function
+
 
     Private Sub TextBoxSiteAddressPLZ_TextChanged(sender As Object, e As EventArgs) Handles TextBoxSiteAddressPLZ.TextChanged
         GlobalUtilities.ValidateNumber(DirectCast(sender, TextBox), ButtonCardViewApply)
@@ -684,9 +727,12 @@ Public Class CardView
                 End While
                 File.WriteAllBytes(tempFilePath, fileBytes)
 
-                MessageBox.Show($"File downloaded successfully to {tempFilePath}", "Download Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
                 ' Optionally, open the folder containing the downloaded file
-                Process.Start("explorer.exe", $"/select,""{tempFilePath}""")
+                If fileExtension = ".pdf" Then
+                    Process.Start(tempFilePath)
+                Else
+                    Process.Start("explorer.exe", $"/select,""{tempFilePath}""")
+                End If
             Else
                 MessageBox.Show("No file available for the current CardID.", "Download Failed", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
@@ -772,6 +818,8 @@ Public Class CardView
     Private Sub TextBoxLong_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLong.TextChanged
         GlobalUtilities.ValidateGeocode(DirectCast(sender, TextBox), ButtonCardViewApply)
     End Sub
+
+
 End Class
 
 Public Class Contact
@@ -800,7 +848,6 @@ End Class
 
 Public Class BorderedTableLayoutPanel
     Inherits TableLayoutPanel
-
     Protected Overrides Sub OnPaint(e As PaintEventArgs)
         MyBase.OnPaint(e)
 
