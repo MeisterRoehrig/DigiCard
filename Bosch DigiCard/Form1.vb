@@ -1,14 +1,7 @@
-﻿Imports System.Runtime.Serialization
-Imports System.Text
-Imports System.Windows
-Imports System.Windows.Forms
-Imports System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock
+﻿Imports System.Text
 Imports GMap.NET
 Imports GMap.NET.WindowsForms
 Imports GMap.NET.WindowsForms.Markers
-Imports Microsoft.Maps
-Imports System
-Imports System.Drawing
 Imports System.Globalization
 
 Public Class Form1
@@ -74,6 +67,12 @@ Public Class Form1
     End Sub
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        Dim string1 As String = "Max"
+        Dim string2 As String = "Max"
+        Debug.WriteLine(Simil.Simil(string1, string2))
+
+
         Debug.WriteLine("[DigiCard] Form1 Loaded")
         WipeDatabaseConnection()
         ToolStripStatusLabel1.Text = "Ready"
@@ -390,8 +389,6 @@ Public Class Form1
         ' Refresh the map to show the new markers
         GMapControl.Refresh()
     End Sub
-
-
 End Class
 
 

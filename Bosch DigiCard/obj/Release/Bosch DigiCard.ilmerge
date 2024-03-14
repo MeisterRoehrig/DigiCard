@@ -1,0 +1,12 @@
+Bosch DigiCard.exe
+EntityFramework.dll
+EntityFramework.SqlServer.dll
+GMap.NET.Core.dll
+GMap.NET.WindowsForms.dll
+Microsoft.Maps.MapControl.WPF.dll
+Newtonsoft.Json.dll
+System.Data.SqlClient.dll
+System.Data.SQLite.dll
+System.Data.SQLite.EF6.dll
+System.Data.SQLite.Linq.dll
+System.Security.Principal.Windows.dll

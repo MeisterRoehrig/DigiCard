@@ -34,3 +34,7 @@ D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Data.SQLite.xm
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\System.Security.Principal.Windows.xml
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Microsoft.Maps.MapControl.WPF.dll
 D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Microsoft.Maps.MapControl.WPF.xml
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.exe.manifest
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\bin\Debug\Bosch DigiCard.application
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.exe.manifest
+D:\2024_SATARI_DATA\CODE\DigiCard\Bosch DigiCard\obj\Debug\Bosch DigiCard.application

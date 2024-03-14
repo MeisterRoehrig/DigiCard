@@ -1,14 +1,8 @@
 ﻿Imports System.Text.RegularExpressions
-Imports System.Windows.Forms
-Imports System.Drawing
 Imports System.IO
-Imports System.Diagnostics
-Imports System.Data.SqlClient
 Imports System.Net
 Imports Newtonsoft.Json
-Imports System.Configuration
 Imports System.Globalization
-Imports System.Data.OleDb
 Imports ADODB
 
 
@@ -375,19 +369,19 @@ Public Class CardView
             .AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink,
             .Padding = New Padding(5),
             .Dock = DockStyle.Top,
-            .Anchor = AnchorStyles.Left Or AnchorStyles.Right,
+            .Anchor = AnchorStyles.Left,
             .Margin = New Padding(5)
         }
 
             ' Configure columns: new for label and buttons, existing adjusted
             contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' New: Position label
             contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' New: Move buttons
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 11.0F)) ' Existing: Label
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 22.0F)) ' Existing: TextBox
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 11.0F)) ' Existing: Label
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 22.0F)) ' Existing: TextBox
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 11.0F)) ' Existing: Label
-            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 22.0F)) ' Existing: TextBox
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' Existing: Label
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 60)) ' Existing: TextBox
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' Existing: Label
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 60)) ' Existing: TextBox
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' Existing: Label
+            contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.Percent, 60)) ' Existing: TextBox
             contactTable.ColumnStyles.Add(New ColumnStyle(SizeType.AutoSize)) ' Existing: Delete Button
 
             ' Index label spanning two rows
@@ -400,10 +394,9 @@ Public Class CardView
             contactTable.Controls.Add(positionLabel, 0, 0)
             contactTable.SetRowSpan(positionLabel, 2)
 
-
             ' Up and Down Buttons
-            Dim moveUpButton As New Button With {.Text = "↑", .AutoSize = True}
-            Dim moveDownButton As New Button With {.Text = "↓", .AutoSize = True}
+            Dim moveUpButton As New Button With {.Text = " ↑", .AutoSize = True, .TextAlign = HorizontalAlignment.Center}
+            Dim moveDownButton As New Button With {.Text = " ↓", .AutoSize = True}
             AddHandler moveUpButton.Click, Sub(sender, e) MoveContactUp(contact)
             AddHandler moveDownButton.Click, Sub(sender, e) MoveContactDown(contact)
             contactTable.Controls.Add(moveUpButton, 1, 0)
@@ -425,8 +418,12 @@ Public Class CardView
             ' Gender Label and TextBox
             Dim genderLabel As New Label With {.Text = "Gender:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim genderTextBox As New TextBox With {
-                .Text = contact.PersonGender, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 0}
+                .Text = contact.PersonGender,
+                .Dock = DockStyle.Fill,
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 0},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler genderTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(genderLabel, 2, 0)
@@ -436,7 +433,10 @@ Public Class CardView
             Dim firstNameLabel As New Label With {.Text = "First Name:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim firstNameTextBox As New TextBox With {
                 .Text = contact.PersonFirstname, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 1}
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 1},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler firstNameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(firstNameLabel, 4, 0) ' Adjust column index as needed
@@ -446,7 +446,10 @@ Public Class CardView
             Dim surnameLabel As New Label With {.Text = "Surname:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim surnameTextBox As New TextBox With {
                 .Text = contact.PersonSurname, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 2}
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 2},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler surnameTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(surnameLabel, 6, 0) ' Adjust column index as needed
@@ -456,7 +459,10 @@ Public Class CardView
             Dim phone1Label As New Label With {.Text = "Phone 1:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim phone1TextBox As New TextBox With {
                 .Text = contact.PersonPhone, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 3}
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 3},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler phone1TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone1Label, 2, 1) ' Adjust column index as needed
@@ -466,7 +472,10 @@ Public Class CardView
             Dim phone2Label As New Label With {.Text = "Phone 2:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim phone2TextBox As New TextBox With {
                 .Text = contact.PersonPhone2, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 4}
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 4},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler phone2TextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(phone2Label, 4, 1) ' Adjust column index and row index as needed
@@ -476,7 +485,10 @@ Public Class CardView
             Dim emailLabel As New Label With {.Text = "Email:", .AutoSize = True, .Dock = DockStyle.Fill, .TextAlign = ContentAlignment.MiddleRight}
             Dim emailTextBox As New TextBox With {
                 .Text = contact.PersonMail, .Dock = DockStyle.Fill,
-                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 5}
+                .Tag = New With {Key .Contact = contact, Key .PropertyIndex = 5},
+                .AutoSize = True,
+                .MinimumSize = New Size(20, 0),
+                .Anchor = AnchorStyles.Left Or AnchorStyles.Right
             }
             AddHandler emailTextBox.TextChanged, AddressOf UpdateContact
             contactTable.Controls.Add(emailLabel, 6, 1) ' Adjust column index and row index as needed
@@ -818,8 +830,6 @@ Public Class CardView
     Private Sub TextBoxLong_TextChanged(sender As Object, e As EventArgs) Handles TextBoxLong.TextChanged
         GlobalUtilities.ValidateGeocode(DirectCast(sender, TextBox), ButtonCardViewApply)
     End Sub
-
-
 End Class
 
 Public Class Contact
@@ -1001,5 +1011,4 @@ Module GlobalUtilities
             Debug.WriteLine("API Key is required to use Google Maps features.")
         End If
     End Sub
-
 End Module

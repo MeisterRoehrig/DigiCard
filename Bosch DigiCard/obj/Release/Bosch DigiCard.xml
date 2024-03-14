@@ -1,0 +1,114 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Bosch DigiCard
+</name>
+</assembly>
+<members>
+<member name="T:Bosch_DigiCard.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.BoschDigiCard">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.IconFire">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.IconPolice">
+<summary>
+  Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_mappe_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_seite_einfügen_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.icons8_updates_herunterladen_96">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.My.Resources.Resources.Marker">
+<summary>
+  Looks up a localized resource of type System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Bosch_DigiCard.CompareWords.TotalPoints">
+ <summary>
+ Holds the total match points for the search.
+ </summary>
+</member>
+<member name="P:Bosch_DigiCard.CompareWords.MatchType">
+ <summary>
+ Specifies the type of search to use when matching.
+ </summary>
+ <value>Sets the match type.</value>
+</member>
+<member name="P:Bosch_DigiCard.CompareWords.MinimumSubstringLength">
+ <summary>
+ Specifies the minimum substring length to use when matching.
+   Larger numbers return lower scores.  Must be greater than zero.
+ </summary>
+ <value>Sets the minimum substring length.</value>
+</member>
+<member name="P:Bosch_DigiCard.CompareWords.IgnoreCase">
+ <summary>
+ Specifies if you want to ignore case when matching.
+ </summary>
+ <value>Sets the ignore case value.</value>
+</member>
+<member name="M:Bosch_DigiCard.CompareWords.#ctor(Bosch_DigiCard.CompareWords.MatchTypes)">
+ <summary>
+ Initializes this class.  Defaults minimum substring length to 4.  Defaults ignore case to true.
+ </summary>
+ <param name="matchType">Specifies if you want fast or accurate matching.</param>
+</member>
+<member name="M:Bosch_DigiCard.CompareWords.GetMatch(System.String,System.String)">
+ <summary>
+ Returns a score based on how similar the words are.
+   A score of 100 indicates the strings are identical.
+ </summary>
+ <param name="word1">The first word to compare.</param>
+ <param name="word2">The second word to compare.</param>
+</member>
+<member name="M:Bosch_DigiCard.CompareWords.GetMatch(System.String,System.String,System.Int32)">
+ <summary>
+ Returns True when match score is greater or equal to the minimum score specified.
+ </summary>
+ <param name="word1">The first word to compare.</param>
+ <param name="word2">The second word to compare.</param>
+ <param name="minimumScore">The minimum score of the match in order to determine a successful match.</param>
+</member>
+<member name="M:Bosch_DigiCard.CompareWords.FindCommon(System.String,System.String)">
+ <summary>
+ Recursively substrings the first word, and compares it to the second.
+ </summary>
+ <param name="word1">The first word to compare.</param>
+ <param name="word2">The second word to compare.</param>
+</member>
+</members>
+</doc>

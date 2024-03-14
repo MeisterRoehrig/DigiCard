@@ -40,13 +40,29 @@ Partial Class Form1
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.DataGridViewCardsForm1 = New System.Windows.Forms.DataGridView()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.TabControlCardTable = New System.Windows.Forms.TabControl()
+        Me.TableView = New System.Windows.Forms.TabPage()
+        Me.TableLayoutPanelObject = New System.Windows.Forms.TableLayoutPanel()
+        Me.LabelSiteAddressZIP = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressPLZ = New System.Windows.Forms.TextBox()
+        Me.TextBoxSiteAddressCity = New System.Windows.Forms.TextBox()
+        Me.TextBoxQuickSearch = New System.Windows.Forms.TextBox()
+        Me.LabelSiteAddressCountry = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressCity = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressNumber = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressNumber = New System.Windows.Forms.TextBox()
+        Me.TextBoxSiteAddressAddition = New System.Windows.Forms.TextBox()
+        Me.LabelSiteAddressAddition = New System.Windows.Forms.Label()
+        Me.ButtonRequestLatLong = New System.Windows.Forms.Button()
+        Me.LabelQuickSearch = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressStreet = New System.Windows.Forms.TextBox()
+        Me.FlowLayoutPanelLetLong = New System.Windows.Forms.FlowLayoutPanel()
         Me.CheckBoxHidePolice = New System.Windows.Forms.CheckBox()
         Me.CheckBoxHideFire = New System.Windows.Forms.CheckBox()
         Me.CheckBoxBroadSearch = New System.Windows.Forms.CheckBox()
-        Me.LabelQuickSearch = New System.Windows.Forms.Label()
-        Me.TextBoxQuickSearch = New System.Windows.Forms.TextBox()
-        Me.TabControlCardTable = New System.Windows.Forms.TabControl()
-        Me.TableView = New System.Windows.Forms.TabPage()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.LabelSiteAddressStreet = New System.Windows.Forms.Label()
+        Me.TextBoxSiteAddressCountry = New System.Windows.Forms.TextBox()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.GMapControl = New GMap.NET.WindowsForms.GMapControl()
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
@@ -62,6 +78,8 @@ Partial Class Form1
         Me.SplitContainer1.SuspendLayout()
         Me.TabControlCardTable.SuspendLayout()
         Me.TableView.SuspendLayout()
+        Me.TableLayoutPanelObject.SuspendLayout()
+        Me.FlowLayoutPanelLetLong.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -183,11 +201,7 @@ Partial Class Form1
         '
         'SplitContainer1.Panel1
         '
-        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxHidePolice)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxHideFire)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.CheckBoxBroadSearch)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.LabelQuickSearch)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.TextBoxQuickSearch)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.TableLayoutPanelObject)
         '
         'SplitContainer1.Panel2
         '
@@ -195,58 +209,6 @@ Partial Class Form1
         Me.SplitContainer1.Size = New System.Drawing.Size(1013, 576)
         Me.SplitContainer1.SplitterDistance = 123
         Me.SplitContainer1.TabIndex = 5
-        '
-        'CheckBoxHidePolice
-        '
-        Me.CheckBoxHidePolice.AutoSize = True
-        Me.CheckBoxHidePolice.Location = New System.Drawing.Point(22, 72)
-        Me.CheckBoxHidePolice.Name = "CheckBoxHidePolice"
-        Me.CheckBoxHidePolice.Size = New System.Drawing.Size(80, 17)
-        Me.CheckBoxHidePolice.TabIndex = 4
-        Me.CheckBoxHidePolice.Text = "Hide Police"
-        Me.ToolTip.SetToolTip(Me.CheckBoxHidePolice, "Check this box to exclude all police-related cards from your search results.")
-        Me.CheckBoxHidePolice.UseVisualStyleBackColor = True
-        '
-        'CheckBoxHideFire
-        '
-        Me.CheckBoxHideFire.AutoSize = True
-        Me.CheckBoxHideFire.Location = New System.Drawing.Point(118, 72)
-        Me.CheckBoxHideFire.Name = "CheckBoxHideFire"
-        Me.CheckBoxHideFire.Size = New System.Drawing.Size(68, 17)
-        Me.CheckBoxHideFire.TabIndex = 4
-        Me.CheckBoxHideFire.Text = "Hide Fire"
-        Me.ToolTip.SetToolTip(Me.CheckBoxHideFire, "Check this box to exclude all fire-related cards from your search results.")
-        Me.CheckBoxHideFire.UseVisualStyleBackColor = True
-        '
-        'CheckBoxBroadSearch
-        '
-        Me.CheckBoxBroadSearch.AutoSize = True
-        Me.CheckBoxBroadSearch.Location = New System.Drawing.Point(203, 72)
-        Me.CheckBoxBroadSearch.Name = "CheckBoxBroadSearch"
-        Me.CheckBoxBroadSearch.Size = New System.Drawing.Size(91, 17)
-        Me.CheckBoxBroadSearch.TabIndex = 3
-        Me.CheckBoxBroadSearch.Tag = ""
-        Me.CheckBoxBroadSearch.Text = "Broad Search"
-        Me.ToolTip.SetToolTip(Me.CheckBoxBroadSearch, "Broadens search to include any matching terms. Uncheck for precise results.")
-        Me.CheckBoxBroadSearch.UseVisualStyleBackColor = True
-        '
-        'LabelQuickSearch
-        '
-        Me.LabelQuickSearch.AutoSize = True
-        Me.LabelQuickSearch.Location = New System.Drawing.Point(19, 25)
-        Me.LabelQuickSearch.Name = "LabelQuickSearch"
-        Me.LabelQuickSearch.Size = New System.Drawing.Size(72, 13)
-        Me.LabelQuickSearch.TabIndex = 2
-        Me.LabelQuickSearch.Text = "Quick Search"
-        '
-        'TextBoxQuickSearch
-        '
-        Me.TextBoxQuickSearch.Location = New System.Drawing.Point(97, 22)
-        Me.TextBoxQuickSearch.Name = "TextBoxQuickSearch"
-        Me.TextBoxQuickSearch.Size = New System.Drawing.Size(256, 20)
-        Me.TextBoxQuickSearch.TabIndex = 1
-        Me.ToolTip.SetToolTip(Me.TextBoxQuickSearch, "Enter keywords to search for specific cards. Use space to separate multiple terms" &
-        ".")
         '
         'TabControlCardTable
         '
@@ -269,6 +231,238 @@ Partial Class Form1
         Me.TableView.TabIndex = 0
         Me.TableView.Text = "Table View"
         Me.TableView.UseVisualStyleBackColor = True
+        '
+        'TableLayoutPanelObject
+        '
+        Me.TableLayoutPanelObject.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+        Me.TableLayoutPanelObject.ColumnCount = 4
+        Me.TableLayoutPanelObject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelObject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelObject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelObject.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle())
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxQuickSearch, 1, 0)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelQuickSearch, 0, 0)
+        Me.TableLayoutPanelObject.Controls.Add(Me.FlowLayoutPanelLetLong, 1, 1)
+        Me.TableLayoutPanelObject.Controls.Add(Me.Label1, 0, 1)
+        Me.TableLayoutPanelObject.Controls.Add(Me.ButtonRequestLatLong, 3, 0)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressCountry, 3, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressStreet, 1, 2)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressStreet, 0, 2)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressZIP, 0, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressAddition, 0, 3)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressPLZ, 1, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressAddition, 1, 3)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressCountry, 2, 4)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressCity, 3, 3)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressCity, 2, 3)
+        Me.TableLayoutPanelObject.Controls.Add(Me.TextBoxSiteAddressNumber, 3, 2)
+        Me.TableLayoutPanelObject.Controls.Add(Me.LabelSiteAddressNumber, 2, 2)
+        Me.TableLayoutPanelObject.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TableLayoutPanelObject.Location = New System.Drawing.Point(0, 0)
+        Me.TableLayoutPanelObject.Name = "TableLayoutPanelObject"
+        Me.TableLayoutPanelObject.RowCount = 5
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20.0!))
+        Me.TableLayoutPanelObject.Size = New System.Drawing.Size(1013, 123)
+        Me.TableLayoutPanelObject.TabIndex = 5
+        '
+        'LabelSiteAddressZIP
+        '
+        Me.LabelSiteAddressZIP.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressZIP.AutoSize = True
+        Me.LabelSiteAddressZIP.Location = New System.Drawing.Point(3, 103)
+        Me.LabelSiteAddressZIP.Name = "LabelSiteAddressZIP"
+        Me.LabelSiteAddressZIP.Size = New System.Drawing.Size(24, 13)
+        Me.LabelSiteAddressZIP.TabIndex = 1
+        Me.LabelSiteAddressZIP.Text = "ZIP"
+        '
+        'TextBoxSiteAddressPLZ
+        '
+        Me.TextBoxSiteAddressPLZ.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressPLZ.Location = New System.Drawing.Point(81, 99)
+        Me.TextBoxSiteAddressPLZ.Name = "TextBoxSiteAddressPLZ"
+        Me.TextBoxSiteAddressPLZ.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressPLZ.TabIndex = 2
+        '
+        'TextBoxSiteAddressCity
+        '
+        Me.TextBoxSiteAddressCity.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressCity.Location = New System.Drawing.Point(393, 75)
+        Me.TextBoxSiteAddressCity.Name = "TextBoxSiteAddressCity"
+        Me.TextBoxSiteAddressCity.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressCity.TabIndex = 2
+        '
+        'TextBoxQuickSearch
+        '
+        Me.TextBoxQuickSearch.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxQuickSearch.Location = New System.Drawing.Point(81, 3)
+        Me.TextBoxQuickSearch.Name = "TextBoxQuickSearch"
+        Me.TextBoxQuickSearch.Size = New System.Drawing.Size(256, 20)
+        Me.TextBoxQuickSearch.TabIndex = 1
+        Me.ToolTip.SetToolTip(Me.TextBoxQuickSearch, "Enter keywords to search for specific cards. Use space to separate multiple terms" &
+        ".")
+        '
+        'LabelSiteAddressCountry
+        '
+        Me.LabelSiteAddressCountry.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressCountry.AutoSize = True
+        Me.LabelSiteAddressCountry.Location = New System.Drawing.Point(343, 103)
+        Me.LabelSiteAddressCountry.Name = "LabelSiteAddressCountry"
+        Me.LabelSiteAddressCountry.Size = New System.Drawing.Size(43, 13)
+        Me.LabelSiteAddressCountry.TabIndex = 1
+        Me.LabelSiteAddressCountry.Text = "Country"
+        '
+        'LabelSiteAddressCity
+        '
+        Me.LabelSiteAddressCity.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressCity.AutoSize = True
+        Me.LabelSiteAddressCity.Location = New System.Drawing.Point(343, 77)
+        Me.LabelSiteAddressCity.Name = "LabelSiteAddressCity"
+        Me.LabelSiteAddressCity.Size = New System.Drawing.Size(24, 13)
+        Me.LabelSiteAddressCity.TabIndex = 1
+        Me.LabelSiteAddressCity.Text = "City"
+        '
+        'LabelSiteAddressNumber
+        '
+        Me.LabelSiteAddressNumber.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressNumber.AutoSize = True
+        Me.LabelSiteAddressNumber.Location = New System.Drawing.Point(343, 53)
+        Me.LabelSiteAddressNumber.Name = "LabelSiteAddressNumber"
+        Me.LabelSiteAddressNumber.Size = New System.Drawing.Size(44, 13)
+        Me.LabelSiteAddressNumber.TabIndex = 1
+        Me.LabelSiteAddressNumber.Text = "Number"
+        '
+        'TextBoxSiteAddressNumber
+        '
+        Me.TextBoxSiteAddressNumber.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressNumber.Location = New System.Drawing.Point(393, 51)
+        Me.TextBoxSiteAddressNumber.Name = "TextBoxSiteAddressNumber"
+        Me.TextBoxSiteAddressNumber.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressNumber.TabIndex = 2
+        '
+        'TextBoxSiteAddressAddition
+        '
+        Me.TextBoxSiteAddressAddition.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressAddition.Location = New System.Drawing.Point(81, 75)
+        Me.TextBoxSiteAddressAddition.Name = "TextBoxSiteAddressAddition"
+        Me.TextBoxSiteAddressAddition.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressAddition.TabIndex = 2
+        '
+        'LabelSiteAddressAddition
+        '
+        Me.LabelSiteAddressAddition.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressAddition.AutoSize = True
+        Me.LabelSiteAddressAddition.Location = New System.Drawing.Point(3, 77)
+        Me.LabelSiteAddressAddition.Name = "LabelSiteAddressAddition"
+        Me.LabelSiteAddressAddition.Size = New System.Drawing.Size(45, 13)
+        Me.LabelSiteAddressAddition.TabIndex = 1
+        Me.LabelSiteAddressAddition.Text = "Addition"
+        '
+        'ButtonRequestLatLong
+        '
+        Me.ButtonRequestLatLong.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonRequestLatLong.Location = New System.Drawing.Point(393, 3)
+        Me.ButtonRequestLatLong.Name = "ButtonRequestLatLong"
+        Me.ButtonRequestLatLong.Size = New System.Drawing.Size(75, 18)
+        Me.ButtonRequestLatLong.TabIndex = 4
+        Me.ButtonRequestLatLong.Text = "Search"
+        Me.ButtonRequestLatLong.UseVisualStyleBackColor = True
+        '
+        'LabelQuickSearch
+        '
+        Me.LabelQuickSearch.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelQuickSearch.AutoSize = True
+        Me.LabelQuickSearch.Location = New System.Drawing.Point(3, 5)
+        Me.LabelQuickSearch.Name = "LabelQuickSearch"
+        Me.LabelQuickSearch.Size = New System.Drawing.Size(72, 13)
+        Me.LabelQuickSearch.TabIndex = 2
+        Me.LabelQuickSearch.Text = "Quick Search"
+        '
+        'TextBoxSiteAddressStreet
+        '
+        Me.TextBoxSiteAddressStreet.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressStreet.Location = New System.Drawing.Point(81, 51)
+        Me.TextBoxSiteAddressStreet.Name = "TextBoxSiteAddressStreet"
+        Me.TextBoxSiteAddressStreet.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressStreet.TabIndex = 2
+        '
+        'FlowLayoutPanelLetLong
+        '
+        Me.FlowLayoutPanelLetLong.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.FlowLayoutPanelLetLong.AutoSize = True
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.CheckBoxHidePolice)
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.CheckBoxHideFire)
+        Me.FlowLayoutPanelLetLong.Controls.Add(Me.CheckBoxBroadSearch)
+        Me.FlowLayoutPanelLetLong.Location = New System.Drawing.Point(78, 24)
+        Me.FlowLayoutPanelLetLong.Margin = New System.Windows.Forms.Padding(0)
+        Me.FlowLayoutPanelLetLong.Name = "FlowLayoutPanelLetLong"
+        Me.FlowLayoutPanelLetLong.Size = New System.Drawing.Size(257, 23)
+        Me.FlowLayoutPanelLetLong.TabIndex = 3
+        '
+        'CheckBoxHidePolice
+        '
+        Me.CheckBoxHidePolice.AutoSize = True
+        Me.CheckBoxHidePolice.Location = New System.Drawing.Point(3, 3)
+        Me.CheckBoxHidePolice.Name = "CheckBoxHidePolice"
+        Me.CheckBoxHidePolice.Size = New System.Drawing.Size(80, 17)
+        Me.CheckBoxHidePolice.TabIndex = 4
+        Me.CheckBoxHidePolice.Text = "Hide Police"
+        Me.ToolTip.SetToolTip(Me.CheckBoxHidePolice, "Check this box to exclude all police-related cards from your search results.")
+        Me.CheckBoxHidePolice.UseVisualStyleBackColor = True
+        '
+        'CheckBoxHideFire
+        '
+        Me.CheckBoxHideFire.AutoSize = True
+        Me.CheckBoxHideFire.Location = New System.Drawing.Point(89, 3)
+        Me.CheckBoxHideFire.Name = "CheckBoxHideFire"
+        Me.CheckBoxHideFire.Size = New System.Drawing.Size(68, 17)
+        Me.CheckBoxHideFire.TabIndex = 4
+        Me.CheckBoxHideFire.Text = "Hide Fire"
+        Me.ToolTip.SetToolTip(Me.CheckBoxHideFire, "Check this box to exclude all fire-related cards from your search results.")
+        Me.CheckBoxHideFire.UseVisualStyleBackColor = True
+        '
+        'CheckBoxBroadSearch
+        '
+        Me.CheckBoxBroadSearch.AutoSize = True
+        Me.CheckBoxBroadSearch.Location = New System.Drawing.Point(163, 3)
+        Me.CheckBoxBroadSearch.Name = "CheckBoxBroadSearch"
+        Me.CheckBoxBroadSearch.Size = New System.Drawing.Size(91, 17)
+        Me.CheckBoxBroadSearch.TabIndex = 3
+        Me.CheckBoxBroadSearch.Tag = ""
+        Me.CheckBoxBroadSearch.Text = "Broad Search"
+        Me.ToolTip.SetToolTip(Me.CheckBoxBroadSearch, "Broadens search to include any matching terms. Uncheck for precise results.")
+        Me.CheckBoxBroadSearch.UseVisualStyleBackColor = True
+        '
+        'Label1
+        '
+        Me.Label1.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(3, 29)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(29, 13)
+        Me.Label1.TabIndex = 1
+        Me.Label1.Text = "Filter"
+        '
+        'LabelSiteAddressStreet
+        '
+        Me.LabelSiteAddressStreet.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LabelSiteAddressStreet.AutoSize = True
+        Me.LabelSiteAddressStreet.Location = New System.Drawing.Point(3, 53)
+        Me.LabelSiteAddressStreet.Name = "LabelSiteAddressStreet"
+        Me.LabelSiteAddressStreet.Size = New System.Drawing.Size(35, 13)
+        Me.LabelSiteAddressStreet.TabIndex = 1
+        Me.LabelSiteAddressStreet.Text = "Street"
+        '
+        'TextBoxSiteAddressCountry
+        '
+        Me.TextBoxSiteAddressCountry.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.TextBoxSiteAddressCountry.Location = New System.Drawing.Point(393, 99)
+        Me.TextBoxSiteAddressCountry.Name = "TextBoxSiteAddressCountry"
+        Me.TextBoxSiteAddressCountry.Size = New System.Drawing.Size(163, 20)
+        Me.TextBoxSiteAddressCountry.TabIndex = 2
         '
         'TabPage2
         '
@@ -347,12 +541,15 @@ Partial Class Form1
         Me.StatusStripForm1.PerformLayout()
         CType(Me.DataGridViewCardsForm1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.PerformLayout()
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.TabControlCardTable.ResumeLayout(False)
         Me.TableView.ResumeLayout(False)
+        Me.TableLayoutPanelObject.ResumeLayout(False)
+        Me.TableLayoutPanelObject.PerformLayout()
+        Me.FlowLayoutPanelLetLong.ResumeLayout(False)
+        Me.FlowLayoutPanelLetLong.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
@@ -386,4 +583,20 @@ Partial Class Form1
     Friend WithEvents TabPage2 As TabPage
     Friend WithEvents GMapControl As GMap.NET.WindowsForms.GMapControl
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents TableLayoutPanelObject As TableLayoutPanel
+    Friend WithEvents LabelSiteAddressZIP As Label
+    Friend WithEvents FlowLayoutPanelLetLong As FlowLayoutPanel
+    Friend WithEvents TextBoxSiteAddressPLZ As TextBox
+    Friend WithEvents TextBoxSiteAddressCity As TextBox
+    Friend WithEvents LabelSiteAddressCountry As Label
+    Friend WithEvents LabelSiteAddressCity As Label
+    Friend WithEvents LabelSiteAddressNumber As Label
+    Friend WithEvents TextBoxSiteAddressNumber As TextBox
+    Friend WithEvents TextBoxSiteAddressAddition As TextBox
+    Friend WithEvents LabelSiteAddressStreet As Label
+    Friend WithEvents LabelSiteAddressAddition As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents ButtonRequestLatLong As Button
+    Friend WithEvents TextBoxSiteAddressStreet As TextBox
+    Friend WithEvents TextBoxSiteAddressCountry As TextBox
 End Class

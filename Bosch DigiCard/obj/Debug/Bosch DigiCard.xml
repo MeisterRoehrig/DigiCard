@@ -57,5 +57,36 @@ Bosch DigiCard
   Looks up a localized resource of type System.Drawing.Bitmap.
 </summary>
 </member>
+<member name="M:Bosch_DigiCard.Simil.Simil(System.String,System.String)">
+ <summary>
+ 
+ </summary>
+ <param name="s1">First string</param>
+ <param name="s2">Second string</param>
+ <returns>Value between 0 and 1, indicating the similarity between the two given strings.</returns>
+ <remarks></remarks>
+</member>
+<member name="M:Bosch_DigiCard.Simil.rsimil(System.String,System.Int32,System.String,System.Int32,System.Int32@)">
+ <summary>
+ Recursive function doing most of the work. Results stored in tcnt
+ </summary>
+ <param name="s1">First string.</param>
+ <param name="s1len">Length of first string.</param>
+ <param name="s2">Second string.</param>
+ <param name="s2len">Length of second string.</param>
+ <param name="tcnt">Result.</param>
+ <remarks></remarks>
+</member>
+<member name="M:Bosch_DigiCard.Simil.find_biggest_substring(System.String,System.Int32,System.String,System.Int32,Bosch_DigiCard.Simil.structSubString@)">
+ <summary>
+ 
+ </summary>
+ <param name="s1"></param>
+ <param name="s1len">length of s1 to be considered</param>
+ <param name="s2"></param>
+ <param name="s2len">length of s2 to be considered</param>
+ <param name="ss">ByRef because will be modified inside this function.</param>
+ <remarks></remarks>
+</member>
 </members>
 </doc>
