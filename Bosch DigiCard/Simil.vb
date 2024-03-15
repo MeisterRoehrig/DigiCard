@@ -1,20 +1,11 @@
-﻿Public Class Simil
-
-    'Shared m_tcnt As Double = 0        'Storing to a static field is not allowed in safe assemblies.
-
+﻿'http://accessmvp.com/TomVanStiphout/Simil.htm
+Public Class Simil
     Private Structure structSubString
         Public o1 As Integer
         Public o2 As Integer
         Public len As Integer
     End Structure
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="s1">First string</param>
-    ''' <param name="s2">Second string</param>
-    ''' <returns>Value between 0 and 1, indicating the similarity between the two given strings.</returns>
-    ''' <remarks></remarks>
     Public Shared Function Simil(ByVal s1 As String, ByVal s2 As String) As Double
         Dim returnValue As Double = 0.0
         Dim tlen As Integer                      'sum of lengths of the two strings.
@@ -32,15 +23,6 @@
         Return returnValue
     End Function
 
-    ''' <summary>
-    ''' Recursive function doing most of the work. Results stored in tcnt
-    ''' </summary>
-    ''' <param name="s1">First string.</param>
-    ''' <param name="s1len">Length of first string.</param>
-    ''' <param name="s2">Second string.</param>
-    ''' <param name="s2len">Length of second string.</param>
-    ''' <param name="tcnt">Result.</param>
-    ''' <remarks></remarks>
     Private Shared Sub rsimil(ByVal s1 As String, ByVal s1len As Integer, ByVal s2 As String, ByVal s2len As Integer, ByRef tcnt As Integer)
         Dim ss As structSubString
 
@@ -62,15 +44,6 @@
         End If
     End Sub
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="s1"></param>
-    ''' <param name="s1len">length of s1 to be considered</param>
-    ''' <param name="s2"></param>
-    ''' <param name="s2len">length of s2 to be considered</param>
-    ''' <param name="ss">ByRef because will be modified inside this function.</param>
-    ''' <remarks></remarks>
     Private Shared Sub find_biggest_substring(ByVal s1 As String, ByVal s1len As Integer, ByVal s2 As String, ByVal s2len As Integer, ByRef ss As structSubString)
         Dim i As Integer
         Dim j As Integer

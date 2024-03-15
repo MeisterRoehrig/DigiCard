@@ -869,6 +869,12 @@ End Class
 
 Module GlobalUtilities
 
+    Public Sub ClearTextBoxWithoutTextChange(textBox As TextBox, ByVal textChangedEventHandler As EventHandler)
+        RemoveHandler textBox.TextChanged, textChangedEventHandler
+        textBox.Clear()
+        AddHandler textBox.TextChanged, textChangedEventHandler
+    End Sub
+
     Public Function ValidateAddressNumber(textBox As TextBox, applyButton As Button) As Boolean
         Dim pattern As String = "^[a-zA-Z0-9\s\-]*$"
         Dim isValidAddressNumber As Boolean = String.IsNullOrWhiteSpace(textBox.Text) OrElse Regex.IsMatch(textBox.Text, pattern)

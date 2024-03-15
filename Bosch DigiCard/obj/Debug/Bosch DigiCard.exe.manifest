@@ -43,14 +43,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bosch DigiCard.exe" size="483248">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Bosch DigiCard.exe" size="487344">
       <assemblyIdentity name="Bosch DigiCard" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>LNO2hO5Ev+C4c3OctMZZR4qJ7kCyRdYLvhLV/W0Ricg=</dsig:DigestValue>
+        <dsig:DigestValue>4gqjpFXtX2VgBEDksGsto5qWvaA9e1ThydDhyqLrDWs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -186,13 +186,13 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Bosch DigiCard.exe.config" size="3054">
+  <file name="Bosch DigiCard.exe.config" size="3159">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>wdCEJY2GchsxMoHfUisOhyjxA06FL/YodalzcqOGkhw=</dsig:DigestValue>
+      <dsig:DigestValue>a7d90EgxVB16wTi9Aap9Qf7ZBj1bWh746ow2u35dHjw=</dsig:DigestValue>
     </hash>
   </file>
   <file name="BoschDigiCard.ico" size="34362">

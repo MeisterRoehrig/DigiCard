@@ -105,6 +105,7 @@ Partial Class CardView
         Me.FlowLayoutContact = New System.Windows.Forms.FlowLayoutPanel()
         Me.ButtonContactAdd = New System.Windows.Forms.Button()
         Me.PanelMain = New System.Windows.Forms.Panel()
+        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.GroupBoxDelete = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanelDelete = New System.Windows.Forms.TableLayoutPanel()
         Me.FlowLayoutPanelDelete = New System.Windows.Forms.FlowLayoutPanel()
@@ -118,7 +119,6 @@ Partial Class CardView
         Me.PanelSpacer0 = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
-        Me.Panel3 = New System.Windows.Forms.Panel()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBoxSystemsType.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
@@ -1066,6 +1066,14 @@ Partial Class CardView
         Me.PanelMain.Size = New System.Drawing.Size(1013, 570)
         Me.PanelMain.TabIndex = 6
         '
+        'Panel3
+        '
+        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
+        Me.Panel3.Location = New System.Drawing.Point(8, 778)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(980, 8)
+        Me.Panel3.TabIndex = 13
+        '
         'GroupBoxDelete
         '
         Me.GroupBoxDelete.AutoSize = True
@@ -1195,14 +1203,6 @@ Partial Class CardView
         '
         'TimerQuickSearch
         '
-        '
-        'Panel3
-        '
-        Me.Panel3.Dock = System.Windows.Forms.DockStyle.Top
-        Me.Panel3.Location = New System.Drawing.Point(8, 778)
-        Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(980, 8)
-        Me.Panel3.TabIndex = 13
         '
         'CardView
         '

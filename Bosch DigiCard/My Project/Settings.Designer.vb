@@ -125,6 +125,18 @@ Namespace My
                 Me("GoogleMapsAPIKey") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property FuzzySearch() As Boolean
+            Get
+                Return CType(Me("FuzzySearch"),Boolean)
+            End Get
+            Set
+                Me("FuzzySearch") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

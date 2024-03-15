@@ -58,7 +58,7 @@ Public Class Form1
                 conn = New ADODB.Connection
                 conn.Open($"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={My.Settings.DatabasePath}")
                 Debug.WriteLine($"[DigiCard] Database loaded from saved file path: {My.Settings.DatabasePath}")
-                PerformSearch()
+                PerformSearch(isRefresh:=True)
             Catch ex As Exception
                 Debug.WriteLine($"[DigiCard] Failed to open saved database: {ex.Message}")
                 MessageBox.Show($"Failed to open saved database: {ex.Message}. Try Changing the Database location.", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -68,11 +68,6 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        Dim string1 As String = "Max"
-        Dim string2 As String = "Max"
-        Debug.WriteLine(Simil.Simil(string1, string2))
-
-
         Debug.WriteLine("[DigiCard] Form1 Loaded")
         WipeDatabaseConnection()
         ToolStripStatusLabel1.Text = "Ready"
@@ -81,9 +76,8 @@ Public Class Form1
         CheckBoxHideFire.Checked = My.Settings.HideFire
         CheckBoxHidePolice.Checked = My.Settings.HidePolice
         CheckBoxBroadSearch.Checked = My.Settings.BroadSearch
-
+        CheckBoxFuzzySearch.Checked = My.Settings.FuzzySearch
         UpdateDatabase()
-
     End Sub
 
     Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
@@ -92,7 +86,7 @@ Public Class Form1
 
     Private Sub TimerSearch_Tick(sender As Object, e As EventArgs) Handles TimerQuickSearch.Tick
         TimerQuickSearch.Stop() ' Stop the timer to prevent multiple executions
-        PerformSearch() ' Perform the search operation
+        PerformSearch(isQuickSearch:=True) ' Perform the search operation
     End Sub
 
     Private Sub TextBoxQuickSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxQuickSearch.TextChanged
@@ -100,87 +94,149 @@ Public Class Form1
         TimerQuickSearch.Start() ' Restart the timer
     End Sub
 
-    Private Function BuildSearchQuery() As String
-        Dim whereClause As New System.Text.StringBuilder()
-        Dim filterClause As New System.Text.StringBuilder() ' Renamed from exclusionClause
+    Private Function PrepareSearch() As DataTable
+        ' Start with your base SQL query
+        Dim baseQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet, SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity, SiteAddressCountry, CardType, SiteAddressLat, SiteAddressLong, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
+        Dim filterClauses As New List(Of String)
 
-        ' Handle exclusions explicitly with filterClause
+        ' Directly add conditions based on the checkboxes
         If CheckBoxHideFire.Checked Then
-            AppendCondition(filterClause, "CardType <> 'Fire'", alwaysUseAnd:=True)
+            filterClauses.Add("CardType <> 'Fire'")
         End If
         If CheckBoxHidePolice.Checked Then
-            AppendCondition(filterClause, "CardType <> 'Police'", alwaysUseAnd:=True)
+            filterClauses.Add("CardType <> 'Police'")
         End If
 
-        ' Handle search box input
-        If Not String.IsNullOrWhiteSpace(TextBoxQuickSearch.Text) Then
-            Dim searchTerms As String() = TextBoxQuickSearch.Text.Split(New Char() {" "c}, StringSplitOptions.RemoveEmptyEntries)
-            Dim searchColumns As String() = {"CardNumber", "SiteName", "CardPropertyDescription", "SiteAddressStreet", "SiteAddressAddition", "SiteAddressNumber", "SiteAddressZIP", "SiteAddressCity", "SiteAddressCountry", "CardType"}
-
-            For Each term As String In searchTerms
-                Dim termCondition As New System.Text.StringBuilder()
-                For Each column As String In searchColumns
-                    If termCondition.Length > 0 Then termCondition.Append(" OR ")
-                    termCondition.AppendFormat("{0} LIKE '%{1}%'", column, term)
-                Next
-                AppendCondition(whereClause, $"({termCondition})", CheckBoxBroadSearch.Checked)
-            Next
+        ' Combine the base query with the WHERE clause, if any conditions were added
+        If filterClauses.Any() Then
+            baseQuery &= " WHERE " & String.Join(" AND ", filterClauses)
         End If
 
-        ' Combine filterClause and whereClause
-        If filterClause.Length > 0 Then
-            If whereClause.Length > 0 Then
-                whereClause.Insert(0, filterClause.ToString() & " AND (") ' Prepend filterClause and open parenthesis for remaining conditions
-                whereClause.Append(")") ' Close parenthesis for remaining conditions
-            Else
-                whereClause.Append(filterClause.ToString()) ' Just use filterClause if no other conditions
-            End If
-        End If
-
-        ' Construct the final search query
-        Dim searchQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet,SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity,SiteAddressCountry, CardType, SiteAddressLat, SiteAddressLong, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
-        If whereClause.Length > 0 Then
-            searchQuery &= " WHERE " & whereClause.ToString()
-        End If
-
-        Return searchQuery
+        ' Execute the query and fill a DataTable with the results
+        Return ExecuteQuery(baseQuery)
     End Function
 
-    Private Sub AppendCondition(ByRef clause As StringBuilder, condition As String, Optional useOr As Boolean = False, Optional alwaysUseAnd As Boolean = False)
-        If clause.Length > 0 Then clause.Append(If(alwaysUseAnd, " AND ", If(useOr, " OR ", " AND ")))
-        clause.Append(condition)
-    End Sub
-
-
-    Private Sub PopulateDataGridView(searchQuery As String)
+    Private Function ExecuteQuery(query As String) As DataTable
+        Dim dataTable As New DataTable()
         Try
+            ' Assuming conn is your database connection object already opened
             If rs Is Nothing Then
                 rs = New ADODB.Recordset
             End If
-            rs.Open(searchQuery, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockReadOnly)
+            rs.Open(query, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockReadOnly)
 
-            Dim dt As New DataTable
+            ' Check if the recordset is not empty
             If Not rs.EOF Then
-                TextBoxQuickSearch.BackColor = SystemColors.Window
-                ToolStripStatusLabel1.Text = $"Search results: {rs.RecordCount} entries found."
-
-                Dim data As Object = rs.GetRows()
-                For i As Integer = 0 To rs.Fields.Count - 1
-                    dt.Columns.Add(rs.Fields(i).Name)
+                ' Initialize columns in the DataTable based on the recordset
+                For Each field As ADODB.Field In rs.Fields
+                    dataTable.Columns.Add(field.Name, GetType(String)) ' Consider adjusting the type based on actual column types
                 Next
 
-                For j As Integer = 0 To UBound(data, 2)
-                    Dim row As DataRow = dt.NewRow()
-                    For i As Integer = 0 To UBound(data, 1)
-                        row(i) = data(i, j)
+                ' Add rows to the DataTable
+                While Not rs.EOF
+                    Dim row As DataRow = dataTable.NewRow()
+                    For i As Integer = 0 To rs.Fields.Count - 1
+                        row(i) = rs.Fields(i).Value.ToString()
                     Next
-                    dt.Rows.Add(row)
+                    dataTable.Rows.Add(row)
+                    rs.MoveNext()
+                End While
+            End If
+            rs.Close()
+        Catch ex As Exception
+            Debug.WriteLine("Error executing query: " & ex.Message)
+            ' Handle exceptions or errors as appropriate
+        End Try
+        Return dataTable
+    End Function
+
+    Private Function PerformDataSearch(data As DataTable, isQuickSearch As Boolean) As DataTable
+        ' Define search columns for quick search
+        Dim quickSearchColumns As String() = {"CardNumber", "SiteName", "CardPropertyDescription", "SiteAddressStreet", "SiteAddressAddition", "SiteAddressNumber", "SiteAddressZIP", "SiteAddressCity", "SiteAddressCountry", "CardType"}
+
+        ' Define a dictionary for advanced search with column names mapped to corresponding TextBoxes
+        Dim advancedSearchCriteria As New Dictionary(Of String, TextBox)
+        If Not isQuickSearch Then
+            advancedSearchCriteria.Add("SiteAddressStreet", TextBoxSiteAddressStreet)
+            advancedSearchCriteria.Add("SiteAddressNumber", TextBoxSiteAddressNumber)
+            advancedSearchCriteria.Add("SiteAddressAddition", TextBoxSiteAddressAddition)
+            advancedSearchCriteria.Add("SiteAddressCity", TextBoxSiteAddressCity)
+            advancedSearchCriteria.Add("SiteAddressZIP", TextBoxSiteAddressPLZ)
+            advancedSearchCriteria.Add("SiteAddressCountry", TextBoxSiteAddressCountry)
+            advancedSearchCriteria.Add("CardNumber", TextBoxCardNumber)
+            advancedSearchCriteria.Add("SiteName", TextBoxSiteName)
+        End If
+
+        If TextBoxQuickSearch.Text Is Nothing AndAlso isQuickSearch Then
+            Return data ' If no search terms for quick search, return the original data
+        End If
+
+        Dim searchTerms As String() = If(isQuickSearch, TextBoxQuickSearch.Text.Split(New Char() {","c}, StringSplitOptions.RemoveEmptyEntries), Array.Empty(Of String)())
+        Dim filteredData As DataTable = data.Clone() ' Create a DataTable with the same structure as the original
+
+        For Each row As DataRow In data.Rows
+            Dim termMatches As New List(Of Boolean)()
+
+            If isQuickSearch Then
+                ' Quick search logic
+                For Each term As String In searchTerms
+                    PerformSearchLogic(term, quickSearchColumns, row, termMatches)
                 Next
+            Else
+                ' Advanced search logic
+                For Each kvp As KeyValuePair(Of String, TextBox) In advancedSearchCriteria
+                    If Not String.IsNullOrWhiteSpace(kvp.Value.Text) Then
+                        PerformSearchLogic(kvp.Value.Text, New String() {kvp.Key}, row, termMatches)
+                    End If
+                Next
+            End If
 
-                'Hide CardID Column
-                DataGridViewCardsForm1.DataSource = dt
+            ' Determine if the row should be added to filteredData based on search mode
+            Dim isRowMatch As Boolean = If(CheckBoxBroadSearch.Checked, termMatches.Any(Function(x) x), termMatches.All(Function(x) x))
 
+            If isRowMatch Then
+                filteredData.ImportRow(row) ' Add the matching row to the filtered data
+            End If
+        Next
+
+        Return filteredData
+    End Function
+
+    Private Sub PerformSearchLogic(term As String, columns As String(), row As DataRow, ByRef termMatches As List(Of Boolean))
+        Dim termMatchFound As Boolean = False
+
+        For Each column As String In columns
+            Dim cellText As String = If(row(column) IsNot Nothing, row(column).ToString().ToLower(), "")
+
+            If CheckBoxFuzzySearch.Checked Then
+                ' Use the Simil function for fuzzy search
+                Dim matchScore As Double = Simil.Simil(cellText, term.ToLower())
+                If matchScore >= 0.7 Then ' Assuming 0.7 as the threshold for fuzzy matches
+                    termMatchFound = True
+                    Exit For ' Exit the column loop early if a match is found
+                End If
+            Else
+                ' Use basic matching logic for exact searches
+                If String.Equals(cellText, term, StringComparison.OrdinalIgnoreCase) Then
+                    termMatchFound = True
+                    Exit For ' Exit the column loop early if a match is found
+                End If
+            End If
+        Next
+
+        termMatches.Add(termMatchFound)
+    End Sub
+
+    Private Sub PopulateDataGridView(filteredData As DataTable)
+        Try
+            If filteredData IsNot Nothing AndAlso filteredData.Rows.Count > 0 Then
+                ToolStripStatusLabel1.Text = $"Search results: {filteredData.Rows.Count} entries found."
+
+                ' Hide specific columns as needed
                 With DataGridViewCardsForm1
+                    .DataSource = filteredData
+
+                    ' Since columns are being generated after setting the DataSource, ensure they exist before hiding
                     If .Columns("CardID") IsNot Nothing Then
                         .Columns("CardID").Visible = False
                     End If
@@ -192,23 +248,43 @@ Public Class Form1
                     End If
                 End With
             Else
-                TextBoxQuickSearch.BackColor = Color.LightCoral
                 ToolStripStatusLabel1.Text = "Search results: No entries were found."
-                DataGridViewCardsForm1.DataSource = Nothing
-                DataGridViewCardsForm1.DataSource = New DataTable() ' Clears the DataGridView
+                DataGridViewCardsForm1.DataSource = Nothing ' Clears the DataGridView
             End If
-            rs.Close()
         Catch ex As Exception
             Debug.WriteLine("[DigiCard] Error populating DataGridView: " + ex.Message)
             ToolStripStatusLabel1.Text = "Error: " + ex.Message
         End Try
-
     End Sub
 
-    Private Sub PerformSearch()
-        Dim searchQuery As String = BuildSearchQuery()
-        PopulateDataGridView(searchQuery)
-        DisplayMarkersFromDataGridView()
+
+    Private Sub PerformSearch(Optional isQuickSearch As Boolean = True, Optional isRefresh As Boolean = False)
+        If isRefresh Then
+            If TextBoxQuickSearch.Text Is "" Then
+                Debug.WriteLine("Performing Refresh False")
+                Dim dt As DataTable = PrepareSearch()
+                dt = PerformDataSearch(dt, False)
+                PopulateDataGridView(dt)
+                DisplayMarkersFromDataGridView()
+            Else
+                Dim dt As DataTable = PrepareSearch()
+                Debug.WriteLine("Performing Refresh True")
+
+                dt = PerformDataSearch(dt, True)
+                PopulateDataGridView(dt)
+                DisplayMarkersFromDataGridView()
+            End If
+        Else
+            Dim dt As DataTable = PrepareSearch()
+            dt = PerformDataSearch(dt, isQuickSearch)
+            PopulateDataGridView(dt)
+            DisplayMarkersFromDataGridView()
+        End If
+    End Sub
+
+    Private Sub ButtonAdvancedSearch_Click(sender As Object, e As EventArgs) Handles ButtonAdvancedSearch.Click
+        GlobalUtilities.ClearTextBoxWithoutTextChange(TextBoxQuickSearch, AddressOf TextBoxQuickSearch_TextChanged)
+        PerformSearch(isQuickSearch:=False)
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -218,19 +294,33 @@ Public Class Form1
     End Sub
 
     Private Sub CheckBoxBroadSearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxBroadSearch.CheckedChanged
-        PerformSearch()
+        If TextBoxQuickSearch.Text IsNot "" Then
+            PerformSearch()
+        End If
     End Sub
 
     Private Sub CheckBoxHideFire_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxHideFire.CheckedChanged
         My.Settings.HideFire = CheckBoxHideFire.Checked
         My.Settings.Save()
-        PerformSearch()
+        If TextBoxQuickSearch.Text IsNot "" Then
+            PerformSearch()
+        End If
     End Sub
 
     Private Sub CheckBoxHidePolice_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxHidePolice.CheckedChanged
         My.Settings.HidePolice = CheckBoxHidePolice.Checked
         My.Settings.Save()
-        PerformSearch()
+        If TextBoxQuickSearch.Text IsNot "" Then
+            PerformSearch()
+        End If
+    End Sub
+
+    Private Sub CheckBoxFuzzySearch_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBoxFuzzySearch.CheckedChanged
+        My.Settings.FuzzySearch = CheckBoxFuzzySearch.Checked
+        My.Settings.Save()
+        If TextBoxQuickSearch.Text IsNot "" Then
+            PerformSearch()
+        End If
     End Sub
 
     Private Sub DataGridViewCardsForm1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCardsForm1.CellDoubleClick
@@ -240,7 +330,7 @@ Public Class Form1
             Dim cardView As New CardView(cardID, conn)
             If cardView.ShowDialog() = DialogResult.OK Then
                 ' Refresh DataGridView here
-                PerformSearch()
+                PerformSearch(isRefresh:=True)
                 SelectRowByCardID(cardID)
             End If
         End If
@@ -281,7 +371,7 @@ Public Class Form1
                 ' Update the download path in the settings
                 My.Settings.DownloadPath = folderBrowser.SelectedPath
                 My.Settings.Save() ' Save the settings
-
+                PerformSearch(isRefresh:=True)
                 Debug.WriteLine($"Download path set to: {My.Settings.DownloadPath}", "Download Path Updated", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
@@ -291,7 +381,7 @@ Public Class Form1
         Dim cardView As New CardView(0, conn)
         If cardView.ShowDialog() = DialogResult.OK Then
             ' Refresh DataGridView here
-            PerformSearch()
+            PerformSearch(isRefresh:=True)
             'SelectRowByCardID(cardID)
         End If
     End Sub
@@ -327,6 +417,7 @@ Public Class Form1
             ' Open CardView form with the cardID
             Dim cardView As New CardView(cardID, conn) ' Assuming conn is the database connection
             If cardView.ShowDialog() = DialogResult.OK Then
+                PerformSearch(isRefresh:=True)
                 ' Optionally, refresh the data shown on the map or perform other actions
             End If
         End If
@@ -389,6 +480,7 @@ Public Class Form1
         ' Refresh the map to show the new markers
         GMapControl.Refresh()
     End Sub
+
 End Class
 
 
@@ -456,6 +548,4 @@ Public Class GMarkerGoogleWithLabel
             g.DrawString(LabelText, LabelFont, LabelBrush, labelPosition)
         End If
     End Sub
-
-
 End Class
