@@ -1,5 +1,4 @@
-﻿Imports System.Text
-Imports GMap.NET
+﻿Imports GMap.NET
 Imports GMap.NET.WindowsForms
 Imports GMap.NET.WindowsForms.Markers
 Imports System.Globalization
@@ -9,8 +8,8 @@ Public Class Form1
     Private conn As ADODB.Connection = Nothing
     Private rs As ADODB.Recordset = Nothing
 
+    'Sicherstellen das beim Starten keine DB Connections mit gleichem Namen existieren
     Private Sub WipeDatabaseConnection()
-        ' Close and clean up the connection
         If conn IsNot Nothing Then
             If conn.State = ConnectionState.Open Then
                 conn.Close()
@@ -18,7 +17,6 @@ Public Class Form1
             conn = Nothing
         End If
 
-        ' Close and clean up the recordset
         If rs IsNot Nothing Then
             If rs.State = ADODB.ObjectStateEnum.adStateOpen Then
                 rs.Close()
@@ -27,21 +25,21 @@ Public Class Form1
         End If
     End Sub
 
+    'Speichern des Pfads zur Datenbank
     Private Sub LocateDatabaseToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles LocateDatabaseToolStripMenuItem.Click
         OpenFileDialog1.Filter = "Access Database Files (*.accdb)|*.accdb|All files (*.*)|*.*"
         OpenFileDialog1.Title = "Select Database File"
         If OpenFileDialog1.ShowDialog() = DialogResult.OK Then
             Dim selectedFilePath As String = OpenFileDialog1.FileName
 
-            ' Optionally, check if the selected database can be opened before saving the path
             Dim tempConn As New ADODB.Connection
             Try
                 tempConn.Open($"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={selectedFilePath}") ' 
-                tempConn.Close() ' Close immediately after verifying it can be opened
+                tempConn.Close()
                 My.Settings.DatabasePath = selectedFilePath
-                My.Settings.Save() ' Save the path to settings
+                My.Settings.Save()
                 Debug.WriteLine($"[DigiCard] Database location updated successfully to: {selectedFilePath}")
-                UpdateDatabase() ' Refresh the connection with the new database path
+                UpdateDatabase()
             Catch ex As Exception
                 Debug.WriteLine($"[DigiCard] Failed to open selected database: {ex.Message}")
                 MessageBox.Show($"Failed to open selected database: {ex.Message}", "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -49,6 +47,7 @@ Public Class Form1
         End If
     End Sub
 
+    'Start der Dantenbank verbindnung bei Form Load etc.
     Private Sub UpdateDatabase()
         If Not String.IsNullOrEmpty(My.Settings.DatabasePath) Then
             Try
@@ -72,7 +71,7 @@ Public Class Form1
         WipeDatabaseConnection()
         ToolStripStatusLabel1.Text = "Ready"
 
-        ' Restore the checkbox states from saved settings
+        ' Landen der vorheriegen eingaben aus den Settings 
         CheckBoxHideFire.Checked = My.Settings.HideFire
         CheckBoxHidePolice.Checked = My.Settings.HidePolice
         CheckBoxBroadSearch.Checked = My.Settings.BroadSearch
@@ -84,22 +83,22 @@ Public Class Form1
         WipeDatabaseConnection()
     End Sub
 
+    'Timer um zu verhindern das sofort nach jeder eingabe ein querry durchgefürt werde
     Private Sub TimerSearch_Tick(sender As Object, e As EventArgs) Handles TimerQuickSearch.Tick
-        TimerQuickSearch.Stop() ' Stop the timer to prevent multiple executions
-        PerformSearch(isQuickSearch:=True) ' Perform the search operation
+        TimerQuickSearch.Stop()
+        PerformSearch(isQuickSearch:=True)
     End Sub
 
     Private Sub TextBoxQuickSearch_TextChanged(sender As Object, e As EventArgs) Handles TextBoxQuickSearch.TextChanged
-        TimerQuickSearch.Stop() ' Reset the timer every time the user types
-        TimerQuickSearch.Start() ' Restart the timer
+        TimerQuickSearch.Stop()
+        TimerQuickSearch.Start()
     End Sub
 
+    'Vorbereiten der Select Querry mit dem Filtern
     Private Function PrepareSearch() As DataTable
-        ' Start with your base SQL query
         Dim baseQuery As String = "SELECT CardID, CardNumber, SiteName, CardPropertyDescription, SiteAddressStreet, SiteAddressAddition, SiteAddressNumber, SiteAddressZIP, SiteAddressCity, SiteAddressCountry, CardType, SiteAddressLat, SiteAddressLong, CardCreated, CardLastModified FROM Card INNER JOIN Site ON Card.SiteID=Site.SiteID"
         Dim filterClauses As New List(Of String)
 
-        ' Directly add conditions based on the checkboxes
         If CheckBoxHideFire.Checked Then
             filterClauses.Add("CardType <> 'Fire'")
         End If
@@ -107,32 +106,27 @@ Public Class Form1
             filterClauses.Add("CardType <> 'Police'")
         End If
 
-        ' Combine the base query with the WHERE clause, if any conditions were added
         If filterClauses.Any() Then
             baseQuery &= " WHERE " & String.Join(" AND ", filterClauses)
         End If
 
-        ' Execute the query and fill a DataTable with the results
         Return ExecuteQuery(baseQuery)
     End Function
 
+    'Laden der Daten aus der Datenbank
     Private Function ExecuteQuery(query As String) As DataTable
         Dim dataTable As New DataTable()
         Try
-            ' Assuming conn is your database connection object already opened
             If rs Is Nothing Then
                 rs = New ADODB.Recordset
             End If
             rs.Open(query, conn, ADODB.CursorTypeEnum.adOpenStatic, ADODB.LockTypeEnum.adLockReadOnly)
 
-            ' Check if the recordset is not empty
             If Not rs.EOF Then
-                ' Initialize columns in the DataTable based on the recordset
                 For Each field As ADODB.Field In rs.Fields
-                    dataTable.Columns.Add(field.Name, GetType(String)) ' Consider adjusting the type based on actual column types
+                    dataTable.Columns.Add(field.Name, GetType(String))
                 Next
 
-                ' Add rows to the DataTable
                 While Not rs.EOF
                     Dim row As DataRow = dataTable.NewRow()
                     For i As Integer = 0 To rs.Fields.Count - 1
@@ -145,16 +139,15 @@ Public Class Form1
             rs.Close()
         Catch ex As Exception
             Debug.WriteLine("Error executing query: " & ex.Message)
-            ' Handle exceptions or errors as appropriate
         End Try
         Return dataTable
     End Function
 
     Private Function PerformDataSearch(data As DataTable, isQuickSearch As Boolean) As DataTable
-        ' Define search columns for quick search
+        ' Welche Columns sollen durchsucht werden
         Dim quickSearchColumns As String() = {"CardNumber", "SiteName", "CardPropertyDescription", "SiteAddressStreet", "SiteAddressAddition", "SiteAddressNumber", "SiteAddressZIP", "SiteAddressCity", "SiteAddressCountry", "CardType"}
 
-        ' Define a dictionary for advanced search with column names mapped to corresponding TextBoxes
+        ' Bei advanced search mapping zwischen Columns des rs und den Text Boxen
         Dim advancedSearchCriteria As New Dictionary(Of String, TextBox)
         If Not isQuickSearch Then
             advancedSearchCriteria.Add("SiteAddressStreet", TextBoxSiteAddressStreet)
@@ -167,23 +160,24 @@ Public Class Form1
             advancedSearchCriteria.Add("SiteName", TextBoxSiteName)
         End If
 
+        'Wenn keine eingabe erfolgt ist gesamte daten ohne suche ausgeben
         If TextBoxQuickSearch.Text Is Nothing AndAlso isQuickSearch Then
-            Return data ' If no search terms for quick search, return the original data
+            Return data
         End If
 
         Dim searchTerms As String() = If(isQuickSearch, TextBoxQuickSearch.Text.Split(New Char() {","c}, StringSplitOptions.RemoveEmptyEntries), Array.Empty(Of String)())
-        Dim filteredData As DataTable = data.Clone() ' Create a DataTable with the same structure as the original
+        Dim filteredData As DataTable = data.Clone()
 
         For Each row As DataRow In data.Rows
             Dim termMatches As New List(Of Boolean)()
 
             If isQuickSearch Then
-                ' Quick search logic
                 For Each term As String In searchTerms
+                    'Durchführen einer Quick search
                     PerformSearchLogic(term, quickSearchColumns, row, termMatches)
                 Next
             Else
-                ' Advanced search logic
+                'Durchfüren einer Advanced Search
                 For Each kvp As KeyValuePair(Of String, TextBox) In advancedSearchCriteria
                     If Not String.IsNullOrWhiteSpace(kvp.Value.Text) Then
                         PerformSearchLogic(kvp.Value.Text, New String() {kvp.Key}, row, termMatches)
@@ -191,17 +185,17 @@ Public Class Form1
                 Next
             End If
 
-            ' Determine if the row should be added to filteredData based on search mode
+            'Bei oder suche reicht es wenn suche einem Column matched 
             Dim isRowMatch As Boolean = If(CheckBoxBroadSearch.Checked, termMatches.Any(Function(x) x), termMatches.All(Function(x) x))
 
             If isRowMatch Then
-                filteredData.ImportRow(row) ' Add the matching row to the filtered data
+                filteredData.ImportRow(row)
             End If
         Next
-
         Return filteredData
     End Function
 
+    'Durchsuchen der Vorbereiteten datensatzes mit Fuzzy search oder match search
     Private Sub PerformSearchLogic(term As String, columns As String(), row As DataRow, ByRef termMatches As List(Of Boolean))
         Dim termMatchFound As Boolean = False
 
@@ -209,17 +203,16 @@ Public Class Form1
             Dim cellText As String = If(row(column) IsNot Nothing, row(column).ToString().ToLower(), "")
 
             If CheckBoxFuzzySearch.Checked Then
-                ' Use the Simil function for fuzzy search
                 Dim matchScore As Double = Simil.Simil(cellText, term.ToLower())
-                If matchScore >= 0.7 Then ' Assuming 0.7 as the threshold for fuzzy matches
+                If matchScore >= 0.7 Then
                     termMatchFound = True
-                    Exit For ' Exit the column loop early if a match is found
+                    Exit For
                 End If
             Else
                 ' Use basic matching logic for exact searches
                 If String.Equals(cellText, term, StringComparison.OrdinalIgnoreCase) Then
                     termMatchFound = True
-                    Exit For ' Exit the column loop early if a match is found
+                    Exit For
                 End If
             End If
         Next
@@ -232,11 +225,10 @@ Public Class Form1
             If filteredData IsNot Nothing AndAlso filteredData.Rows.Count > 0 Then
                 ToolStripStatusLabel1.Text = $"Search results: {filteredData.Rows.Count} entries found."
 
-                ' Hide specific columns as needed
+                'verstecken von unnützen Columns
                 With DataGridViewCardsForm1
                     .DataSource = filteredData
 
-                    ' Since columns are being generated after setting the DataSource, ensure they exist before hiding
                     If .Columns("CardID") IsNot Nothing Then
                         .Columns("CardID").Visible = False
                     End If
@@ -249,7 +241,7 @@ Public Class Form1
                 End With
             Else
                 ToolStripStatusLabel1.Text = "Search results: No entries were found."
-                DataGridViewCardsForm1.DataSource = Nothing ' Clears the DataGridView
+                DataGridViewCardsForm1.DataSource = Nothing
             End If
         Catch ex As Exception
             Debug.WriteLine("[DigiCard] Error populating DataGridView: " + ex.Message)
@@ -323,25 +315,22 @@ Public Class Form1
         End If
     End Sub
 
+    'Starte Card Form beim Click
     Private Sub DataGridViewCardsForm1_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewCardsForm1.CellDoubleClick
-        ' Make sure the click is not on the header
         If e.RowIndex >= 0 Then
             Dim cardID As Integer = Convert.ToInt32(DataGridViewCardsForm1.Rows(e.RowIndex).Cells("CardID").Value)
             Dim cardView As New CardView(cardID, conn)
             If cardView.ShowDialog() = DialogResult.OK Then
-                ' Refresh DataGridView here
                 PerformSearch(isRefresh:=True)
                 SelectRowByCardID(cardID)
             End If
         End If
     End Sub
 
-
+    'Wählt Row aus nachdem Card View geschlossen wurde
     Private Sub SelectRowByCardID(cardID As Integer)
-        ' Ensure the DataGridView has been populated and has rows
         If DataGridViewCardsForm1.Rows.Count > 0 Then
             Dim rowIndex As Integer = -1
-            ' Search for the row index with the matching CardID
             For Each row As DataGridViewRow In DataGridViewCardsForm1.Rows
                 If row.Cells("CardID").Value IsNot Nothing AndAlso row.Cells("CardID").Value.ToString() = cardID.ToString() Then
                     rowIndex = row.Index
@@ -349,7 +338,6 @@ Public Class Form1
                 End If
             Next
 
-            ' If a matching row is found, select it
             If rowIndex <> -1 Then
                 DataGridViewCardsForm1.ClearSelection()
                 DataGridViewCardsForm1.Rows(rowIndex).Selected = True
@@ -358,31 +346,28 @@ Public Class Form1
         End If
     End Sub
 
+    'Updaten des Download paths
     Private Sub SetDonwloadPathToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SetDonwloadPathToolStripMenuItem.Click
         Using folderBrowser As New FolderBrowserDialog()
             folderBrowser.Description = "Select a folder to save downloaded Files."
-            ' Set the initial directory to the current download path if one exists
             If Not String.IsNullOrEmpty(My.Settings.DownloadPath) Then
                 folderBrowser.SelectedPath = My.Settings.DownloadPath
             End If
 
-            ' Show the dialog and check if the user clicked OK
             If folderBrowser.ShowDialog() = DialogResult.OK Then
-                ' Update the download path in the settings
                 My.Settings.DownloadPath = folderBrowser.SelectedPath
-                My.Settings.Save() ' Save the settings
+                My.Settings.Save()
                 PerformSearch(isRefresh:=True)
                 Debug.WriteLine($"Download path set to: {My.Settings.DownloadPath}", "Download Path Updated", MessageBoxButtons.OK, MessageBoxIcon.Information)
             End If
         End Using
     End Sub
 
+    'Starten eines CardViews mit für neue Karte
     Private Sub NewEntryToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles NewEntryToolStripMenuItem.Click
         Dim cardView As New CardView(0, conn)
         If cardView.ShowDialog() = DialogResult.OK Then
-            ' Refresh DataGridView here
             PerformSearch(isRefresh:=True)
-            'SelectRowByCardID(cardID)
         End If
     End Sub
 
@@ -390,13 +375,12 @@ Public Class Form1
         GlobalUtilities.UpdateGoogleMapsAPIKey(True)
     End Sub
 
+    'Lade Map View 
     Private Sub GMapControl_Load(sender As Object, e As EventArgs) Handles GMapControl.Load
-        ' Setting the map provider to OpenStreetMap
         GMap.NET.MapProviders.GoogleMapProvider.UserAgent = "DigiCard"
         GMap.NET.GMaps.Instance.Mode = GMap.NET.AccessMode.ServerOnly
         GMapControl.MapProvider = GMap.NET.MapProviders.GoogleMapProvider.Instance
 
-        ' Optional settings for the GMap control
         GMapControl.Position = New GMap.NET.PointLatLng(52.520008, 13.404954) ' Example: Latitude and Longitude of Paris, France
         GMapControl.MinZoom = 5
         GMapControl.MaxZoom = 20
@@ -407,24 +391,21 @@ Public Class Form1
         AddHandler GMapControl.OnMarkerClick, AddressOf MarkerClick
     End Sub
 
-    ' Event handler for marker click
+    'Wird bei click eines Markers aufgerufen und startet den Card view
     Private Sub MarkerClick(item As GMap.NET.WindowsForms.GMapMarker, e As MouseEventArgs)
         Debug.WriteLine("Marker clicked: " & item.Position.ToString())
-        ' Check if the marker's Tag property contains a cardID
         If item.Tag IsNot Nothing Then
             Dim cardID As Integer = Convert.ToInt32(item.Tag)
 
-            ' Open CardView form with the cardID
-            Dim cardView As New CardView(cardID, conn) ' Assuming conn is the database connection
+            Dim cardView As New CardView(cardID, conn)
             If cardView.ShowDialog() = DialogResult.OK Then
                 PerformSearch(isRefresh:=True)
-                ' Optionally, refresh the data shown on the map or perform other actions
             End If
         End If
     End Sub
 
+    'Lädt marker in der Karte auf basis des Data Grid Views
     Private Sub DisplayMarkersFromDataGridView()
-        ' Create or clear the overlay for markers
         Dim markersOverlay As GMap.NET.WindowsForms.GMapOverlay
         Dim overlayExists As Boolean = False
 
@@ -432,7 +413,7 @@ Public Class Form1
             If overlay.Id = "markers" Then
                 markersOverlay = overlay
                 overlayExists = True
-                markersOverlay.Markers.Clear() ' Clear existing markers if overlay already exists
+                markersOverlay.Markers.Clear()
                 Exit For
             End If
         Next
@@ -443,7 +424,6 @@ Public Class Form1
             Debug.WriteLine("Overlay count: " & GMapControl.Overlays.Count)
         End If
 
-        ' Iterate through the DataGridView rows
         For Each row As DataGridViewRow In DataGridViewCardsForm1.Rows
             If Not row.IsNewRow AndAlso Not IsDBNull(row.Cells("SiteAddressLat").Value) AndAlso Not IsDBNull(row.Cells("SiteAddressLong").Value) Then
                 Dim lat As Double = 0
@@ -451,9 +431,7 @@ Public Class Form1
                 Dim latString As String = row.Cells("SiteAddressLat").Value.ToString()
                 Dim lngString As String = row.Cells("SiteAddressLong").Value.ToString()
 
-                ' Use Double.TryParse with CultureInfo.InvariantCulture
                 If Double.TryParse(latString, NumberStyles.Any, CultureInfo.InvariantCulture, lat) AndAlso Double.TryParse(lngString, NumberStyles.Any, CultureInfo.InvariantCulture, lng) Then
-                    ' Create a new marker with lat and lng
                     Dim marker As GMarkerGoogleWithLabel
                     If row.Cells("CardType").Value.ToString() = "Fire" Then
                         marker = New GMarkerGoogleWithLabel(New GMap.NET.PointLatLng(lat, lng), GMap.NET.WindowsForms.Markers.GMarkerGoogleType.red_dot)
@@ -471,19 +449,17 @@ Public Class Form1
                     If Not IsDBNull(row.Cells("SiteName").Value) Then
                         marker.LabelText = row.Cells("SiteName").Value.ToString()
                     End If
-                    ' Add the marker to the overlay
                     markersOverlay.Markers.Add(marker)
                 End If
             End If
         Next
 
-        ' Refresh the map to show the new markers
         GMapControl.Refresh()
     End Sub
 
 End Class
 
-
+'Erweiterung der GMarker Classe mit zusätzlichem Lable
 Public Class GMarkerGoogleWithLabel
     Inherits GMarkerGoogle
 
@@ -507,7 +483,7 @@ Public Class GMarkerGoogleWithLabel
         End Get
         Set(value As Color)
             _labelColor = value
-            _labelBrush = New SolidBrush(value) ' Update the brush when the color is set
+            _labelBrush = New SolidBrush(value)
         End Set
     End Property
 
@@ -524,27 +500,21 @@ Public Class GMarkerGoogleWithLabel
     Public Overrides Sub OnRender(g As Graphics)
         MyBase.OnRender(g)
 
-        ' Ensure there is text to draw.
         If Not String.IsNullOrWhiteSpace(LabelText) Then
-            ' Calculate the position for the label based on the marker's position and the offset.
             Dim labelPosition As New PointF(LocalPosition.X + LabelOffset.X, LocalPosition.Y + LabelOffset.Y)
 
-            ' Create a white brush for the border
             Dim borderBrush As Brush = New SolidBrush(Color.White)
 
-            ' Text border thickness
-            Dim borderThickness As Integer = 0.7 ' Adjust the thickness as needed
+            Dim borderThickness As Integer = 0.7
 
-            ' Draw the border by drawing the text in white slightly offset in all directions
             For x As Integer = -borderThickness To borderThickness
                 For y As Integer = -borderThickness To borderThickness
-                    If x <> 0 OrElse y <> 0 Then ' Avoid redrawing the text at the central position
+                    If x <> 0 OrElse y <> 0 Then
                         g.DrawString(LabelText, LabelFont, borderBrush, New PointF(labelPosition.X + x, labelPosition.Y + y))
                     End If
                 Next
             Next
 
-            ' Draw the main text over the border
             g.DrawString(LabelText, LabelFont, LabelBrush, labelPosition)
         End If
     End Sub

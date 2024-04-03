@@ -215,7 +215,6 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="testpdf.pdf" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="ADODB">

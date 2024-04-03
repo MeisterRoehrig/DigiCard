@@ -37,18 +37,7 @@ Partial Class CardView
         Me.GroupBoxCard = New System.Windows.Forms.GroupBox()
         Me.TableLayoutPanel3 = New System.Windows.Forms.TableLayoutPanel()
         Me.TableLayoutPanel4 = New System.Windows.Forms.TableLayoutPanel()
-        Me.LableMapPDF = New System.Windows.Forms.Label()
         Me.LableMapDWG = New System.Windows.Forms.Label()
-        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.ButtonUploadMapPDF = New System.Windows.Forms.Button()
-        Me.ButtonDownloadMapPDF = New System.Windows.Forms.Button()
-        Me.FlowLayoutPanel6 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.ButtonUploadMapDWG = New System.Windows.Forms.Button()
-        Me.ButtonDownloadMapDWG = New System.Windows.Forms.Button()
-        Me.ButtonGenerateCardPDF = New System.Windows.Forms.Button()
-        Me.FlowLayoutPanel7 = New System.Windows.Forms.FlowLayoutPanel()
-        Me.ButtonUploadCardPDF = New System.Windows.Forms.Button()
-        Me.ButtonDownloadCard = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.TableLayoutPanel2 = New System.Windows.Forms.TableLayoutPanel()
         Me.ComboBoxCardTyp = New System.Windows.Forms.ComboBox()
@@ -119,15 +108,22 @@ Partial Class CardView
         Me.PanelSpacer0 = New System.Windows.Forms.Panel()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.TimerQuickSearch = New System.Windows.Forms.Timer(Me.components)
+        Me.ButtonDownloadCard = New System.Windows.Forms.Button()
+        Me.ButtonUploadCardPDF = New System.Windows.Forms.Button()
+        Me.FlowLayoutPanel7 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.LableMapPDF = New System.Windows.Forms.Label()
+        Me.ButtonDownloadMapPDF = New System.Windows.Forms.Button()
+        Me.ButtonUploadMapPDF = New System.Windows.Forms.Button()
+        Me.FlowLayoutPanel5 = New System.Windows.Forms.FlowLayoutPanel()
+        Me.ButtonDownloadMapDWG = New System.Windows.Forms.Button()
+        Me.ButtonUploadMapDWG = New System.Windows.Forms.Button()
+        Me.FlowLayoutPanel6 = New System.Windows.Forms.FlowLayoutPanel()
         Me.StatusStrip1.SuspendLayout()
         Me.GroupBoxSystemsType.SuspendLayout()
         Me.FlowLayoutPanel1.SuspendLayout()
         Me.GroupBoxCard.SuspendLayout()
         Me.TableLayoutPanel3.SuspendLayout()
         Me.TableLayoutPanel4.SuspendLayout()
-        Me.FlowLayoutPanel5.SuspendLayout()
-        Me.FlowLayoutPanel6.SuspendLayout()
-        Me.FlowLayoutPanel7.SuspendLayout()
         Me.TableLayoutPanel2.SuspendLayout()
         Me.FlowLayoutPanel2.SuspendLayout()
         Me.GroupBoxObject.SuspendLayout()
@@ -141,6 +137,9 @@ Partial Class CardView
         Me.GroupBoxDelete.SuspendLayout()
         Me.TableLayoutPanelDelete.SuspendLayout()
         Me.FlowLayoutPanelDelete.SuspendLayout()
+        Me.FlowLayoutPanel7.SuspendLayout()
+        Me.FlowLayoutPanel5.SuspendLayout()
+        Me.FlowLayoutPanel6.SuspendLayout()
         Me.SuspendLayout()
         '
         'StatusStrip1
@@ -289,7 +288,6 @@ Partial Class CardView
         Me.TableLayoutPanel4.Controls.Add(Me.LableMapDWG, 0, 1)
         Me.TableLayoutPanel4.Controls.Add(Me.FlowLayoutPanel5, 1, 0)
         Me.TableLayoutPanel4.Controls.Add(Me.FlowLayoutPanel6, 1, 1)
-        Me.TableLayoutPanel4.Controls.Add(Me.ButtonGenerateCardPDF, 1, 4)
         Me.TableLayoutPanel4.Controls.Add(Me.FlowLayoutPanel7, 1, 3)
         Me.TableLayoutPanel4.Controls.Add(Me.Label2, 0, 3)
         Me.TableLayoutPanel4.Location = New System.Drawing.Point(730, 3)
@@ -303,16 +301,6 @@ Partial Class CardView
         Me.TableLayoutPanel4.Size = New System.Drawing.Size(237, 138)
         Me.TableLayoutPanel4.TabIndex = 6
         '
-        'LableMapPDF
-        '
-        Me.LableMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.LableMapPDF.AutoSize = True
-        Me.LableMapPDF.Location = New System.Drawing.Point(3, 7)
-        Me.LableMapPDF.Name = "LableMapPDF"
-        Me.LableMapPDF.Size = New System.Drawing.Size(52, 13)
-        Me.LableMapPDF.TabIndex = 12
-        Me.LableMapPDF.Text = "Map PDF"
-        '
         'LableMapDWG
         '
         Me.LableMapDWG.Anchor = System.Windows.Forms.AnchorStyles.Left
@@ -322,113 +310,6 @@ Partial Class CardView
         Me.LableMapDWG.Size = New System.Drawing.Size(58, 13)
         Me.LableMapDWG.TabIndex = 9
         Me.LableMapDWG.Text = "Map DWG"
-        '
-        'FlowLayoutPanel5
-        '
-        Me.FlowLayoutPanel5.AutoSize = True
-        Me.FlowLayoutPanel5.Controls.Add(Me.ButtonUploadMapPDF)
-        Me.FlowLayoutPanel5.Controls.Add(Me.ButtonDownloadMapPDF)
-        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(64, 0)
-        Me.FlowLayoutPanel5.Margin = New System.Windows.Forms.Padding(0)
-        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
-        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(173, 28)
-        Me.FlowLayoutPanel5.TabIndex = 7
-        '
-        'ButtonUploadMapPDF
-        '
-        Me.ButtonUploadMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonUploadMapPDF.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonUploadMapPDF.Name = "ButtonUploadMapPDF"
-        Me.ButtonUploadMapPDF.Size = New System.Drawing.Size(67, 22)
-        Me.ButtonUploadMapPDF.TabIndex = 8
-        Me.ButtonUploadMapPDF.Text = "Upload PDF"
-        Me.ButtonUploadMapPDF.UseVisualStyleBackColor = True
-        '
-        'ButtonDownloadMapPDF
-        '
-        Me.ButtonDownloadMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonDownloadMapPDF.Location = New System.Drawing.Point(76, 3)
-        Me.ButtonDownloadMapPDF.Name = "ButtonDownloadMapPDF"
-        Me.ButtonDownloadMapPDF.Size = New System.Drawing.Size(94, 22)
-        Me.ButtonDownloadMapPDF.TabIndex = 16
-        Me.ButtonDownloadMapPDF.Text = "Download PDF"
-        Me.ButtonDownloadMapPDF.UseVisualStyleBackColor = True
-        '
-        'FlowLayoutPanel6
-        '
-        Me.FlowLayoutPanel6.AutoSize = True
-        Me.FlowLayoutPanel6.Controls.Add(Me.ButtonUploadMapDWG)
-        Me.FlowLayoutPanel6.Controls.Add(Me.ButtonDownloadMapDWG)
-        Me.FlowLayoutPanel6.Location = New System.Drawing.Point(64, 28)
-        Me.FlowLayoutPanel6.Margin = New System.Windows.Forms.Padding(0)
-        Me.FlowLayoutPanel6.Name = "FlowLayoutPanel6"
-        Me.FlowLayoutPanel6.Size = New System.Drawing.Size(173, 28)
-        Me.FlowLayoutPanel6.TabIndex = 8
-        '
-        'ButtonUploadMapDWG
-        '
-        Me.ButtonUploadMapDWG.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonUploadMapDWG.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonUploadMapDWG.Name = "ButtonUploadMapDWG"
-        Me.ButtonUploadMapDWG.Size = New System.Drawing.Size(67, 22)
-        Me.ButtonUploadMapDWG.TabIndex = 10
-        Me.ButtonUploadMapDWG.Text = "Upload DWG"
-        Me.ButtonUploadMapDWG.UseVisualStyleBackColor = True
-        '
-        'ButtonDownloadMapDWG
-        '
-        Me.ButtonDownloadMapDWG.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonDownloadMapDWG.Location = New System.Drawing.Point(76, 3)
-        Me.ButtonDownloadMapDWG.Name = "ButtonDownloadMapDWG"
-        Me.ButtonDownloadMapDWG.Size = New System.Drawing.Size(94, 22)
-        Me.ButtonDownloadMapDWG.TabIndex = 17
-        Me.ButtonDownloadMapDWG.Text = "Download DWG"
-        Me.ButtonDownloadMapDWG.UseVisualStyleBackColor = True
-        '
-        'ButtonGenerateCardPDF
-        '
-        Me.ButtonGenerateCardPDF.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.ButtonGenerateCardPDF.AutoSize = True
-        Me.ButtonGenerateCardPDF.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.ButtonGenerateCardPDF.Location = New System.Drawing.Point(67, 112)
-        Me.ButtonGenerateCardPDF.Name = "ButtonGenerateCardPDF"
-        Me.ButtonGenerateCardPDF.Size = New System.Drawing.Size(167, 23)
-        Me.ButtonGenerateCardPDF.TabIndex = 15
-        Me.ButtonGenerateCardPDF.Text = "Generate PDF"
-        Me.ButtonGenerateCardPDF.UseVisualStyleBackColor = True
-        '
-        'FlowLayoutPanel7
-        '
-        Me.FlowLayoutPanel7.AutoSize = True
-        Me.FlowLayoutPanel7.Controls.Add(Me.ButtonUploadCardPDF)
-        Me.FlowLayoutPanel7.Controls.Add(Me.ButtonDownloadCard)
-        Me.FlowLayoutPanel7.Location = New System.Drawing.Point(64, 81)
-        Me.FlowLayoutPanel7.Margin = New System.Windows.Forms.Padding(0)
-        Me.FlowLayoutPanel7.Name = "FlowLayoutPanel7"
-        Me.FlowLayoutPanel7.Size = New System.Drawing.Size(173, 28)
-        Me.FlowLayoutPanel7.TabIndex = 9
-        Me.FlowLayoutPanel7.TabStop = True
-        '
-        'ButtonUploadCardPDF
-        '
-        Me.ButtonUploadCardPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonUploadCardPDF.Location = New System.Drawing.Point(3, 3)
-        Me.ButtonUploadCardPDF.Name = "ButtonUploadCardPDF"
-        Me.ButtonUploadCardPDF.Size = New System.Drawing.Size(67, 22)
-        Me.ButtonUploadCardPDF.TabIndex = 12
-        Me.ButtonUploadCardPDF.Text = "Upload PDF"
-        Me.ButtonUploadCardPDF.UseVisualStyleBackColor = True
-        '
-        'ButtonDownloadCard
-        '
-        Me.ButtonDownloadCard.Anchor = System.Windows.Forms.AnchorStyles.Left
-        Me.ButtonDownloadCard.Location = New System.Drawing.Point(76, 3)
-        Me.ButtonDownloadCard.Name = "ButtonDownloadCard"
-        Me.ButtonDownloadCard.Size = New System.Drawing.Size(94, 22)
-        Me.ButtonDownloadCard.TabIndex = 18
-        Me.ButtonDownloadCard.Text = "Download PDF"
-        Me.ButtonDownloadCard.UseVisualStyleBackColor = True
         '
         'Label2
         '
@@ -1204,6 +1085,110 @@ Partial Class CardView
         'TimerQuickSearch
         '
         '
+        'ButtonDownloadCard
+        '
+        Me.ButtonDownloadCard.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonDownloadCard.Location = New System.Drawing.Point(76, 3)
+        Me.ButtonDownloadCard.Name = "ButtonDownloadCard"
+        Me.ButtonDownloadCard.Size = New System.Drawing.Size(94, 22)
+        Me.ButtonDownloadCard.TabIndex = 18
+        Me.ButtonDownloadCard.Text = "Download PDF"
+        Me.ButtonDownloadCard.UseVisualStyleBackColor = True
+        '
+        'ButtonUploadCardPDF
+        '
+        Me.ButtonUploadCardPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonUploadCardPDF.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonUploadCardPDF.Name = "ButtonUploadCardPDF"
+        Me.ButtonUploadCardPDF.Size = New System.Drawing.Size(67, 22)
+        Me.ButtonUploadCardPDF.TabIndex = 12
+        Me.ButtonUploadCardPDF.Text = "Upload PDF"
+        Me.ButtonUploadCardPDF.UseVisualStyleBackColor = True
+        '
+        'FlowLayoutPanel7
+        '
+        Me.FlowLayoutPanel7.AutoSize = True
+        Me.FlowLayoutPanel7.Controls.Add(Me.ButtonUploadCardPDF)
+        Me.FlowLayoutPanel7.Controls.Add(Me.ButtonDownloadCard)
+        Me.FlowLayoutPanel7.Location = New System.Drawing.Point(64, 81)
+        Me.FlowLayoutPanel7.Margin = New System.Windows.Forms.Padding(0)
+        Me.FlowLayoutPanel7.Name = "FlowLayoutPanel7"
+        Me.FlowLayoutPanel7.Size = New System.Drawing.Size(173, 28)
+        Me.FlowLayoutPanel7.TabIndex = 9
+        Me.FlowLayoutPanel7.TabStop = True
+        '
+        'LableMapPDF
+        '
+        Me.LableMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.LableMapPDF.AutoSize = True
+        Me.LableMapPDF.Location = New System.Drawing.Point(3, 7)
+        Me.LableMapPDF.Name = "LableMapPDF"
+        Me.LableMapPDF.Size = New System.Drawing.Size(52, 13)
+        Me.LableMapPDF.TabIndex = 12
+        Me.LableMapPDF.Text = "Map PDF"
+        '
+        'ButtonDownloadMapPDF
+        '
+        Me.ButtonDownloadMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonDownloadMapPDF.Location = New System.Drawing.Point(76, 3)
+        Me.ButtonDownloadMapPDF.Name = "ButtonDownloadMapPDF"
+        Me.ButtonDownloadMapPDF.Size = New System.Drawing.Size(94, 22)
+        Me.ButtonDownloadMapPDF.TabIndex = 16
+        Me.ButtonDownloadMapPDF.Text = "Download PDF"
+        Me.ButtonDownloadMapPDF.UseVisualStyleBackColor = True
+        '
+        'ButtonUploadMapPDF
+        '
+        Me.ButtonUploadMapPDF.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonUploadMapPDF.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonUploadMapPDF.Name = "ButtonUploadMapPDF"
+        Me.ButtonUploadMapPDF.Size = New System.Drawing.Size(67, 22)
+        Me.ButtonUploadMapPDF.TabIndex = 8
+        Me.ButtonUploadMapPDF.Text = "Upload PDF"
+        Me.ButtonUploadMapPDF.UseVisualStyleBackColor = True
+        '
+        'FlowLayoutPanel5
+        '
+        Me.FlowLayoutPanel5.AutoSize = True
+        Me.FlowLayoutPanel5.Controls.Add(Me.ButtonUploadMapPDF)
+        Me.FlowLayoutPanel5.Controls.Add(Me.ButtonDownloadMapPDF)
+        Me.FlowLayoutPanel5.Location = New System.Drawing.Point(64, 0)
+        Me.FlowLayoutPanel5.Margin = New System.Windows.Forms.Padding(0)
+        Me.FlowLayoutPanel5.Name = "FlowLayoutPanel5"
+        Me.FlowLayoutPanel5.Size = New System.Drawing.Size(173, 28)
+        Me.FlowLayoutPanel5.TabIndex = 7
+        '
+        'ButtonDownloadMapDWG
+        '
+        Me.ButtonDownloadMapDWG.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonDownloadMapDWG.Location = New System.Drawing.Point(76, 3)
+        Me.ButtonDownloadMapDWG.Name = "ButtonDownloadMapDWG"
+        Me.ButtonDownloadMapDWG.Size = New System.Drawing.Size(94, 22)
+        Me.ButtonDownloadMapDWG.TabIndex = 17
+        Me.ButtonDownloadMapDWG.Text = "Download DWG"
+        Me.ButtonDownloadMapDWG.UseVisualStyleBackColor = True
+        '
+        'ButtonUploadMapDWG
+        '
+        Me.ButtonUploadMapDWG.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.ButtonUploadMapDWG.Location = New System.Drawing.Point(3, 3)
+        Me.ButtonUploadMapDWG.Name = "ButtonUploadMapDWG"
+        Me.ButtonUploadMapDWG.Size = New System.Drawing.Size(67, 22)
+        Me.ButtonUploadMapDWG.TabIndex = 10
+        Me.ButtonUploadMapDWG.Text = "Upload DWG"
+        Me.ButtonUploadMapDWG.UseVisualStyleBackColor = True
+        '
+        'FlowLayoutPanel6
+        '
+        Me.FlowLayoutPanel6.AutoSize = True
+        Me.FlowLayoutPanel6.Controls.Add(Me.ButtonUploadMapDWG)
+        Me.FlowLayoutPanel6.Controls.Add(Me.ButtonDownloadMapDWG)
+        Me.FlowLayoutPanel6.Location = New System.Drawing.Point(64, 28)
+        Me.FlowLayoutPanel6.Margin = New System.Windows.Forms.Padding(0)
+        Me.FlowLayoutPanel6.Name = "FlowLayoutPanel6"
+        Me.FlowLayoutPanel6.Size = New System.Drawing.Size(173, 28)
+        Me.FlowLayoutPanel6.TabIndex = 8
+        '
         'CardView
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1231,9 +1216,6 @@ Partial Class CardView
         Me.TableLayoutPanel3.PerformLayout()
         Me.TableLayoutPanel4.ResumeLayout(False)
         Me.TableLayoutPanel4.PerformLayout()
-        Me.FlowLayoutPanel5.ResumeLayout(False)
-        Me.FlowLayoutPanel6.ResumeLayout(False)
-        Me.FlowLayoutPanel7.ResumeLayout(False)
         Me.TableLayoutPanel2.ResumeLayout(False)
         Me.TableLayoutPanel2.PerformLayout()
         Me.FlowLayoutPanel2.ResumeLayout(False)
@@ -1257,6 +1239,9 @@ Partial Class CardView
         Me.TableLayoutPanelDelete.PerformLayout()
         Me.FlowLayoutPanelDelete.ResumeLayout(False)
         Me.FlowLayoutPanelDelete.PerformLayout()
+        Me.FlowLayoutPanel7.ResumeLayout(False)
+        Me.FlowLayoutPanel5.ResumeLayout(False)
+        Me.FlowLayoutPanel6.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1340,20 +1325,19 @@ Partial Class CardView
     Friend WithEvents FlowLayoutPanel2 As FlowLayoutPanel
     Friend WithEvents LableCardNumberInfo As Label
     Friend WithEvents TableLayoutPanel4 As TableLayoutPanel
+    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
+    Friend WithEvents Panel2 As Panel
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Panel3 As Panel
     Friend WithEvents LableMapPDF As Label
+    Friend WithEvents FlowLayoutPanel5 As FlowLayoutPanel
+    Friend WithEvents ButtonUploadMapPDF As Button
+    Friend WithEvents ButtonDownloadMapPDF As Button
     Friend WithEvents FlowLayoutPanel7 As FlowLayoutPanel
     Friend WithEvents ButtonUploadCardPDF As Button
     Friend WithEvents ButtonDownloadCard As Button
     Friend WithEvents FlowLayoutPanel6 As FlowLayoutPanel
     Friend WithEvents ButtonUploadMapDWG As Button
     Friend WithEvents ButtonDownloadMapDWG As Button
-    Friend WithEvents FlowLayoutPanel5 As FlowLayoutPanel
-    Friend WithEvents ButtonUploadMapPDF As Button
-    Friend WithEvents ButtonDownloadMapPDF As Button
-    Friend WithEvents TableLayoutPanel3 As TableLayoutPanel
-    Friend WithEvents Panel2 As Panel
-    Friend WithEvents Panel1 As Panel
-    Friend WithEvents Label2 As Label
-    Friend WithEvents ButtonGenerateCardPDF As Button
-    Friend WithEvents Panel3 As Panel
 End Class
